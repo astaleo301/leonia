@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leonia News</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="background"></div>
+  <header>
+    <div class="logo">
+      <h1>Leonia</h1>
+      <p>Neutral Eyes</p>
+    </div>
+    <nav>
+      <button onclick="showPage('home')"><i data-lucide="home"></i> ホーム</button>
+      <button onclick="showPage('bookshelf')"><i data-lucide="book-open"></i> 本棚</button>
+      <button onclick="showPage('about')"><i data-lucide="info"></i> About</button>
+      <button onclick="showPage('contact')"><i data-lucide="mail"></i> Contact</button>
+    </nav>
+  </header>
+  <main id="content"></main>
+  <div id="article-popup" class="popup"></div>
+  <div id="book-popup" class="popup"></div>
+  <footer>
+    <p>© 2025 Leonia. Powered by neutral AI.</p>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
