@@ -7,12 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         @keyframes slideUp {
@@ -50,7 +46,10 @@
         <div class="container mx-auto px-6 py-5">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20">
+                    <!-- ロゴ画像（logo.pngがある場合） -->
+                    <img src="./images/logo.png" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <!-- フォールバック：画像がない場合 -->
+                    <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20" style="display:none;">
                         <span class="text-white font-extralight text-xl">L</span>
                     </div>
                     <div>
@@ -67,7 +66,11 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-16 relative" id="main-content"></main>
+    <main class="container mx-auto px-6 py-16 relative" id="main-content">
+        <div class="text-center text-slate-400 py-20">
+            <p>記事を読み込んでいます...</p>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer class="relative border-t border-white/5 bg-slate-950/50 backdrop-blur-sm mt-24">
@@ -98,114 +101,9 @@
             book: '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>'
         };
 
-        // Data
-        const newsArticles = [
-            {
-                id: 1,
-                title: "量子コンピューティングの新たな突破口",
-                category: "テクノロジー",
-                categoryColor: "bg-blue-500/10",
-                categoryText: "text-blue-400",
-                excerpt: "研究チームが室温での量子もつれ状態の維持に成功。量子コンピューティングの実用化に大きく前進。",
-                summary: "国際研究チームが、室温環境下で量子もつれ状態を安定的に維持することに成功しました。これまで超低温環境が必須とされていた量子コンピューティング技術において、画期的な進展となります。この成果により、量子コンピュータの実用化と普及が大きく加速すると期待されています。",
-                date: "2025-10-27",
-                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80"
-            },
-            {
-                id: 2,
-                title: "深海探査で未知の生態系を発見",
-                category: "サイエンス",
-                categoryColor: "bg-emerald-500/10",
-                categoryText: "text-emerald-400",
-                excerpt: "マリアナ海溝の新たな調査により、これまで知られていなかった生物群集が確認された。",
-                summary: "深海探査船による最新の調査で、マリアナ海溝の水深8000m地点において、これまで知られていなかった独自の生態系が発見されました。熱水噴出孔周辺には、地球上の他の場所には存在しない固有種が多数確認され、生命の起源や進化の過程を解明する新たな手がかりとなることが期待されています。",
-                date: "2025-10-26",
-                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80"
-            },
-            {
-                id: 3,
-                title: "再生可能エネルギーが世界エネルギー供給の40%に到達",
-                category: "環境",
-                categoryColor: "bg-green-500/10",
-                categoryText: "text-green-400",
-                excerpt: "国際エネルギー機関の最新レポートによると、太陽光と風力発電の急速な普及により歴史的な節目を達成。",
-                summary: "国際エネルギー機関(IEA)が発表した最新の報告書によれば、2025年における世界の総エネルギー供給量のうち、再生可能エネルギーが占める割合が初めて40%に達しました。特に太陽光発電と風力発電の技術革新とコスト低下が、この急速な普及を牽引しています。",
-                date: "2025-10-25",
-                image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&q=80"
-            },
-            {
-                id: 4,
-                title: "AIによる新薬開発が臨床試験段階へ",
-                category: "医療",
-                categoryColor: "bg-pink-500/10",
-                categoryText: "text-pink-400",
-                excerpt: "機械学習により設計された抗がん剤が、従来の手法より3倍の速度で開発され、ヒト臨床試験を開始。",
-                summary: "人工知能と機械学習技術を活用して設計された新規抗がん剤が、第一相臨床試験を開始しました。この薬剤は従来の創薬プロセスと比較して約3分の1の期間で開発され、AIによる薬剤設計の有効性を実証する重要な事例となっています。",
-                date: "2025-10-24",
-                image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&q=80"
-            },
-            {
-                id: 5,
-                title: "火星探査機が地下水の存在を確認",
-                category: "宇宙",
-                categoryColor: "bg-purple-500/10",
-                categoryText: "text-purple-400",
-                excerpt: "NASAの探査機が火星の地下3kmに大規模な液体水の存在を示す証拠を発見。生命探査に新たな展開。",
-                summary: "NASAの火星探査機が、火星の地下約3kmの深さに大規模な液体水の層が存在する強力な証拠を発見しました。これは火星における生命の痕跡を探索する上で極めて重要な発見であり、今後の探査計画に大きな影響を与えることが予想されます。",
-                date: "2025-10-23",
-                image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=400&q=80"
-            },
-            {
-                id: 6,
-                title: "量子暗号通信網が主要都市間で実用化",
-                category: "テクノロジー",
-                categoryColor: "bg-blue-500/10",
-                categoryText: "text-blue-400",
-                excerpt: "絶対に傍受不可能とされる量子暗号技術を用いた通信網が、東京-大阪間で商用サービスを開始。",
-                summary: "量子力学の原理を応用した絶対に傍受不可能な暗号通信技術が、東京と大阪を結ぶ商用ネットワークで実用化されました。この技術により、金融取引や機密情報の伝送における安全性が飛躍的に向上することが期待されています。",
-                date: "2025-10-22",
-                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=80"
-            }
-        ];
-
-        const researchBooks = [
-            {
-                id: 1,
-                title: "量子コンピューティング革命",
-                subtitle: "次世代計算技術の全貌",
-                coverColor: "from-blue-400 via-cyan-400 to-teal-300",
-                pages: 67,
-                date: "2025-10-20",
-                summary: "本書は、量子コンピューティング技術の最新動向から将来展望まで、AIによる徹底的な調査と分析をまとめた包括的なレポートです。室温量子コンピュータの実現可能性、産業応用の可能性、社会への影響まで多角的に考察しています。"
-            },
-            {
-                id: 2,
-                title: "深海の未知なる世界",
-                subtitle: "マリアナ海溝生態系調査報告",
-                coverColor: "from-emerald-400 via-teal-400 to-cyan-500",
-                pages: 89,
-                date: "2025-10-15",
-                summary: "最新の深海探査データをもとに、マリアナ海溝の生態系、地質学的特徴、そして生命の起源に関する新たな知見を網羅的に分析した調査報告書です。未知の生物種の発見から、極限環境における生命適応メカニズムまで詳細に解説しています。"
-            },
-            {
-                id: 3,
-                title: "再生可能エネルギーの未来",
-                subtitle: "持続可能な社会への道筋",
-                coverColor: "from-green-400 via-lime-400 to-yellow-300",
-                pages: 124,
-                date: "2025-10-10",
-                summary: "世界各国のエネルギー政策、技術革新、経済的影響を総合的に分析し、再生可能エネルギーが主流となる社会のビジョンを描きます。太陽光、風力、地熱、水力など多様なエネルギー源の可能性と課題を、データに基づいて詳細に検討しています。"
-            },
-            {
-                id: 4,
-                title: "AI創薬の最前線",
-                subtitle: "医療イノベーションの新時代",
-                coverColor: "from-pink-400 via-rose-400 to-orange-300",
-                pages: 95,
-                date: "2025-10-05",
-                summary: "人工知能技術が製薬業界にもたらす革命的な変化を、技術的側面、規制環境、倫理的課題まで包括的に分析した専門書です。機械学習による創薬プロセスの効率化から、個別化医療の実現まで、未来の医療を展望します。"
-            }
-        ];
+        // Data - これがJSONファイルから読み込まれます
+        let newsArticles = [];
+        let researchBooks = [];
 
         // State
         let state = {
@@ -217,6 +115,62 @@
             shareMenu: null,
             formData: { name: '', email: '', message: '' }
         };
+
+        // JSONファイルから記事を読み込む
+        async function loadArticles() {
+            try {
+                const response = await fetch('./articles/articles.json');
+                newsArticles = await response.json();
+                renderContent();
+            } catch (error) {
+                console.error('記事の読み込みに失敗しました:', error);
+                // エラー時はデフォルトの記事を表示
+                newsArticles = getDefaultArticles();
+                renderContent();
+            }
+        }
+
+        // JSONファイルから本を読み込む
+        async function loadBooks() {
+            try {
+                const response = await fetch('./books/books.json');
+                researchBooks = await response.json();
+            } catch (error) {
+                console.error('本の読み込みに失敗しました:', error);
+                researchBooks = getDefaultBooks();
+            }
+        }
+
+        // デフォルトの記事（フォールバック用）
+        function getDefaultArticles() {
+            return [
+                {
+                    id: 1,
+                    title: "量子コンピューティングの新たな突破口",
+                    category: "テクノロジー",
+                    categoryColor: "bg-blue-500/10",
+                    categoryText: "text-blue-400",
+                    excerpt: "研究チームが室温での量子もつれ状態の維持に成功。量子コンピューティングの実用化に大きく前進。",
+                    summary: "国際研究チームが、室温環境下で量子もつれ状態を安定的に維持することに成功しました。これまで超低温環境が必須とされていた量子コンピューティング技術において、画期的な進展となります。この成果により、量子コンピュータの実用化と普及が大きく加速すると期待されています。",
+                    date: "2025-10-27",
+                    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80"
+                }
+            ];
+        }
+
+        function getDefaultBooks() {
+            return [
+                {
+                    id: 1,
+                    title: "量子コンピューティング革命",
+                    subtitle: "次世代計算技術の全貌",
+                    coverColor: "from-blue-400 via-cyan-400 to-teal-300",
+                    pages: 67,
+                    date: "2025-10-20",
+                    summary: "本書は、量子コンピューティング技術の最新動向から将来展望まで、AIによる徹底的な調査と分析をまとめた包括的なレポートです。"
+                }
+            ];
+        }
 
         // Navigation
         const navItems = [
@@ -250,8 +204,8 @@
             renderContent();
         }
 
-        function showArticlePopup(article) {
-            state.selectedArticle = article;
+        function showArticlePopup(articleId) {
+            state.selectedArticle = newsArticles.find(a => a.id === articleId);
             state.showPopup = true;
             renderPopup();
         }
@@ -261,8 +215,8 @@
             renderPopup();
         }
 
-        function showBookModal(book) {
-            state.selectedBook = book;
+        function showBookModal(bookId) {
+            state.selectedBook = researchBooks.find(b => b.id === bookId);
             state.showBookPopup = true;
             renderBookPopup();
         }
@@ -281,7 +235,8 @@
             }
         }
 
-        function shareArticle(article, platform) {
+        function shareArticle(articleId, platform) {
+            const article = newsArticles.find(a => a.id === articleId);
             const url = `https://leonia.news/article/${article.id}`;
             const text = article.title;
             
@@ -308,7 +263,9 @@
         function renderPopup() {
             const container = document.getElementById('popup-container');
             if (!state.showPopup || !state.selectedArticle) {
-                container.innerHTML = '';
+                if (!state.showBookPopup) {
+                    container.innerHTML = '';
+                }
                 return;
             }
 
@@ -355,13 +312,13 @@
                                     
                                     ${state.shareMenu === article.id ? `
                                         <div class="flex gap-2 items-center animate-fadeIn">
-                                            <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                            <button onclick="shareArticle(${article.id}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                 ${icons.twitter}
                                             </button>
-                                            <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'facebook')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                            <button onclick="shareArticle(${article.id}, 'facebook')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                 ${icons.facebook}
                                             </button>
-                                            <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                            <button onclick="shareArticle(${article.id}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                 ${icons.link2}
                                             </button>
                                         </div>
@@ -384,7 +341,8 @@
             }
 
             const book = state.selectedBook;
-            container.innerHTML += `
+            const existingContent = container.innerHTML;
+            container.innerHTML = existingContent + `
                 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeBookPopup()">
                     <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
                     <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
@@ -448,7 +406,7 @@
                             
                             <div class="max-w-4xl mx-auto space-y-4">
                                 ${newsArticles.map(article => `
-                                    <div onclick="showArticlePopup(${JSON.stringify(article).replace(/"/g, '&quot;')})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
+                                    <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
                                         <div class="p-5 flex gap-4">
                                             <img src="${article.image}" alt="${article.title}" class="w-28 h-28 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
                                             
@@ -488,7 +446,7 @@
                             
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
                                 ${researchBooks.map(book => `
-                                    <div onclick="showBookModal(${JSON.stringify(book).replace(/"/g, '&quot;')})" class="group cursor-pointer transition-all duration-500 hover:-translate-y-2">
+                                    <div onclick="showBookModal(${book.id})" class="group cursor-pointer transition-all duration-500 hover:-translate-y-2">
                                         <div class="w-full aspect-[3/4] rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-xl group-hover:shadow-2xl transition-all duration-500 flex flex-col items-center justify-center p-6 relative overflow-hidden">
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                                             ${icons.book}
@@ -595,13 +553,13 @@
                                         </button>
                                         ${state.shareMenu === 'article' ? `
                                             <div class="flex gap-2 items-center animate-fadeIn">
-                                                <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'twitter')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                <button onclick="shareArticle(${article.id}, 'twitter')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                     ${icons.twitter}
                                                 </button>
-                                                <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'facebook')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                <button onclick="shareArticle(${article.id}, 'facebook')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                     ${icons.facebook}
                                                 </button>
-                                                <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'copy')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                <button onclick="shareArticle(${article.id}, 'copy')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                     ${icons.link2}
                                                 </button>
                                             </div>
@@ -628,7 +586,8 @@
 
         // Initialize
         renderNav();
-        renderContent();
+        loadArticles();
+        loadBooks();
     </script>
 </body>
 </html>
