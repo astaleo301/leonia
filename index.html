@@ -46,8 +46,8 @@
         <div class="container mx-auto px-6 py-5">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <!-- ロゴ画像（logo.pngがある場合） -->
-                    <img src="./images/logo.png" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <!-- ロゴ画像（logo.png, logo.jpg, logo.svgに対応） -->
+                    <img src="./images/logo.png" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.onerror=null; this.src='./images/logo.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex'};">
                     <!-- フォールバック：画像がない場合 -->
                     <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20" style="display:none;">
                         <span class="text-white font-extralight text-xl">L</span>
@@ -342,10 +342,33 @@
 
             const book = state.selectedBook;
             const existingContent = container.innerHTML;
+            
+            // 章の目次を生成
+            const hasChapters = book.chapters && book.chapters.length > 0;
+            const tableOfContents = hasChapters ? `
+                <div class="space-y-3">
+                    <h3 class="text-lg font-medium text-slate-200">目次</h3>
+                    <div class="space-y-2">
+                        ${book.chapters.map(chapter => `
+                            <button onclick="readBookChapter(${book.id}, ${chapter.number})" 
+                                class="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all group">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-xs text-slate-500">第${chapter.number}章</div>
+                                        <div class="text-sm text-slate-300 group-hover:text-orange-300 transition-colors">${chapter.title}</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-hover:text-orange-400 transition-colors"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </div>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : '';
+            
             container.innerHTML = existingContent + `
                 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeBookPopup()">
                     <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
-                    <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
+                    <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
                         <button onclick="closeBookPopup()" class="sticky top-6 right-6 float-right p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm z-10">
                             ${icons.x}
                         </button>
@@ -362,18 +385,107 @@
                                         <span>${book.pages}ページ</span>
                                         <span>•</span>
                                         <span>${book.date}</span>
+                                        ${hasChapters ? `<span>•</span><span>${book.chapters.length}章</span>` : ''}
                                     </div>
                                 </div>
                             </div>
                             
                             <p class="text-slate-300 leading-relaxed">${book.summary}</p>
                             
-                            <div class="pt-6 border-t border-white/5">
-                                <button onclick="alert('本の閲覧機能は開発中です')" class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all font-medium shadow-lg shadow-orange-500/20">
-                                    ${icons.book}
-                                    本を読む
-                                </button>
+                            ${hasChapters ? `
+                                <div class="pt-6 border-t border-white/5">
+                                    ${tableOfContents}
+                                </div>
+                            ` : `
+                                <div class="pt-6 border-t border-white/5">
+                                    <button onclick="alert('この本の内容は準備中です')" class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all font-medium shadow-lg shadow-orange-500/20">
+                                        ${icons.book}
+                                        本を読む
+                                    </button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 本の章を読む
+        function readBookChapter(bookId, chapterNumber) {
+            const book = researchBooks.find(b => b.id === bookId);
+            if (!book || !book.chapters) return;
+            
+            const chapter = book.chapters.find(c => c.number === chapterNumber);
+            if (!chapter) return;
+            
+            state.selectedBook = book;
+            state.selectedChapter = chapter;
+            renderChapterReader();
+        }
+
+        // 章の読書ビュー
+        function renderChapterReader() {
+            const container = document.getElementById('popup-container');
+            const book = state.selectedBook;
+            const chapter = state.selectedChapter;
+            
+            const currentIndex = book.chapters.findIndex(c => c.number === chapter.number);
+            const hasPrev = currentIndex > 0;
+            const hasNext = currentIndex < book.chapters.length - 1;
+            
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeBookPopup()">
+                    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
+                    <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/5 animate-slideUp flex flex-col" onclick="event.stopPropagation()">
+                        
+                        <!-- ヘッダー -->
+                        <div class="flex items-center justify-between px-10 py-6 border-b border-white/5 flex-shrink-0">
+                            <button onclick="showBookModal(${book.id})" class="flex items-center gap-2 text-slate-400 hover:text-slate-300 transition-colors text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                目次に戻る
+                            </button>
+                            <div class="text-center flex-1">
+                                <div class="text-xs text-slate-500">第${chapter.number}章</div>
+                                <div class="text-sm text-slate-300 font-light">${chapter.title}</div>
                             </div>
+                            <button onclick="closeBookPopup()" class="p-2 bg-white/5 hover:bg-white/10 rounded-full transition-all">
+                                ${icons.x}
+                            </button>
+                        </div>
+                        
+                        <!-- 本文 -->
+                        <div class="flex-1 overflow-y-auto px-10 py-8">
+                            <div class="max-w-3xl mx-auto space-y-6">
+                                <h1 class="text-3xl font-light text-slate-100 leading-snug mb-8">
+                                    第${chapter.number}章: ${chapter.title}
+                                </h1>
+                                ${chapter.content.split('\n\n').map(paragraph => 
+                                    `<p class="text-slate-300 leading-relaxed text-base font-light">${paragraph.trim()}</p>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- フッター（ナビゲーション） -->
+                        <div class="flex items-center justify-between px-10 py-6 border-t border-white/5 flex-shrink-0">
+                            ${hasPrev ? `
+                                <button onclick="readBookChapter(${book.id}, ${book.chapters[currentIndex - 1].number})" 
+                                    class="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    前の章
+                                </button>
+                            ` : '<div></div>'}
+                            
+                            <div class="text-xs text-slate-500">
+                                ${chapter.number} / ${book.chapters.length}
+                            </div>
+                            
+                            ${hasNext ? `
+                                <button onclick="readBookChapter(${book.id}, ${book.chapters[currentIndex + 1].number})" 
+                                    class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all text-sm shadow-lg shadow-orange-500/20">
+                                    次の章
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            ` : '<div></div>'}
                         </div>
                     </div>
                 </div>
