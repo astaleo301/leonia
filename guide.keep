@@ -1,0 +1,87 @@
+{
+  "id": 999,
+  "title": "ここに記事タイトルを入力",
+  "category": "カテゴリー名（テクノロジー、サイエンス、環境、医療、宇宙、経済など）",
+  "categoryColor": "bg-blue-500/10",
+  "categoryText": "text-blue-400",
+  "excerpt": "一覧ページに表示される短い要約文（1-2行程度）",
+  "summary": "記事の本文。詳細ページに表示される長めの説明文。ここに記事の内容を詳しく書きます。",
+  "date": "2025-10-28",
+  "image": "https://images.unsplash.com/photo-xxxxx?w=800&q=80"
+}
+
+【記入ガイド】
+
+1. id: 
+   - 既存の記事と重複しない番号を付ける
+   - 最後の記事のidに+1するのが簡単
+
+2. title:
+   - 記事のタイトル
+
+3. category & カテゴリー色:
+   以下から選ぶか、新しい組み合わせを作成：
+
+   テクノロジー（青）:
+   "categoryColor": "bg-blue-500/10"
+   "categoryText": "text-blue-400"
+
+   サイエンス（エメラルド）:
+   "categoryColor": "bg-emerald-500/10"
+   "categoryText": "text-emerald-400"
+
+   環境（緑）:
+   "categoryColor": "bg-green-500/10"
+   "categoryText": "text-green-400"
+
+   医療（ピンク）:
+   "categoryColor": "bg-pink-500/10"
+   "categoryText": "text-pink-400"
+
+   宇宙（紫）:
+   "categoryColor": "bg-purple-500/10"
+   "categoryText": "text-purple-400"
+
+   経済（黄色）:
+   "categoryColor": "bg-yellow-500/10"
+   "categoryText": "text-yellow-400"
+
+   文化（オレンジ）:
+   "categoryColor": "bg-orange-500/10"
+   "categoryText": "text-orange-400"
+
+4. excerpt:
+   - 一覧ページに表示される短い説明
+   - 1-2文程度
+
+5. summary:
+   - 記事の本文
+   - 詳細ページに表示される
+
+6. date:
+   - 形式: "YYYY-MM-DD"
+   - 例: "2025-10-28"
+
+7. image:
+   - Unsplash: "https://images.unsplash.com/photo-xxxxx?w=800&q=80"
+   - 自分の画像: "./images/articles/my-image.jpg"
+
+【使い方】
+1. このテンプレートをコピー
+2. 内容を記入
+3. articles.jsonを開く
+4. 配列の最後（]の前）に「,」を付けてから、このデータを貼り付け
+5. 保存してGitHubにpush
+
+【例】
+articles.jsonに追加する場合:
+
+[
+  { 既存の記事1 },
+  { 既存の記事2 },
+  {
+    "id": 3,
+    "title": "新しい記事",
+    ...
+  }
+]
