@@ -1,36 +1,634 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leonia News</title>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leonia - Neutral Eyes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .animate-slideUp {
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body>
-  <div class="background"></div>
-  <header>
-    <div class="logo">
-      <h1>Leonia</h1>
-      <p>Neutral Eyes</p>
-    </div>
-    <nav>
-      <button onclick="showPage('home')"><i data-lucide="home"></i> ホーム</button>
-      <button onclick="showPage('bookshelf')"><i data-lucide="book-open"></i> 本棚</button>
-      <button onclick="showPage('about')"><i data-lucide="info"></i> About</button>
-      <button onclick="showPage('contact')"><i data-lucide="mail"></i> Contact</button>
-    </nav>
-  </header>
-  <main id="content"></main>
-  <div id="article-popup" class="popup"></div>
-  <div id="book-popup" class="popup"></div>
-  <footer>
-    <p>© 2025 Leonia. Powered by neutral AI.</p>
-  </footer>
-  <script src="script.js"></script>
-  <script>
-    lucide.createIcons();
-  </script>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950/20 via-transparent to-transparent pointer-events-none"></div>
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-40 backdrop-blur-2xl bg-slate-950/80 border-b border-white/5">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20">
+                        <span class="text-white font-extralight text-xl">L</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extralight bg-gradient-to-r from-slate-200 via-orange-200 to-amber-300 bg-clip-text text-transparent">
+                            Leonia
+                        </h1>
+                        <p class="text-[10px] text-slate-600 font-light">Neutral Eyes</p>
+                    </div>
+                </div>
+                
+                <nav class="flex gap-2" id="nav-buttons"></nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-16 relative" id="main-content"></main>
+
+    <!-- Footer -->
+    <footer class="relative border-t border-white/5 bg-slate-950/50 backdrop-blur-sm mt-24">
+        <div class="container mx-auto px-6 py-10">
+            <div class="text-center space-y-2">
+                <p class="text-slate-500 text-sm font-light">© 2025 Leonia. All rights reserved.</p>
+                <p class="text-slate-600 text-xs font-light">Powered by neutral AI technology</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Popup Container -->
+    <div id="popup-container"></div>
+
+    <script>
+        // SVG Icons
+        const icons = {
+            home: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
+            bookOpen: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>',
+            info: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>',
+            mail: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>',
+            share2: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>',
+            externalLink: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>',
+            x: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
+            twitter: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>',
+            facebook: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>',
+            link2: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><line x1="8" x2="16" y1="12" y2="12"></line></svg>',
+            book: '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>'
+        };
+
+        // Data
+        const newsArticles = [
+            {
+                id: 1,
+                title: "量子コンピューティングの新たな突破口",
+                category: "テクノロジー",
+                categoryColor: "bg-blue-500/10",
+                categoryText: "text-blue-400",
+                excerpt: "研究チームが室温での量子もつれ状態の維持に成功。量子コンピューティングの実用化に大きく前進。",
+                summary: "国際研究チームが、室温環境下で量子もつれ状態を安定的に維持することに成功しました。これまで超低温環境が必須とされていた量子コンピューティング技術において、画期的な進展となります。この成果により、量子コンピュータの実用化と普及が大きく加速すると期待されています。",
+                date: "2025-10-27",
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80"
+            },
+            {
+                id: 2,
+                title: "深海探査で未知の生態系を発見",
+                category: "サイエンス",
+                categoryColor: "bg-emerald-500/10",
+                categoryText: "text-emerald-400",
+                excerpt: "マリアナ海溝の新たな調査により、これまで知られていなかった生物群集が確認された。",
+                summary: "深海探査船による最新の調査で、マリアナ海溝の水深8000m地点において、これまで知られていなかった独自の生態系が発見されました。熱水噴出孔周辺には、地球上の他の場所には存在しない固有種が多数確認され、生命の起源や進化の過程を解明する新たな手がかりとなることが期待されています。",
+                date: "2025-10-26",
+                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80"
+            },
+            {
+                id: 3,
+                title: "再生可能エネルギーが世界エネルギー供給の40%に到達",
+                category: "環境",
+                categoryColor: "bg-green-500/10",
+                categoryText: "text-green-400",
+                excerpt: "国際エネルギー機関の最新レポートによると、太陽光と風力発電の急速な普及により歴史的な節目を達成。",
+                summary: "国際エネルギー機関(IEA)が発表した最新の報告書によれば、2025年における世界の総エネルギー供給量のうち、再生可能エネルギーが占める割合が初めて40%に達しました。特に太陽光発電と風力発電の技術革新とコスト低下が、この急速な普及を牽引しています。",
+                date: "2025-10-25",
+                image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&q=80"
+            },
+            {
+                id: 4,
+                title: "AIによる新薬開発が臨床試験段階へ",
+                category: "医療",
+                categoryColor: "bg-pink-500/10",
+                categoryText: "text-pink-400",
+                excerpt: "機械学習により設計された抗がん剤が、従来の手法より3倍の速度で開発され、ヒト臨床試験を開始。",
+                summary: "人工知能と機械学習技術を活用して設計された新規抗がん剤が、第一相臨床試験を開始しました。この薬剤は従来の創薬プロセスと比較して約3分の1の期間で開発され、AIによる薬剤設計の有効性を実証する重要な事例となっています。",
+                date: "2025-10-24",
+                image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&q=80"
+            },
+            {
+                id: 5,
+                title: "火星探査機が地下水の存在を確認",
+                category: "宇宙",
+                categoryColor: "bg-purple-500/10",
+                categoryText: "text-purple-400",
+                excerpt: "NASAの探査機が火星の地下3kmに大規模な液体水の存在を示す証拠を発見。生命探査に新たな展開。",
+                summary: "NASAの火星探査機が、火星の地下約3kmの深さに大規模な液体水の層が存在する強力な証拠を発見しました。これは火星における生命の痕跡を探索する上で極めて重要な発見であり、今後の探査計画に大きな影響を与えることが予想されます。",
+                date: "2025-10-23",
+                image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=400&q=80"
+            },
+            {
+                id: 6,
+                title: "量子暗号通信網が主要都市間で実用化",
+                category: "テクノロジー",
+                categoryColor: "bg-blue-500/10",
+                categoryText: "text-blue-400",
+                excerpt: "絶対に傍受不可能とされる量子暗号技術を用いた通信網が、東京-大阪間で商用サービスを開始。",
+                summary: "量子力学の原理を応用した絶対に傍受不可能な暗号通信技術が、東京と大阪を結ぶ商用ネットワークで実用化されました。この技術により、金融取引や機密情報の伝送における安全性が飛躍的に向上することが期待されています。",
+                date: "2025-10-22",
+                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=80"
+            }
+        ];
+
+        const researchBooks = [
+            {
+                id: 1,
+                title: "量子コンピューティング革命",
+                subtitle: "次世代計算技術の全貌",
+                coverColor: "from-blue-400 via-cyan-400 to-teal-300",
+                pages: 67,
+                date: "2025-10-20",
+                summary: "本書は、量子コンピューティング技術の最新動向から将来展望まで、AIによる徹底的な調査と分析をまとめた包括的なレポートです。室温量子コンピュータの実現可能性、産業応用の可能性、社会への影響まで多角的に考察しています。"
+            },
+            {
+                id: 2,
+                title: "深海の未知なる世界",
+                subtitle: "マリアナ海溝生態系調査報告",
+                coverColor: "from-emerald-400 via-teal-400 to-cyan-500",
+                pages: 89,
+                date: "2025-10-15",
+                summary: "最新の深海探査データをもとに、マリアナ海溝の生態系、地質学的特徴、そして生命の起源に関する新たな知見を網羅的に分析した調査報告書です。未知の生物種の発見から、極限環境における生命適応メカニズムまで詳細に解説しています。"
+            },
+            {
+                id: 3,
+                title: "再生可能エネルギーの未来",
+                subtitle: "持続可能な社会への道筋",
+                coverColor: "from-green-400 via-lime-400 to-yellow-300",
+                pages: 124,
+                date: "2025-10-10",
+                summary: "世界各国のエネルギー政策、技術革新、経済的影響を総合的に分析し、再生可能エネルギーが主流となる社会のビジョンを描きます。太陽光、風力、地熱、水力など多様なエネルギー源の可能性と課題を、データに基づいて詳細に検討しています。"
+            },
+            {
+                id: 4,
+                title: "AI創薬の最前線",
+                subtitle: "医療イノベーションの新時代",
+                coverColor: "from-pink-400 via-rose-400 to-orange-300",
+                pages: 95,
+                date: "2025-10-05",
+                summary: "人工知能技術が製薬業界にもたらす革命的な変化を、技術的側面、規制環境、倫理的課題まで包括的に分析した専門書です。機械学習による創薬プロセスの効率化から、個別化医療の実現まで、未来の医療を展望します。"
+            }
+        ];
+
+        // State
+        let state = {
+            currentPage: 'home',
+            selectedArticle: null,
+            selectedBook: null,
+            showPopup: false,
+            showBookPopup: false,
+            shareMenu: null,
+            formData: { name: '', email: '', message: '' }
+        };
+
+        // Navigation
+        const navItems = [
+            { id: 'home', label: 'ホーム', icon: 'home' },
+            { id: 'bookshelf', label: '本棚', icon: 'bookOpen' },
+            { id: 'about', label: 'About', icon: 'info' },
+            { id: 'contact', label: 'Contact', icon: 'mail' }
+        ];
+
+        function renderNav() {
+            const nav = document.getElementById('nav-buttons');
+            nav.innerHTML = navItems.map(item => `
+                <button
+                    onclick="changePage('${item.id}')"
+                    class="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light ${
+                        state.currentPage === item.id 
+                            ? 'bg-gradient-to-r from-orange-400/70 to-amber-400/70 text-white shadow-lg shadow-orange-500/20' 
+                            : 'text-slate-400 hover:bg-white/5 hover:text-slate-300'
+                    }"
+                >
+                    ${icons[item.icon]}
+                    <span class="hidden md:inline">${item.label}</span>
+                </button>
+            `).join('');
+        }
+
+        function changePage(page) {
+            state.currentPage = page;
+            state.selectedArticle = null;
+            renderNav();
+            renderContent();
+        }
+
+        function showArticlePopup(article) {
+            state.selectedArticle = article;
+            state.showPopup = true;
+            renderPopup();
+        }
+
+        function closePopup() {
+            state.showPopup = false;
+            renderPopup();
+        }
+
+        function showBookModal(book) {
+            state.selectedBook = book;
+            state.showBookPopup = true;
+            renderBookPopup();
+        }
+
+        function closeBookPopup() {
+            state.showBookPopup = false;
+            renderBookPopup();
+        }
+
+        function toggleShareMenu(id) {
+            state.shareMenu = state.shareMenu === id ? null : id;
+            if (state.showPopup) {
+                renderPopup();
+            } else {
+                renderContent();
+            }
+        }
+
+        function shareArticle(article, platform) {
+            const url = `https://leonia.news/article/${article.id}`;
+            const text = article.title;
+            
+            switch(platform) {
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                    break;
+                case 'facebook':
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(url);
+                    alert('リンクをコピーしました');
+                    break;
+            }
+            state.shareMenu = null;
+            if (state.showPopup) {
+                renderPopup();
+            } else {
+                renderContent();
+            }
+        }
+
+        function renderPopup() {
+            const container = document.getElementById('popup-container');
+            if (!state.showPopup || !state.selectedArticle) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const article = state.selectedArticle;
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closePopup()">
+                    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
+                    <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
+                        <button onclick="closePopup()" class="sticky top-6 right-6 float-right p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm z-10">
+                            ${icons.x}
+                        </button>
+                        
+                        <div class="p-10 space-y-6">
+                            <img src="${article.image}" alt="${article.title}" class="w-full h-56 object-cover rounded-2xl shadow-xl">
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="px-3 py-1.5 ${article.categoryColor} backdrop-blur-sm rounded-full text-xs ${article.categoryText} font-medium border border-white/5">
+                                        ${article.category}
+                                    </span>
+                                    <span class="text-slate-500 text-xs">${article.date}</span>
+                                </div>
+                                
+                                <h2 class="text-3xl font-light text-slate-100 leading-snug">${article.title}</h2>
+                                
+                                <p class="text-slate-300 leading-relaxed text-base">${article.summary}</p>
+                            </div>
+                            
+                            <div class="pt-6 border-t border-white/5 space-y-4">
+                                <p class="text-slate-400 text-sm leading-relaxed">
+                                    この記事は、複数の信頼できる情報源から収集されたデータをもとに、AIによって中立的な視点で作成されています。
+                                </p>
+                                
+                                <div class="flex gap-3 flex-wrap">
+                                    <button onclick="toggleShareMenu(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all text-sm backdrop-blur-sm">
+                                        ${icons.share2}
+                                        共有
+                                    </button>
+                                    
+                                    <button onclick="viewArticleDetail(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all text-sm shadow-lg shadow-orange-500/20">
+                                        ${icons.externalLink}
+                                        詳細を見る
+                                    </button>
+                                    
+                                    ${state.shareMenu === article.id ? `
+                                        <div class="flex gap-2 items-center animate-fadeIn">
+                                            <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                ${icons.twitter}
+                                            </button>
+                                            <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'facebook')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                ${icons.facebook}
+                                            </button>
+                                            <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                ${icons.link2}
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBookPopup() {
+            const container = document.getElementById('popup-container');
+            if (!state.showBookPopup || !state.selectedBook) {
+                if (!state.showPopup) {
+                    container.innerHTML = '';
+                }
+                return;
+            }
+
+            const book = state.selectedBook;
+            container.innerHTML += `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeBookPopup()">
+                    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
+                    <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
+                        <button onclick="closeBookPopup()" class="sticky top-6 right-6 float-right p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm z-10">
+                            ${icons.x}
+                        </button>
+                        
+                        <div class="p-10 space-y-6">
+                            <div class="flex items-start gap-6">
+                                <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0">
+                                    ${icons.book}
+                                </div>
+                                <div class="flex-1 space-y-3">
+                                    <h2 class="text-2xl font-light text-slate-100 leading-snug">${book.title}</h2>
+                                    <p class="text-slate-400 text-sm">${book.subtitle}</p>
+                                    <div class="flex items-center gap-4 text-xs text-slate-500">
+                                        <span>${book.pages}ページ</span>
+                                        <span>•</span>
+                                        <span>${book.date}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-slate-300 leading-relaxed">${book.summary}</p>
+                            
+                            <div class="pt-6 border-t border-white/5">
+                                <button onclick="alert('本の閲覧機能は開発中です')" class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all font-medium shadow-lg shadow-orange-500/20">
+                                    ${icons.book}
+                                    本を読む
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function viewArticleDetail(articleId) {
+            state.selectedArticle = newsArticles.find(a => a.id === articleId);
+            state.currentPage = 'article';
+            state.showPopup = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderNav();
+            renderContent();
+            renderPopup();
+        }
+
+        function renderContent() {
+            const main = document.getElementById('main-content');
+            
+            switch(state.currentPage) {
+                case 'home':
+                    main.innerHTML = `
+                        <div class="space-y-12 animate-fadeIn">
+                            <div class="text-center space-y-4 py-12">
+                                <h1 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">
+                                    Neutral Eyes
+                                </h1>
+                                <p class="text-slate-500 text-sm font-light">中立的な視点で世界を見つめる</p>
+                            </div>
+                            
+                            <div class="max-w-4xl mx-auto space-y-4">
+                                ${newsArticles.map(article => `
+                                    <div onclick="showArticlePopup(${JSON.stringify(article).replace(/"/g, '&quot;')})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
+                                        <div class="p-5 flex gap-4">
+                                            <img src="${article.image}" alt="${article.title}" class="w-28 h-28 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
+                                            
+                                            <div class="flex-1 flex flex-col justify-between min-w-0">
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
+                                                            ${article.category}
+                                                        </span>
+                                                        <span class="text-xs text-slate-600">${article.date}</span>
+                                                    </div>
+                                                    
+                                                    <h3 class="font-medium text-slate-200 text-base leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
+                                                        ${article.title}
+                                                    </h3>
+                                                    
+                                                    <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">
+                                                        ${article.excerpt}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    break;
+                
+                case 'bookshelf':
+                    main.innerHTML = `
+                        <div class="space-y-12 animate-fadeIn">
+                            <div class="text-center space-y-3">
+                                <h2 class="text-4xl font-extralight text-slate-200">調査本棚</h2>
+                                <p class="text-slate-500 text-sm font-light">AIによる詳細な調査・分析レポート</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                                ${researchBooks.map(book => `
+                                    <div onclick="showBookModal(${JSON.stringify(book).replace(/"/g, '&quot;')})" class="group cursor-pointer transition-all duration-500 hover:-translate-y-2">
+                                        <div class="w-full aspect-[3/4] rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-xl group-hover:shadow-2xl transition-all duration-500 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                            ${icons.book}
+                                            <div class="text-center relative z-10">
+                                                <h3 class="text-white font-medium text-base mb-1 leading-snug">${book.title}</h3>
+                                                <p class="text-white/80 text-xs">${book.subtitle}</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 space-y-1 px-1">
+                                            <p class="text-slate-300 text-sm font-light">${book.title}</p>
+                                            <div class="flex items-center gap-3 text-xs text-slate-600">
+                                                <span>${book.pages}ページ</span>
+                                                <span>•</span>
+                                                <span>${book.date}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    break;
+                
+                case 'about':
+                    main.innerHTML = `
+                        <div class="max-w-3xl mx-auto space-y-10 animate-fadeIn">
+                            <h2 class="text-4xl font-extralight text-slate-200 text-center">Leoniaについて</h2>
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl p-10 border border-white/5 space-y-6">
+                                <p class="text-slate-300 leading-relaxed font-light">
+                                    Leoniaは、AIによる中立的な情報収集と分析を通じて、偏りのないニュースをお届けするプラットフォームです。
+                                </p>
+                                <p class="text-slate-300 leading-relaxed font-light">
+                                    私たちのモットー「Neutral Eyes」は、あらゆる視点から物事を見つめ、読者自身が判断できる情報を提供するという理念を表しています。
+                                </p>
+                                <p class="text-slate-300 leading-relaxed font-light">
+                                    宇宙と銀河をテーマにしたデザインは、広大な視野と無限の可能性を象徴しています。
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                
+                case 'contact':
+                    main.innerHTML = `
+                        <div class="max-w-2xl mx-auto space-y-10 animate-fadeIn">
+                            <h2 class="text-4xl font-extralight text-slate-200 text-center">お問い合わせ</h2>
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl p-10 border border-white/5">
+                                <form onsubmit="handleSubmit(event)" class="space-y-6">
+                                    <div>
+                                        <label class="block text-slate-400 mb-2 text-sm font-light">お名前</label>
+                                        <input type="text" id="name" value="${state.formData.name}" onchange="updateFormData('name', this.value)" class="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:border-orange-400/50 focus:outline-none transition-colors font-light">
+                                    </div>
+                                    <div>
+                                        <label class="block text-slate-400 mb-2 text-sm font-light">メールアドレス</label>
+                                        <input type="email" id="email" value="${state.formData.email}" onchange="updateFormData('email', this.value)" class="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:border-orange-400/50 focus:outline-none transition-colors font-light">
+                                    </div>
+                                    <div>
+                                        <label class="block text-slate-400 mb-2 text-sm font-light">メッセージ</label>
+                                        <textarea rows="6" id="message" onchange="updateFormData('message', this.value)" class="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:border-orange-400/50 focus:outline-none transition-colors resize-none font-light">${state.formData.message}</textarea>
+                                    </div>
+                                    <button type="submit" class="w-full bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white py-3.5 rounded-xl font-light transition-all shadow-lg shadow-orange-500/20">
+                                        送信
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                
+                case 'article':
+                    if (!state.selectedArticle) {
+                        changePage('home');
+                        return;
+                    }
+                    const article = state.selectedArticle;
+                    main.innerHTML = `
+                        <div class="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+                            <button onclick="changePage('home')" class="text-orange-400 hover:text-orange-300 flex items-center gap-2 text-sm transition-colors font-light">
+                                ← 戻る
+                            </button>
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl overflow-hidden border border-white/5">
+                                <img src="${article.image}" alt="${article.title}" class="w-full h-80 object-cover">
+                                <div class="p-10 space-y-6">
+                                    <div class="flex items-center gap-3">
+                                        <span class="px-4 py-2 ${article.categoryColor} backdrop-blur-sm rounded-xl text-sm ${article.categoryText} font-medium">
+                                            ${article.category}
+                                        </span>
+                                        <span class="text-slate-500 text-sm">${article.date}</span>
+                                    </div>
+                                    <h1 class="text-4xl font-light text-slate-200 leading-snug">${article.title}</h1>
+                                    <p class="text-slate-300 text-lg leading-relaxed font-light">${article.summary}</p>
+                                    
+                                    <div class="pt-6 border-t border-white/5">
+                                        <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                            この記事は、複数の信頼できる情報源から収集されたデータをもとに、AIによって中立的な視点で作成されています。
+                                            詳細な分析と追加の情報源については、各セクションで確認することができます。
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="flex gap-3 flex-wrap">
+                                        <button onclick="toggleShareMenu('article')" class="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all backdrop-blur-sm">
+                                            ${icons.share2}
+                                            共有
+                                        </button>
+                                        ${state.shareMenu === 'article' ? `
+                                            <div class="flex gap-2 items-center animate-fadeIn">
+                                                <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'twitter')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                    ${icons.twitter}
+                                                </button>
+                                                <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'facebook')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                    ${icons.facebook}
+                                                </button>
+                                                <button onclick="shareArticle(${JSON.stringify(article).replace(/"/g, '&quot;')}, 'copy')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                    ${icons.link2}
+                                                </button>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        function updateFormData(field, value) {
+            state.formData[field] = value;
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert('メッセージを送信しました(デモ)');
+            state.formData = { name: '', email: '', message: '' };
+            renderContent();
+        }
+
+        // Initialize
+        renderNav();
+        renderContent();
+    </script>
 </body>
 </html>
