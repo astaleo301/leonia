@@ -153,6 +153,7 @@
         let researchBooks = [];
         let audioPlayer = null;
         let currentAudioBookId = null;
+        let sortOrder = 'newest';
 
         let state = {
             currentPage: 'home',
@@ -246,6 +247,7 @@
         function changePage(page) {
             state.currentPage = page;
             state.selectedArticle = null;
+            sortOrder = 'newest';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             renderNav();
             renderContent();
@@ -499,7 +501,7 @@
             }
 
             const book = state.selectedBook;
-            const existingContent = container.innerHTML;
+            const existingContent = state.showPopup ? container.innerHTML : '';
             
             const hasChapters = book.chapters && book.chapters.length > 0;
             const hasCover = book.cover;
@@ -734,11 +736,31 @@
             return shuffled.slice(0, count);
         }
 
+        function getSortedArticles() {
+            const sorted = [...newsArticles];
+            switch(sortOrder) {
+                case 'newest':
+                    return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+                case 'oldest':
+                    return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+                case 'category':
+                    return sorted.sort((a, b) => a.category.localeCompare(b.category));
+                default:
+                    return sorted;
+            }
+        }
+
+        function changeSortOrder(order) {
+            sortOrder = order;
+            renderContent();
+        }
+
         function renderContent() {
             const main = document.getElementById('main-content');
             
             switch(state.currentPage) {
                 case 'home':
+                    const sortedArticles = getSortedArticles();
                     main.innerHTML = `
                         <div class="space-y-12 animate-fadeIn">
                             <div class="text-center space-y-4 py-12">
@@ -748,33 +770,50 @@
                                 <p class="text-slate-500 text-sm font-light">中立的な視点で世界を見つめる</p>
                             </div>
                             
-                            <div class="max-w-4xl mx-auto space-y-4">
-                                ${newsArticles.map(article => `
-                                    <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
-                                        <div class="p-5 flex gap-4">
-                                            <img src="${article.image}" alt="${article.title}" class="w-28 h-28 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
-                                            
-                                            <div class="flex-1 flex flex-col justify-between min-w-0">
-                                                <div class="space-y-2">
-                                                    <div class="flex items-center gap-2">
-                                                        <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
-                                                            ${article.category}
-                                                        </span>
-                                                        <span class="text-xs text-slate-600">${article.date}</span>
+                            <div class="max-w-4xl mx-auto space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-slate-500 text-sm font-light">${sortedArticles.length}件の記事</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="changeSortOrder('newest')" class="px-4 py-2 rounded-xl text-xs transition-all font-light ${sortOrder === 'newest' ? 'bg-white/10 text-orange-300' : 'text-slate-500 hover:text-slate-400 hover:bg-white/5'}">
+                                            新しい順
+                                        </button>
+                                        <button onclick="changeSortOrder('oldest')" class="px-4 py-2 rounded-xl text-xs transition-all font-light ${sortOrder === 'oldest' ? 'bg-white/10 text-orange-300' : 'text-slate-500 hover:text-slate-400 hover:bg-white/5'}">
+                                            古い順
+                                        </button>
+                                        <button onclick="changeSortOrder('category')" class="px-4 py-2 rounded-xl text-xs transition-all font-light ${sortOrder === 'category' ? 'bg-white/10 text-orange-300' : 'text-slate-500 hover:text-slate-400 hover:bg-white/5'}">
+                                            カテゴリー順
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    ${sortedArticles.map(article => `
+                                        <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
+                                            <div class="p-5 flex gap-4">
+                                                <img src="${article.image}" alt="${article.title}" class="w-28 h-28 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
+                                                
+                                                <div class="flex-1 flex flex-col justify-between min-w-0">
+                                                    <div class="space-y-2">
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
+                                                                ${article.category}
+                                                            </span>
+                                                            <span class="text-xs text-slate-600">${article.date}</span>
+                                                        </div>
+                                                        
+                                                        <h3 class="font-medium text-slate-200 text-base leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
+                                                            ${article.title}
+                                                        </h3>
+                                                        
+                                                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">
+                                                            ${article.excerpt}
+                                                        </p>
                                                     </div>
-                                                    
-                                                    <h3 class="font-medium text-slate-200 text-base leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
-                                                        ${article.title}
-                                                    </h3>
-                                                    
-                                                    <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">
-                                                        ${article.excerpt}
-                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                `).join('')}
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
                     `;
@@ -823,18 +862,118 @@
                 
                 case 'about':
                     main.innerHTML = `
-                        <div class="max-w-3xl mx-auto space-y-10 animate-fadeIn">
-                            <h2 class="text-4xl font-extralight text-slate-200 text-center">Leoniaについて</h2>
-                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl p-10 border border-white/5 space-y-6">
-                                <p class="text-slate-300 leading-relaxed font-light">
-                                    Leoniaは、AIによる中立的な情報収集と分析を通じて、偏りのないニュースをお届けするプラットフォームです。
-                                </p>
-                                <p class="text-slate-300 leading-relaxed font-light">
-                                    私たちのモットー「Neutral Eyes」は、あらゆる視点から物事を見つめ、読者自身が判断できる情報を提供するという理念を表しています。
-                                </p>
-                                <p class="text-slate-300 leading-relaxed font-light">
-                                    宇宙と銀河をテーマにしたデザインは、広大な視野と無限の可能性を象徴しています。
-                                </p>
+                        <div class="max-w-4xl mx-auto space-y-16 animate-fadeIn py-8">
+                            <div class="text-center space-y-6">
+                                <h2 class="text-5xl font-extralight text-slate-200 tracking-wide">About Leonia</h2>
+                                <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                                <p class="text-slate-400 text-sm font-light">中立的な視点で、あなたの思考をサポートします</p>
+                            </div>
+                            
+                            <div class="space-y-12">
+                                <div class="bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm rounded-3xl p-10 border border-white/5 space-y-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-400/20 to-amber-400/20 flex items-center justify-center border border-orange-400/10">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400/60"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                        </div>
+                                        <div class="flex-1 space-y-4">
+                                            <h3 class="text-2xl font-light text-slate-200">Leoniaとは</h3>
+                                            <p class="text-slate-300 leading-relaxed font-light">
+                                                Leoniaは、AIを活用した中立的な情報プラットフォームです。私たちは、あらゆる利権や圧力から独立した立場で、偏りのない情報をお届けします。
+                                            </p>
+                                            <p class="text-slate-300 leading-relaxed font-light">
+                                                利用者が自ら考え、検証し、議論するための十分な知識と手法を提供することを目的としています
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-white/[0.02] backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-400/20 transition-all duration-500 group space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400/20 to-cyan-400/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400/60"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-slate-200">独立性の保証</h3>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                            広告は一切導入しません。スポンサーの影響を受けることなく、純粋に中立的な情報提供に専念します。あなたに届く情報は、誰の利益でもなく、ただ事実だけを基にしています。
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white/[0.02] backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-400/20 transition-all duration-500 group space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400/20 to-pink-400/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400/60"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-slate-200">広告ゼロの理由</h3>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                            私たちは、完全に独立した情報提供を実現するため、広告に頼らないモデルを選択しました。
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white/[0.02] backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-400/20 transition-all duration-500 group space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-400/20 to-emerald-400/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400/60"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-slate-200">もう一つの選択肢</h3>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                            感情や私見のこもった人間的なメディアを否定するわけではありません。Leoniaは「もう一つの選択肢」として、中立的な視点を提供します。
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white/[0.02] backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-400/20 transition-all duration-500 group space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400/20 to-amber-400/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400/60"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-slate-200">思考のパートナー</h3>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                            私たちの役割は、利用者が思考・検証・議論するための土台となる、正確で十分な情報を提供することです。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="relative">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-orange-950/10 via-transparent to-orange-950/10 rounded-3xl blur-xl"></div>
+                                    <div class="relative bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-sm rounded-3xl p-10 border border-white/10 space-y-6">
+                                        <div class="text-center space-y-4">
+                                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400/20 to-amber-400/20 border border-orange-400/20">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400/60"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                                            </div>
+                                            <h3 class="text-2xl font-light text-slate-200">Neutral Eyes</h3>
+                                            <p class="text-slate-400 leading-relaxed font-light max-w-2xl mx-auto">
+                                                中立的な視点で世界を見つめること。それは、あらゆる角度から物事を捉え、判断を支えるための基盤を提供することです。情報の向こう側にある真実に、少しでも近づけるように。
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-center gap-8 pt-6 flex-wrap">
+                                            <div class="text-center space-y-1">
+                                                <div class="text-3xl font-extralight text-orange-400/40">0</div>
+                                                <p class="text-xs text-slate-500 font-light">広告</p>
+                                            </div>
+                                            <div class="w-px h-12 bg-white/5"></div>
+                                            <div class="text-center space-y-1">
+                                                <div class="text-3xl font-extralight text-orange-400/40">100%</div>
+                                                <p class="text-xs text-slate-500 font-light">中立性</p>
+                                            </div>
+                                            <div class="w-px h-12 bg-white/5"></div>
+                                            <div class="text-center space-y-1">
+                                                <div class="text-3xl font-extralight text-orange-400/40">∞</div>
+                                                <p class="text-xs text-slate-500 font-light">可能性</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center space-y-4 pt-8">
+                                    <p class="text-slate-500 text-sm font-light leading-relaxed">
+                                        あなたの思考と判断を、Leoniaがサポートします。
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     `;
