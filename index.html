@@ -46,9 +46,7 @@
         <div class="container mx-auto px-6 py-5">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <!-- ロゴ画像（logo.png, logo.jpg, logo.svgに対応） -->
-                    <img src="./images/logo.png" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.onerror=null; this.src='./images/logo.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex'};">
-                    <!-- フォールバック：画像がない場合 -->
+                    <img src="./images/logo.jpg" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20" style="display:none;">
                         <span class="text-white font-extralight text-xl">L</span>
                     </div>
@@ -86,7 +84,8 @@
     <div id="popup-container"></div>
 
     <script>
-        // SVG Icons
+        const BASE_URL = 'https://astaleo301.github.io/leonia/';
+        
         const icons = {
             home: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
             bookOpen: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>',
@@ -96,27 +95,25 @@
             externalLink: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>',
             x: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
             twitter: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>',
-            facebook: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>',
             link2: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><line x1="8" x2="16" y1="12" y2="12"></line></svg>',
-            book: '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>'
+            book: '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>',
+            messageCircle: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
+            xTwitter: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>',
+            cloud: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>'
         };
 
-        // Data - これがJSONファイルから読み込まれます
         let newsArticles = [];
         let researchBooks = [];
 
-        // State
         let state = {
             currentPage: 'home',
             selectedArticle: null,
             selectedBook: null,
             showPopup: false,
             showBookPopup: false,
-            shareMenu: null,
-            formData: { name: '', email: '', message: '' }
+            shareMenu: null
         };
 
-        // JSONファイルから記事を読み込む
         async function loadArticles() {
             try {
                 const response = await fetch('./articles/articles.json');
@@ -124,13 +121,11 @@
                 renderContent();
             } catch (error) {
                 console.error('記事の読み込みに失敗しました:', error);
-                // エラー時はデフォルトの記事を表示
                 newsArticles = getDefaultArticles();
                 renderContent();
             }
         }
 
-        // JSONファイルから本を読み込む
         async function loadBooks() {
             try {
                 const response = await fetch('./books/books.json');
@@ -141,7 +136,6 @@
             }
         }
 
-        // デフォルトの記事（フォールバック用）
         function getDefaultArticles() {
             return [
                 {
@@ -152,6 +146,7 @@
                     categoryText: "text-blue-400",
                     excerpt: "研究チームが室温での量子もつれ状態の維持に成功。量子コンピューティングの実用化に大きく前進。",
                     summary: "国際研究チームが、室温環境下で量子もつれ状態を安定的に維持することに成功しました。これまで超低温環境が必須とされていた量子コンピューティング技術において、画期的な進展となります。この成果により、量子コンピュータの実用化と普及が大きく加速すると期待されています。",
+                    content: "国際研究チームが、室温環境下で量子もつれ状態を安定的に維持することに成功しました。これまで超低温環境が必須とされていた量子コンピューティング技術において、画期的な進展となります。\n\nこの技術的ブレークスルーは、従来の量子コンピュータが抱えていた最大の課題の一つを解決するものです。量子状態の維持には通常、絶対零度に近い極低温環境が必要とされていましたが、新しい手法では特殊な材料とレーザー技術を組み合わせることで、室温でも安定した量子もつれを実現しました。\n\n研究チームによると、この成果により量子コンピュータの製造コストが大幅に削減され、より多くの研究機関や企業が量子技術にアクセスできるようになると期待されています。また、量子通信やセンシング技術への応用も見込まれており、様々な分野での実用化が加速すると予想されます。",
                     date: "2025-10-27",
                     image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80"
                 }
@@ -172,7 +167,6 @@
             ];
         }
 
-        // Navigation
         const navItems = [
             { id: 'home', label: 'ホーム', icon: 'home' },
             { id: 'bookshelf', label: '本棚', icon: 'bookOpen' },
@@ -200,6 +194,7 @@
         function changePage(page) {
             state.currentPage = page;
             state.selectedArticle = null;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             renderNav();
             renderContent();
         }
@@ -237,19 +232,17 @@
 
         function shareArticle(articleId, platform) {
             const article = newsArticles.find(a => a.id === articleId);
-            const url = `https://leonia.news/article/${article.id}`;
+            const url = `${BASE_URL}?article=${article.id}`;
             const text = article.title;
             
             switch(platform) {
                 case 'twitter':
                     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
                     break;
-                case 'facebook':
-                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-                    break;
                 case 'copy':
-                    navigator.clipboard.writeText(url);
-                    alert('リンクをコピーしました');
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('リンクをコピーしました');
+                    });
                     break;
             }
             state.shareMenu = null;
@@ -307,16 +300,13 @@
                                     
                                     <button onclick="viewArticleDetail(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all text-sm shadow-lg shadow-orange-500/20">
                                         ${icons.externalLink}
-                                        詳細を見る
+                                        詳細を読む
                                     </button>
                                     
                                     ${state.shareMenu === article.id ? `
                                         <div class="flex gap-2 items-center animate-fadeIn">
                                             <button onclick="shareArticle(${article.id}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                 ${icons.twitter}
-                                            </button>
-                                            <button onclick="shareArticle(${article.id}, 'facebook')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                                ${icons.facebook}
                                             </button>
                                             <button onclick="shareArticle(${article.id}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
                                                 ${icons.link2}
@@ -343,8 +333,9 @@
             const book = state.selectedBook;
             const existingContent = container.innerHTML;
             
-            // 章の目次を生成
             const hasChapters = book.chapters && book.chapters.length > 0;
+            const hasCover = book.cover;
+            
             const tableOfContents = hasChapters ? `
                 <div class="space-y-3">
                     <h3 class="text-lg font-medium text-slate-200">目次</h3>
@@ -375,7 +366,10 @@
                         
                         <div class="p-10 space-y-6">
                             <div class="flex items-start gap-6">
-                                <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0">
+                                ${hasCover ? `
+                                    <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                ` : ''}
+                                <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
                                     ${icons.book}
                                 </div>
                                 <div class="flex-1 space-y-3">
@@ -410,7 +404,6 @@
             `;
         }
 
-        // 本の章を読む
         function readBookChapter(bookId, chapterNumber) {
             const book = researchBooks.find(b => b.id === bookId);
             if (!book || !book.chapters) return;
@@ -423,7 +416,6 @@
             renderChapterReader();
         }
 
-        // 章の読書ビュー
         function renderChapterReader() {
             const container = document.getElementById('popup-container');
             const book = state.selectedBook;
@@ -438,7 +430,6 @@
                     <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
                     <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/5 animate-slideUp flex flex-col" onclick="event.stopPropagation()">
                         
-                        <!-- ヘッダー -->
                         <div class="flex items-center justify-between px-10 py-6 border-b border-white/5 flex-shrink-0">
                             <button onclick="showBookModal(${book.id})" class="flex items-center gap-2 text-slate-400 hover:text-slate-300 transition-colors text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -453,7 +444,6 @@
                             </button>
                         </div>
                         
-                        <!-- 本文 -->
                         <div class="flex-1 overflow-y-auto px-10 py-8">
                             <div class="max-w-3xl mx-auto space-y-6">
                                 <h1 class="text-3xl font-light text-slate-100 leading-snug mb-8">
@@ -465,7 +455,6 @@
                             </div>
                         </div>
                         
-                        <!-- フッター（ナビゲーション） -->
                         <div class="flex items-center justify-between px-10 py-6 border-t border-white/5 flex-shrink-0">
                             ${hasPrev ? `
                                 <button onclick="readBookChapter(${book.id}, ${book.chapters[currentIndex - 1].number})" 
@@ -500,6 +489,12 @@
             renderNav();
             renderContent();
             renderPopup();
+        }
+
+        function getRandomArticles(excludeId, count = 3) {
+            const otherArticles = newsArticles.filter(a => a.id !== excludeId);
+            const shuffled = otherArticles.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
         }
 
         function renderContent() {
@@ -557,14 +552,21 @@
                             </div>
                             
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-                                ${researchBooks.map(book => `
+                                ${researchBooks.map(book => {
+                                    const hasCover = book.cover;
+                                    return `
                                     <div onclick="showBookModal(${book.id})" class="group cursor-pointer transition-all duration-500 hover:-translate-y-2">
-                                        <div class="w-full aspect-[3/4] rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-xl group-hover:shadow-2xl transition-all duration-500 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                                            ${icons.book}
-                                            <div class="text-center relative z-10">
-                                                <h3 class="text-white font-medium text-base mb-1 leading-snug">${book.title}</h3>
-                                                <p class="text-white/80 text-xs">${book.subtitle}</p>
+                                        <div class="w-full aspect-[3/4] rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
+                                            ${hasCover ? `
+                                                <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            ` : ''}
+                                            <div class="w-full h-full bg-gradient-to-br ${book.coverColor} flex flex-col items-center justify-center p-6 relative" style="${hasCover ? 'display:none;' : ''}">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                                ${icons.book}
+                                                <div class="text-center relative z-10">
+                                                    <h3 class="text-white font-medium text-base mb-1 leading-snug">${book.title}</h3>
+                                                    <p class="text-white/80 text-xs">${book.subtitle}</p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="mt-3 space-y-1 px-1">
@@ -576,7 +578,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                `).join('')}
+                                `}).join('')}
                             </div>
                         </div>
                     `;
@@ -603,26 +605,60 @@
                 
                 case 'contact':
                     main.innerHTML = `
-                        <div class="max-w-2xl mx-auto space-y-10 animate-fadeIn">
-                            <h2 class="text-4xl font-extralight text-slate-200 text-center">お問い合わせ</h2>
-                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl p-10 border border-white/5">
-                                <form onsubmit="handleSubmit(event)" class="space-y-6">
-                                    <div>
-                                        <label class="block text-slate-400 mb-2 text-sm font-light">お名前</label>
-                                        <input type="text" id="name" value="${state.formData.name}" onchange="updateFormData('name', this.value)" class="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:border-orange-400/50 focus:outline-none transition-colors font-light">
+                        <div class="max-w-4xl mx-auto space-y-10 animate-fadeIn">
+                            <h2 class="text-4xl font-extralight text-slate-200 text-center">Contact</h2>
+                            
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl p-10 border border-white/5 space-y-8">
+                                <div class="text-center space-y-3">
+                                    <p class="text-slate-300 leading-relaxed font-light">
+                                        お問い合わせは以下のチャンネルからお気軽にどうぞ
+                                    </p>
+                                </div>
+                                
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <div class="space-y-6">
+                                        <a href="https://simplex.chat/contact#/?v=2-7&smp=smp%3A%2F%2FSkIkI6EPd2D63F4xFKfHk7I1UGZVNn6k1QWZ5rcyr6w%3D%40smp9.simplex.im%2FVEQykNaEh6WyGiwY6X-j8_VrCLMbLJvm%23%2F%3Fv%3D1-3%26dh%3DMCowBQYDK2VuAyEA8s3P2WYR8ZmkP7O_s5HFVn20pEvRmnvgXjy4sYQwFCM%253D%26srv%3Dogtwfxyi3h2h5weftjjpjmxclhb5ugufa5rcyrmg7j4xlch7qsr5nuqd.onion" target="_blank" class="flex items-start gap-4 p-6 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
+                                            <div class="p-3 bg-gradient-to-br from-orange-400/20 to-amber-400/20 rounded-xl group-hover:from-orange-400/30 group-hover:to-amber-400/30 transition-all">
+                                                ${icons.messageCircle}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-lg font-medium text-slate-200 mb-1">SimpleX Chat</h3>
+                                                <p class="text-slate-400 text-sm font-light">プライバシー重視のメッセージング</p>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="https://x.com/leonianews" target="_blank" class="flex items-start gap-4 p-6 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
+                                            <div class="p-3 bg-gradient-to-br from-slate-400/20 to-slate-500/20 rounded-xl group-hover:from-slate-400/30 group-hover:to-slate-500/30 transition-all">
+                                                ${icons.xTwitter}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-lg font-medium text-slate-200 mb-1">X (Twitter)</h3>
+                                                <p class="text-slate-400 text-sm font-light">@leonianews</p>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="https://bsky.app/profile/leonia.bsky.social" target="_blank" class="flex items-start gap-4 p-6 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
+                                            <div class="p-3 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-xl group-hover:from-blue-400/30 group-hover:to-cyan-400/30 transition-all">
+                                                ${icons.cloud}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-lg font-medium text-slate-200 mb-1">Bluesky</h3>
+                                                <p class="text-slate-400 text-sm font-light">@leonia.bsky.social</p>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <div>
-                                        <label class="block text-slate-400 mb-2 text-sm font-light">メールアドレス</label>
-                                        <input type="email" id="email" value="${state.formData.email}" onchange="updateFormData('email', this.value)" class="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:border-orange-400/50 focus:outline-none transition-colors font-light">
+                                    
+                                    <div class="flex flex-col items-center justify-center space-y-4 p-6 bg-white/[0.02] rounded-2xl border border-white/5">
+                                        <div class="text-center space-y-2">
+                                            <h3 class="text-lg font-medium text-slate-200">SimpleX QRコード</h3>
+                                            <p class="text-slate-400 text-xs font-light">スキャンして接続</p>
+                                        </div>
+                                        <img src="./images/simplex-qr.png" alt="SimpleX QR Code" class="w-48 h-48 rounded-xl bg-white p-2" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="w-48 h-48 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center" style="display:none;">
+                                            <p class="text-slate-400 text-sm text-center px-4">QRコード画像を<br>準備中です</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label class="block text-slate-400 mb-2 text-sm font-light">メッセージ</label>
-                                        <textarea rows="6" id="message" onchange="updateFormData('message', this.value)" class="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-slate-200 focus:border-orange-400/50 focus:outline-none transition-colors resize-none font-light">${state.formData.message}</textarea>
-                                    </div>
-                                    <button type="submit" class="w-full bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white py-3.5 rounded-xl font-light transition-all shadow-lg shadow-orange-500/20">
-                                        送信
-                                    </button>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -634,72 +670,106 @@
                         return;
                     }
                     const article = state.selectedArticle;
+                    const recommendedArticles = getRandomArticles(article.id);
+                    
                     main.innerHTML = `
                         <div class="max-w-4xl mx-auto space-y-8 animate-fadeIn">
                             <button onclick="changePage('home')" class="text-orange-400 hover:text-orange-300 flex items-center gap-2 text-sm transition-colors font-light">
-                                ← 戻る
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                ホームに戻る
                             </button>
-                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl overflow-hidden border border-white/5">
-                                <img src="${article.image}" alt="${article.title}" class="w-full h-80 object-cover">
-                                <div class="p-10 space-y-6">
-                                    <div class="flex items-center gap-3">
-                                        <span class="px-4 py-2 ${article.categoryColor} backdrop-blur-sm rounded-xl text-sm ${article.categoryText} font-medium">
-                                            ${article.category}
-                                        </span>
-                                        <span class="text-slate-500 text-sm">${article.date}</span>
+                            
+                            <article class="bg-white/[0.02] backdrop-blur-sm rounded-3xl overflow-hidden border border-white/5">
+                                <img src="${article.image}" alt="${article.title}" class="w-full h-96 object-cover">
+                                
+                                <div class="p-12 space-y-8">
+                                    <div class="space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <span class="px-4 py-2 ${article.categoryColor} backdrop-blur-sm rounded-xl text-sm ${article.categoryText} font-medium border border-white/5">
+                                                ${article.category}
+                                            </span>
+                                            <span class="text-slate-500 text-sm">${article.date}</span>
+                                        </div>
+                                        
+                                        <h1 class="text-5xl font-light text-slate-100 leading-tight">${article.title}</h1>
                                     </div>
-                                    <h1 class="text-4xl font-light text-slate-200 leading-snug">${article.title}</h1>
-                                    <p class="text-slate-300 text-lg leading-relaxed font-light">${article.summary}</p>
                                     
-                                    <div class="pt-6 border-t border-white/5">
+                                    <div class="prose prose-invert prose-lg max-w-none">
+                                        ${article.content ? article.content.split('\n\n').map(paragraph => 
+                                            `<p class="text-slate-300 leading-relaxed font-light mb-6">${paragraph.trim()}</p>`
+                                        ).join('') : `<p class="text-slate-300 leading-relaxed font-light mb-6">${article.summary}</p>`}
+                                    </div>
+                                    
+                                    <div class="pt-8 border-t border-white/5 space-y-4">
                                         <p class="text-slate-400 leading-relaxed text-sm font-light">
                                             この記事は、複数の信頼できる情報源から収集されたデータをもとに、AIによって中立的な視点で作成されています。
-                                            詳細な分析と追加の情報源については、各セクションで確認することができます。
                                         </p>
-                                    </div>
-                                    
-                                    <div class="flex gap-3 flex-wrap">
-                                        <button onclick="toggleShareMenu('article')" class="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all backdrop-blur-sm">
-                                            ${icons.share2}
-                                            共有
-                                        </button>
-                                        ${state.shareMenu === 'article' ? `
-                                            <div class="flex gap-2 items-center animate-fadeIn">
-                                                <button onclick="shareArticle(${article.id}, 'twitter')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                                    ${icons.twitter}
-                                                </button>
-                                                <button onclick="shareArticle(${article.id}, 'facebook')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                                    ${icons.facebook}
-                                                </button>
-                                                <button onclick="shareArticle(${article.id}, 'copy')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                                    ${icons.link2}
-                                                </button>
-                                            </div>
-                                        ` : ''}
+                                        
+                                        <div class="flex gap-3 flex-wrap">
+                                            <button onclick="toggleShareMenu('article')" class="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all backdrop-blur-sm">
+                                                ${icons.share2}
+                                                共有
+                                            </button>
+                                            ${state.shareMenu === 'article' ? `
+                                                <div class="flex gap-2 items-center animate-fadeIn">
+                                                    <button onclick="shareArticle(${article.id}, 'twitter')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                        ${icons.twitter}
+                                                    </button>
+                                                    <button onclick="shareArticle(${article.id}, 'copy')" class="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                        ${icons.link2}
+                                                    </button>
+                                                </div>
+                                            ` : ''}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
+                            
+                            ${recommendedArticles.length > 0 ? `
+                                <div class="space-y-6 pt-8">
+                                    <h2 class="text-2xl font-light text-slate-200">おすすめの記事</h2>
+                                    <div class="grid md:grid-cols-3 gap-6">
+                                        ${recommendedArticles.map(rec => `
+                                            <div onclick="viewArticleDetail(${rec.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
+                                                <img src="${rec.image}" alt="${rec.title}" class="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105">
+                                                <div class="p-4 space-y-2">
+                                                    <span class="px-2.5 py-1 ${rec.categoryColor} backdrop-blur-sm rounded-lg text-xs ${rec.categoryText} font-medium inline-block">
+                                                        ${rec.category}
+                                                    </span>
+                                                    <h3 class="font-medium text-slate-200 text-sm leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
+                                                        ${rec.title}
+                                                    </h3>
+                                                    <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">
+                                                        ${rec.excerpt}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
                         </div>
                     `;
                     break;
             }
         }
 
-        function updateFormData(field, value) {
-            state.formData[field] = value;
+        // Check URL parameters on load
+        function checkURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('article');
+            if (articleId) {
+                const article = newsArticles.find(a => a.id === parseInt(articleId));
+                if (article) {
+                    viewArticleDetail(parseInt(articleId));
+                }
+            }
         }
 
-        function handleSubmit(e) {
-            e.preventDefault();
-            alert('メッセージを送信しました(デモ)');
-            state.formData = { name: '', email: '', message: '' };
-            renderContent();
-        }
-
-        // Initialize
         renderNav();
-        loadArticles();
-        loadBooks();
+        Promise.all([loadArticles(), loadBooks()]).then(() => {
+            checkURLParams();
+        });
     </script>
 </body>
 </html>
