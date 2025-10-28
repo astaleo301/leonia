@@ -988,7 +988,8 @@
                     setTimeout(() => {
                         const summaryElement = document.getElementById('article-summary');
                         if (summaryElement && article.summary) {
-                            summaryElement.innerHTML = article.summary.replace(/\n/g, '<br>');
+                            const formattedSummary = article.summary.replace(/\n/g, '<br>');
+                            summaryElement.innerHTML = `<p class="text-slate-300 leading-relaxed font-light">${formattedSummary}</p>`;
                         }
                     }, 0);
                     break;
