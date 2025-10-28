@@ -36,6 +36,48 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(to right, rgb(251, 146, 60), rgb(251, 191, 36));
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(251, 146, 60, 0.5);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(to right, rgb(251, 146, 60), rgb(251, 191, 36));
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 8px rgba(251, 146, 60, 0.5);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
@@ -99,11 +141,18 @@
             book: '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>',
             messageCircle: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
             xTwitter: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>',
-            cloud: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>'
+            cloud: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>',
+            play: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>',
+            pause: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
+            skipBack: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>',
+            skipForward: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>',
+            volume2: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>'
         };
 
         let newsArticles = [];
         let researchBooks = [];
+        let audioPlayer = null;
+        let currentAudioBookId = null;
 
         let state = {
             currentPage: 'home',
@@ -111,7 +160,10 @@
             selectedBook: null,
             showPopup: false,
             showBookPopup: false,
-            shareMenu: null
+            shareMenu: null,
+            audioPlaying: false,
+            audioCurrentTime: 0,
+            audioDuration: 0
         };
 
         async function loadArticles() {
@@ -218,6 +270,11 @@
 
         function closeBookPopup() {
             state.showBookPopup = false;
+            if (audioPlayer) {
+                audioPlayer.pause();
+                audioPlayer = null;
+                currentAudioBookId = null;
+            }
             renderBookPopup();
         }
 
@@ -225,6 +282,8 @@
             state.shareMenu = state.shareMenu === id ? null : id;
             if (state.showPopup) {
                 renderPopup();
+            } else if (state.showBookPopup) {
+                renderBookPopup();
             } else {
                 renderContent();
             }
@@ -240,9 +299,7 @@
                     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
                     break;
                 case 'copy':
-                    navigator.clipboard.writeText(url).then(() => {
-                        alert('リンクをコピーしました');
-                    });
+                    navigator.clipboard.writeText(url);
                     break;
             }
             state.shareMenu = null;
@@ -250,6 +307,117 @@
                 renderPopup();
             } else {
                 renderContent();
+            }
+        }
+
+        function shareBook(bookId, platform) {
+            const book = researchBooks.find(b => b.id === bookId);
+            const url = `${BASE_URL}?book=${book.id}`;
+            const text = book.title;
+            
+            switch(platform) {
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(url);
+                    break;
+            }
+            state.shareMenu = null;
+            renderBookPopup();
+        }
+
+        function initAudioPlayer(bookId) {
+            if (currentAudioBookId === bookId && audioPlayer) {
+                return;
+            }
+
+            if (audioPlayer) {
+                audioPlayer.pause();
+            }
+
+            const book = researchBooks.find(b => b.id === bookId);
+            if (!book || !book.audioUrl) return;
+
+            audioPlayer = new Audio(book.audioUrl);
+            currentAudioBookId = bookId;
+
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                state.audioDuration = audioPlayer.duration;
+                updateAudioUI();
+            });
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                state.audioCurrentTime = audioPlayer.currentTime;
+                updateAudioUI();
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                state.audioPlaying = false;
+                updateAudioUI();
+            });
+
+            audioPlayer.addEventListener('play', () => {
+                state.audioPlaying = true;
+                updateAudioUI();
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                state.audioPlaying = false;
+                updateAudioUI();
+            });
+        }
+
+        function toggleAudioPlayPause() {
+            if (!audioPlayer) return;
+            
+            if (state.audioPlaying) {
+                audioPlayer.pause();
+            } else {
+                audioPlayer.play();
+            }
+        }
+
+        function seekAudio(seconds) {
+            if (!audioPlayer) return;
+            audioPlayer.currentTime = Math.max(0, Math.min(audioPlayer.currentTime + seconds, audioPlayer.duration));
+        }
+
+        function setAudioProgress(value) {
+            if (!audioPlayer) return;
+            audioPlayer.currentTime = value;
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateAudioUI() {
+            const playButton = document.getElementById('audio-play-button');
+            const currentTimeEl = document.getElementById('audio-current-time');
+            const durationEl = document.getElementById('audio-duration');
+            const progressBar = document.getElementById('audio-progress');
+
+            if (playButton) {
+                playButton.innerHTML = state.audioPlaying ? icons.pause : icons.play;
+            }
+
+            if (currentTimeEl) {
+                currentTimeEl.textContent = formatTime(state.audioCurrentTime);
+            }
+
+            if (durationEl) {
+                durationEl.textContent = formatTime(state.audioDuration);
+            }
+
+            if (progressBar) {
+                progressBar.value = state.audioCurrentTime;
+                progressBar.max = state.audioDuration || 100;
+                const percent = (state.audioCurrentTime / state.audioDuration) * 100 || 0;
+                progressBar.style.background = `linear-gradient(to right, rgba(251, 146, 60, 0.3) 0%, rgba(251, 191, 36, 0.3) ${percent}%, rgba(255, 255, 255, 0.1) ${percent}%, rgba(255, 255, 255, 0.1) 100%)`;
             }
         }
 
@@ -284,7 +452,7 @@
                                 
                                 <h2 class="text-3xl font-light text-slate-100 leading-snug">${article.title}</h2>
                                 
-                                <p class="text-slate-300 leading-relaxed text-base">${article.summary}</p>
+                                <p class="text-slate-300 leading-relaxed text-base">${article.excerpt || ''}</p>
                             </div>
                             
                             <div class="pt-6 border-t border-white/5 space-y-4">
@@ -335,6 +503,51 @@
             
             const hasChapters = book.chapters && book.chapters.length > 0;
             const hasCover = book.cover;
+            const hasAudio = book.audioUrl;
+            
+            if (hasAudio && currentAudioBookId !== book.id) {
+                initAudioPlayer(book.id);
+            }
+
+            const audioPlayerHTML = hasAudio ? `
+                <div class="pt-6 border-t border-white/5 space-y-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-slate-300 flex items-center gap-2">
+                            ${icons.volume2}
+                            音声版
+                        </h3>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-2xl p-5 space-y-4 backdrop-blur-sm border border-white/5">
+                        <div class="flex items-center gap-3">
+                            <div class="text-xs text-slate-500" id="audio-current-time">0:00</div>
+                            <input 
+                                type="range" 
+                                id="audio-progress"
+                                class="flex-1"
+                                value="0"
+                                max="100"
+                                oninput="setAudioProgress(this.value)"
+                            >
+                            <div class="text-xs text-slate-500" id="audio-duration">0:00</div>
+                        </div>
+                        
+                        <div class="flex items-center justify-center gap-3">
+                            <button onclick="seekAudio(-10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
+                                ${icons.skipBack}
+                            </button>
+                            
+                            <button onclick="toggleAudioPlayPause()" id="audio-play-button" class="p-4 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 rounded-full transition-all shadow-lg shadow-orange-500/20">
+                                ${icons.play}
+                            </button>
+                            
+                            <button onclick="seekAudio(10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
+                                ${icons.skipForward}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
             
             const tableOfContents = hasChapters ? `
                 <div class="space-y-3">
@@ -348,7 +561,7 @@
                                         <div class="text-xs text-slate-500">第${chapter.number}章</div>
                                         <div class="text-sm text-slate-300 group-hover:text-orange-300 transition-colors">${chapter.title}</div>
                                     </div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-hover:text-orange-400 transition-colors"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                 </div>
                             </button>
                         `).join('')}
@@ -386,6 +599,28 @@
                             
                             <p class="text-slate-300 leading-relaxed">${book.summary}</p>
                             
+                            ${audioPlayerHTML}
+                            
+                            <div class="pt-6 border-t border-white/5 space-y-4">
+                                <div class="flex gap-3 flex-wrap">
+                                    <button onclick="toggleShareMenu('book-${book.id}')" class="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all text-sm backdrop-blur-sm">
+                                        ${icons.share2}
+                                        共有
+                                    </button>
+                                    
+                                    ${state.shareMenu === `book-${book.id}` ? `
+                                        <div class="flex gap-2 items-center animate-fadeIn">
+                                            <button onclick="shareBook(${book.id}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                ${icons.twitter}
+                                            </button>
+                                            <button onclick="shareBook(${book.id}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                                ${icons.link2}
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
                             ${hasChapters ? `
                                 <div class="pt-6 border-t border-white/5">
                                     ${tableOfContents}
@@ -402,6 +637,8 @@
                     </div>
                 </div>
             `;
+            
+            setTimeout(updateAudioUI, 100);
         }
 
         function readBookChapter(bookId, chapterNumber) {
@@ -694,10 +931,7 @@
                                         <h1 class="text-5xl font-light text-slate-100 leading-tight">${article.title}</h1>
                                     </div>
                                     
-                                    <div class="prose prose-invert prose-lg max-w-none">
-                                        ${article.content ? article.content.split('\n\n').map(paragraph => 
-                                            `<p class="text-slate-300 leading-relaxed font-light mb-6">${paragraph.trim()}</p>`
-                                        ).join('') : `<p class="text-slate-300 leading-relaxed font-light mb-6">${article.summary}</p>`}
+                                    <div id="article-summary" class="prose prose-invert prose-lg max-w-none">
                                     </div>
                                     
                                     <div class="pt-8 border-t border-white/5 space-y-4">
@@ -750,18 +984,31 @@
                             ` : ''}
                         </div>
                     `;
+                    
+                    setTimeout(() => {
+                        const summaryElement = document.getElementById('article-summary');
+                        if (summaryElement && article.summary) {
+                            summaryElement.innerHTML = article.summary.replace(/\n/g, '<br>');
+                        }
+                    }, 0);
                     break;
             }
         }
 
-        // Check URL parameters on load
         function checkURLParams() {
             const urlParams = new URLSearchParams(window.location.search);
             const articleId = urlParams.get('article');
+            const bookId = urlParams.get('book');
+            
             if (articleId) {
                 const article = newsArticles.find(a => a.id === parseInt(articleId));
                 if (article) {
                     viewArticleDetail(parseInt(articleId));
+                }
+            } else if (bookId) {
+                const book = researchBooks.find(b => b.id === parseInt(bookId));
+                if (book) {
+                    showBookModal(parseInt(bookId));
                 }
             }
         }
