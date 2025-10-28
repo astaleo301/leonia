@@ -78,9 +78,9 @@
   },
   {
     "id": 3,
+    "cover": true,
     "title": "OpenAI内部告発者の死",
     "subtitle": "知財論争と謎に包まれた死の真相",
-    "coverImage": "leonia/images/covers/book1.jpg",
     "coverColor": "from-purple-400 via-violet-400 to-indigo-300",
     "pages": 2188,
     "date": "2025-10-27",
