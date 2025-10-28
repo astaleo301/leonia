@@ -80,7 +80,7 @@
     "id": 3,
     "cover": true,
     "title": "OpenAI内部告発者の死",
-    "audioUrl": "/audio/3.mp3",
+    "audioUrl": "./audio/3.mp3",
     "subtitle": "知財論争と謎に包まれた死の真相",
     "coverColor": "from-purple-400 via-violet-400 to-indigo-300",
     "pages": 2188,
@@ -121,7 +121,7 @@
   },
   {
     "id": 4,
-    "title": "バイアスとは？",
+    "title": "バイアスとは",
     "subtitle": "マリアナ海溝生態系調査報告",
     "coverColor": "from-emerald-400 via-teal-400 to-cyan-500",
     "pages": 89,
