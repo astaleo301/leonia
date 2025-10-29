@@ -75,7 +75,7 @@ function renderNav() {
     nav.innerHTML = navItems.map(item => `
         <button
             onclick="changePage('${item.id}')"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light ${
+            class="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light ${
                 state.currentPage === item.id 
                     ? 'bg-gradient-to-r from-orange-400/70 to-amber-400/70 text-white shadow-lg shadow-orange-500/20' 
                     : 'text-slate-400 hover:bg-white/5 hover:text-slate-300'
@@ -130,6 +130,7 @@ function closeBookPopup() {
 }
 
 function toggleShareMenu(id) {
+    event.stopPropagation();
     state.shareMenu = state.shareMenu === id ? null : id;
     if (state.showPopup) {
         renderPopup();
@@ -141,6 +142,7 @@ function toggleShareMenu(id) {
 }
 
 function shareArticle(articleId, platform) {
+    event.stopPropagation();
     const article = newsArticles.find(a => a.id === articleId);
     const url = `${BASE_URL}?article=${article.id}`;
     const text = article.title;
@@ -162,6 +164,7 @@ function shareArticle(articleId, platform) {
 }
 
 function shareBook(bookId, platform) {
+    event.stopPropagation();
     const book = researchBooks.find(b => b.id === bookId);
     const url = `${BASE_URL}?book=${book.id}`;
     const text = book.title;
@@ -315,74 +318,6 @@ function updateAudioUI() {
     }
 }
 
-function viewArticleDetail(articleId) {
-    state.selectedArticle = newsArticles.find(a => a.id === articleId);
-    state.currentPage = 'article';
-    state.showPopup = false;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    renderNav();
-    renderContent();
-    renderPopup();
-}
-
-function getRandomArticles(excludeId, count = 3) {
-    const otherArticles = newsArticles.filter(a => a.id !== excludeId);
-    const shuffled = otherArticles.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-}
-
-function getSortedArticles() {
-    let filtered = selectedCategory === 'all' 
-        ? [...newsArticles] 
-        : newsArticles.filter(a => a.category === selectedCategory);
-    
-    switch(sortOrder) {
-        case 'newest':
-            return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-        case 'oldest':
-            return filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-        default:
-            return filtered;
-    }
-}
-
-function changeSortOrder(order) {
-    sortOrder = order;
-    renderContent();
-}
-
-function changeCategory(category) {
-    selectedCategory = category;
-    renderContent();
-}
-
-function getCategories() {
-    const categories = [...new Set(newsArticles.map(a => a.category))];
-    return categories;
-}
-
-function checkURLParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('article');
-    const bookId = urlParams.get('book');
-    
-    if (articleId) {
-        const article = newsArticles.find(a => a.id === parseInt(articleId));
-        if (article) {
-            viewArticleDetail(parseInt(articleId));
-        }
-    } else if (bookId) {
-        const book = researchBooks.find(b => b.id === parseInt(bookId));
-        if (book) {
-            showBookModal(parseInt(bookId));
-        }
-    }
-}
-
-renderNav();
-Promise.all([loadArticles(), loadBooks()]).then(() => {
-    checkURLParams();
-});
 function renderPopup() {
     const container = document.getElementById('popup-container');
     if (!state.showPopup || !state.selectedArticle) {
@@ -539,18 +474,18 @@ function renderBookPopup() {
                     ${icons.x}
                 </button>
                 
-                <div class="p-10 space-y-6">
-                    <div class="flex items-start gap-6">
+                <div class="p-6 sm:p-10 space-y-6">
+                    <div class="flex flex-col sm:flex-row items-start gap-6">
                         ${hasCover ? `
-                            <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover mx-auto sm:mx-0" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         ` : ''}
-                        <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
+                        <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0" style="${hasCover ? 'display:none;' : ''}">
                             ${icons.book}
                         </div>
-                        <div class="flex-1 space-y-3">
-                            <h2 class="text-2xl font-light text-slate-100 leading-snug">${book.title}</h2>
+                        <div class="flex-1 space-y-3 text-center sm:text-left w-full">
+                            <h2 class="text-xl sm:text-2xl font-light text-slate-100 leading-snug">${book.title}</h2>
                             <p class="text-slate-400 text-sm">${book.subtitle}</p>
-                            <div class="flex items-center gap-4 text-xs text-slate-500">
+                            <div class="flex items-center justify-center sm:justify-start gap-4 text-xs text-slate-500 flex-wrap">
                                 <span>${book.pages}ページ</span>
                                 <span>•</span>
                                 <span>${book.date}</span>
@@ -679,6 +614,71 @@ function renderChapterReader() {
         </div>
     `;
 }
+
+function viewArticleDetail(articleId) {
+    state.selectedArticle = newsArticles.find(a => a.id === articleId);
+    state.currentPage = 'article';
+    state.showPopup = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderNav();
+    renderContent();
+    renderPopup();
+}
+
+function getRandomArticles(excludeId, count = 3) {
+    const otherArticles = newsArticles.filter(a => a.id !== excludeId);
+    const shuffled = otherArticles.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+function getSortedArticles() {
+    let filtered = selectedCategory === 'all' 
+        ? [...newsArticles] 
+        : newsArticles.filter(a => a.category === selectedCategory);
+    
+    switch(sortOrder) {
+        case 'newest':
+            return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        case 'oldest':
+            return filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+        default:
+            return filtered;
+    }
+}
+
+function changeSortOrder(order) {
+    sortOrder = order;
+    renderContent();
+}
+
+function changeCategory(category) {
+    selectedCategory = category;
+    renderContent();
+}
+
+function getCategories() {
+    const categories = [...new Set(newsArticles.map(a => a.category))];
+    return categories;
+}
+
+function checkURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('article');
+    const bookId = urlParams.get('book');
+    
+    if (articleId) {
+        const article = newsArticles.find(a => a.id === parseInt(articleId));
+        if (article) {
+            viewArticleDetail(parseInt(articleId));
+        }
+    } else if (bookId) {
+        const book = researchBooks.find(b => b.id === parseInt(bookId));
+        if (book) {
+            showBookModal(parseInt(bookId));
+        }
+    }
+}
+
 function renderContent() {
     const main = document.getElementById('main-content');
     
@@ -726,7 +726,7 @@ function renderContent() {
                             ${sortedArticles.map(article => `
                                 <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden relative">
                                     ${article.audioUrl ? `
-                                        <div class="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-orange-400/20 backdrop-blur-sm border border-orange-400/30 flex items-center justify-center">
+                                        <div class="absolute top-3 left-3 z-10 w-7 h-7 rounded-full bg-orange-400/20 backdrop-blur-sm border border-orange-400/30 flex items-center justify-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                                         </div>
                                     ` : ''}
@@ -735,7 +735,7 @@ function renderContent() {
                                         
                                         <div class="flex-1 flex flex-col justify-between min-w-0">
                                             <div class="space-y-2">
-                                                <div class="flex items-center gap-2">
+                                                <div class="flex items-center gap-2 flex-wrap">
                                                     <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
                                                         ${article.category}
                                                     </span>
@@ -800,8 +800,7 @@ function renderContent() {
                 </div>
             `;
             break;
-        
-        case 'about':
+            case 'about':
             main.innerHTML = `
                 <div class="max-w-4xl mx-auto space-y-16 animate-fadeIn py-8">
                     <div class="text-center space-y-6">
@@ -1013,7 +1012,7 @@ function renderContent() {
                                     <span class="text-slate-500 text-sm">${article.date}</span>
                                 </div>
                                 
-                                <h1 class="text-3xl sm:text-5xl font-light text-slate-100 leading-tight">${article.title}</h1>
+                                <h1 class="text-2xl sm:text-4xl md:text-5xl font-light text-slate-100 leading-tight">${article.title}</h1>
                             </div>
                             
                             ${hasAudio ? `
@@ -1047,7 +1046,7 @@ function renderContent() {
                                 </div>
                             ` : ''}
                             
-                            <div id="article-summary" class="prose prose-invert prose-lg max-w-none text-left">
+                            <div id="article-summary" class="text-slate-200 text-lg leading-relaxed space-y-4">
                             </div>
                             
                             <div class="pt-8 border-t border-white/5 space-y-4">
@@ -1105,7 +1104,7 @@ function renderContent() {
                 const summaryElement = document.getElementById('article-summary');
                 if (summaryElement && article.summary) {
                     const formattedSummary = article.summary.replace(/\n/g, '<br>');
-                    summaryElement.innerHTML = `<p class="text-slate-300 leading-relaxed font-light">${formattedSummary}</p>`;
+                    summaryElement.innerHTML = `<p class="text-slate-200 text-lg leading-relaxed font-light">${formattedSummary}</p>`;
                 }
                 if (hasAudio) {
                     updateAudioUI();
@@ -1114,3 +1113,8 @@ function renderContent() {
             break;
     }
 }
+
+renderNav();
+Promise.all([loadArticles(), loadBooks()]).then(() => {
+    checkURLParams();
+});
