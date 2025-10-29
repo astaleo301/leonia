@@ -75,7 +75,7 @@ function renderNav() {
     nav.innerHTML = navItems.map(item => `
         <button
             onclick="changePage('${item.id}')"
-            class="flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light ${
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light ${
                 state.currentPage === item.id 
                     ? 'bg-gradient-to-r from-orange-400/70 to-amber-400/70 text-white shadow-lg shadow-orange-500/20' 
                     : 'text-slate-400 hover:bg-white/5 hover:text-slate-300'
@@ -131,11 +131,12 @@ function closeBookPopup() {
 
 function toggleShareMenu(id) {
     state.shareMenu = state.shareMenu === id ? null : id;
-    
     if (state.showPopup) {
         renderPopup();
     } else if (state.showBookPopup) {
         renderBookPopup();
+    } else {
+        renderContent();
     }
 }
 
@@ -155,6 +156,8 @@ function shareArticle(articleId, platform) {
     state.shareMenu = null;
     if (state.showPopup) {
         renderPopup();
+    } else {
+        renderContent();
     }
 }
 
@@ -312,6 +315,74 @@ function updateAudioUI() {
     }
 }
 
+function viewArticleDetail(articleId) {
+    state.selectedArticle = newsArticles.find(a => a.id === articleId);
+    state.currentPage = 'article';
+    state.showPopup = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderNav();
+    renderContent();
+    renderPopup();
+}
+
+function getRandomArticles(excludeId, count = 3) {
+    const otherArticles = newsArticles.filter(a => a.id !== excludeId);
+    const shuffled = otherArticles.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+function getSortedArticles() {
+    let filtered = selectedCategory === 'all' 
+        ? [...newsArticles] 
+        : newsArticles.filter(a => a.category === selectedCategory);
+    
+    switch(sortOrder) {
+        case 'newest':
+            return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        case 'oldest':
+            return filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+        default:
+            return filtered;
+    }
+}
+
+function changeSortOrder(order) {
+    sortOrder = order;
+    renderContent();
+}
+
+function changeCategory(category) {
+    selectedCategory = category;
+    renderContent();
+}
+
+function getCategories() {
+    const categories = [...new Set(newsArticles.map(a => a.category))];
+    return categories;
+}
+
+function checkURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('article');
+    const bookId = urlParams.get('book');
+    
+    if (articleId) {
+        const article = newsArticles.find(a => a.id === parseInt(articleId));
+        if (article) {
+            viewArticleDetail(parseInt(articleId));
+        }
+    } else if (bookId) {
+        const book = researchBooks.find(b => b.id === parseInt(bookId));
+        if (book) {
+            showBookModal(parseInt(bookId));
+        }
+    }
+}
+
+renderNav();
+Promise.all([loadArticles(), loadBooks()]).then(() => {
+    checkURLParams();
+});
 function renderPopup() {
     const container = document.getElementById('popup-container');
     if (!state.showPopup || !state.selectedArticle) {
@@ -345,6 +416,152 @@ function renderPopup() {
                         
                         <p class="text-slate-300 leading-relaxed text-base">${article.excerpt || ''}</p>
                     </div>
+                    
+                    <div class="pt-6 border-t border-white/5 space-y-4">
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            この記事は、複数の信頼できる情報源から収集されたデータをもとに、AIによって中立的な視点で作成されています。
+                        </p>
+                        
+                        <div class="flex gap-3 flex-wrap">
+                            <button onclick="toggleShareMenu(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all text-sm backdrop-blur-sm">
+                                ${icons.share2}
+                                共有
+                            </button>
+                            
+                            <button onclick="viewArticleDetail(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all text-sm shadow-lg shadow-orange-500/20">
+                                ${icons.externalLink}
+                                詳細を読む
+                            </button>
+                            
+                            ${state.shareMenu === article.id ? `
+                                <div class="flex gap-2 items-center animate-fadeIn">
+                                    <button onclick="shareArticle(${article.id}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                        ${icons.twitter}
+                                    </button>
+                                    <button onclick="shareArticle(${article.id}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
+                                        ${icons.link2}
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderBookPopup() {
+    const container = document.getElementById('popup-container');
+    if (!state.showBookPopup || !state.selectedBook) {
+        if (!state.showPopup) {
+            container.innerHTML = '';
+        }
+        return;
+    }
+
+    const book = state.selectedBook;
+    const existingContent = state.showPopup ? container.innerHTML : '';
+    
+    const hasChapters = book.chapters && book.chapters.length > 0;
+    const hasCover = book.cover;
+    const hasAudio = book.audioUrl;
+    
+    if (hasAudio && currentAudioBookId !== book.id) {
+        initAudioPlayer(book.id);
+    }
+
+    const audioPlayerHTML = hasAudio ? `
+        <div class="pt-6 border-t border-white/5 space-y-4">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-sm font-medium text-slate-300 flex items-center gap-2">
+                    ${icons.volume2}
+                    音声版
+                </h3>
+            </div>
+            
+            <div class="bg-white/5 rounded-2xl p-5 space-y-4 backdrop-blur-sm border border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="text-xs text-slate-500" id="audio-current-time">0:00</div>
+                    <input 
+                        type="range" 
+                        id="audio-progress"
+                        class="flex-1"
+                        value="0"
+                        max="100"
+                        oninput="setAudioProgress(this.value)"
+                    >
+                    <div class="text-xs text-slate-500" id="audio-duration">0:00</div>
+                </div>
+                
+                <div class="flex items-center justify-center gap-3">
+                    <button onclick="seekAudio(-10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
+                        ${icons.skipBack}
+                    </button>
+                    
+                    <button onclick="toggleAudioPlayPause()" id="audio-play-button" class="p-4 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 rounded-full transition-all shadow-lg shadow-orange-500/20">
+                        ${icons.play}
+                    </button>
+                    
+                    <button onclick="seekAudio(10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
+                        ${icons.skipForward}
+                    </button>
+                </div>
+            </div>
+        </div>
+    ` : '';
+    
+    const tableOfContents = hasChapters ? `
+        <div class="space-y-3">
+            <h3 class="text-lg font-medium text-slate-200">目次</h3>
+            <div class="space-y-2">
+                ${book.chapters.map(chapter => `
+                    <button onclick="readBookChapter(${book.id}, ${chapter.number})" 
+                        class="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all group">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs text-slate-500">第${chapter.number}章</div>
+                                <div class="text-sm text-slate-300 group-hover:text-orange-300 transition-colors">${chapter.title}</div>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+    ` : '';
+    
+    container.innerHTML = existingContent + `
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeBookPopup()">
+            <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
+            <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
+                <button onclick="closeBookPopup()" class="sticky top-6 right-6 float-right p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm z-10">
+                    ${icons.x}
+                </button>
+                
+                <div class="p-10 space-y-6">
+                    <div class="flex items-start gap-6">
+                        ${hasCover ? `
+                            <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        ` : ''}
+                        <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
+                            ${icons.book}
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <h2 class="text-2xl font-light text-slate-100 leading-snug">${book.title}</h2>
+                            <p class="text-slate-400 text-sm">${book.subtitle}</p>
+                            <div class="flex items-center gap-4 text-xs text-slate-500">
+                                <span>${book.pages}ページ</span>
+                                <span>•</span>
+                                <span>${book.date}</span>
+                                ${hasChapters ? `<span>•</span><span>${book.chapters.length}章</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-slate-300 leading-relaxed">${book.summary}</p>
+                    
+                    ${audioPlayerHTML}
                     
                     <div class="pt-6 border-t border-white/5 space-y-4">
                         <div class="flex gap-3 flex-wrap">
@@ -462,53 +679,6 @@ function renderChapterReader() {
         </div>
     `;
 }
-
-function viewArticleDetail(articleId) {
-    state.selectedArticle = newsArticles.find(a => a.id === articleId);
-    state.currentPage = 'article';
-    state.showPopup = false;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    renderNav();
-    renderContent();
-    renderPopup();
-}
-
-function getRandomArticles(excludeId, count = 3) {
-    const otherArticles = newsArticles.filter(a => a.id !== excludeId);
-    const shuffled = otherArticles.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-}
-
-function getSortedArticles() {
-    let filtered = selectedCategory === 'all' 
-        ? [...newsArticles] 
-        : newsArticles.filter(a => a.category === selectedCategory);
-    
-    switch(sortOrder) {
-        case 'newest':
-            return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-        case 'oldest':
-            return filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-        default:
-            return filtered;
-    }
-}
-
-function changeSortOrder(order) {
-    sortOrder = order;
-    renderContent();
-}
-
-function changeCategory(category) {
-    selectedCategory = category;
-    renderContent();
-}
-
-function getCategories() {
-    const categories = [...new Set(newsArticles.map(a => a.category))];
-    return categories;
-}
-
 function renderContent() {
     const main = document.getElementById('main-content');
     
@@ -556,8 +726,8 @@ function renderContent() {
                             ${sortedArticles.map(article => `
                                 <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden relative">
                                     ${article.audioUrl ? `
-                                        <div class="absolute top-3 right-3 z-10 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-orange-400/20 backdrop-blur-sm border border-orange-400/30 flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                        <div class="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-orange-400/20 backdrop-blur-sm border border-orange-400/30 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                                         </div>
                                     ` : ''}
                                     <div class="p-5 flex gap-4">
@@ -725,6 +895,11 @@ function renderContent() {
                                     <div class="text-center space-y-1">
                                         <div class="text-3xl font-extralight text-orange-400/40">0</div>
                                         <p class="text-xs text-slate-500 font-light">広告</p>
+                                    </div>
+                                    <div class="w-px h-12 bg-white/5"></div>
+                                    <div class="text-center space-y-1">
+                                        <div class="text-3xl font-extralight text-orange-400/40">100%</div>
+                                        <p class="text-xs text-slate-500 font-light">中立性</p>
                                     </div>
                                     <div class="w-px h-12 bg-white/5"></div>
                                     <div class="text-center space-y-1">
@@ -929,7 +1104,8 @@ function renderContent() {
             setTimeout(() => {
                 const summaryElement = document.getElementById('article-summary');
                 if (summaryElement && article.summary) {
-                    summaryElement.innerHTML = `<div class="text-slate-300 leading-relaxed font-light space-y-4">${article.summary}</div>`;
+                    const formattedSummary = article.summary.replace(/\n/g, '<br>');
+                    summaryElement.innerHTML = `<p class="text-slate-300 leading-relaxed font-light">${formattedSummary}</p>`;
                 }
                 if (hasAudio) {
                     updateAudioUI();
@@ -937,217 +1113,4 @@ function renderContent() {
             }, 0);
             break;
     }
-}
-
-function checkURLParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('article');
-    const bookId = urlParams.get('book');
-    
-    if (articleId) {
-        const article = newsArticles.find(a => a.id === parseInt(articleId));
-        if (article) {
-            viewArticleDetail(parseInt(articleId));
-        }
-    } else if (bookId) {
-        const book = researchBooks.find(b => b.id === parseInt(bookId));
-        if (book) {
-            showBookModal(parseInt(bookId));
-        }
-    }
-}
-
-renderNav();
-Promise.all([loadArticles(), loadBooks()]).then(() => {
-    checkURLParams();
-});
-                                    <div class="text-center space-y-1">
-                                        <div class="text-3xl font-extralight text-orange-400/40">100%</div>
-                                        <p class="text-xs text-slate-500 font-light">中立性</p>
-                                    </div>
-                                    <div class="w-px h-12 bg-white/5"></div>
-                                 space-y-4">
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            この記事は、複数の信頼できる情報源から収集されたデータをもとに、AIによって中立的な視点で作成されています。
-                        </p>
-                        
-                        <div class="flex gap-3 flex-wrap">
-                            <button onclick="toggleShareMenu(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all text-sm backdrop-blur-sm">
-                                ${icons.share2}
-                                共有
-                            </button>
-                            
-                            <button onclick="viewArticleDetail(${article.id})" class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all text-sm shadow-lg shadow-orange-500/20">
-                                ${icons.externalLink}
-                                詳細を読む
-                            </button>
-                            
-                            ${state.shareMenu === article.id ? `
-                                <div class="flex gap-2 items-center animate-fadeIn">
-                                    <button onclick="shareArticle(${article.id}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                        ${icons.twitter}
-                                    </button>
-                                    <button onclick="shareArticle(${article.id}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                        ${icons.link2}
-                                    </button>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function renderBookPopup() {
-    const container = document.getElementById('popup-container');
-    if (!state.showBookPopup || !state.selectedBook) {
-        if (!state.showPopup) {
-            container.innerHTML = '';
-        }
-        return;
-    }
-
-    const book = state.selectedBook;
-    const existingContent = state.showPopup ? container.innerHTML : '';
-    
-    const hasChapters = book.chapters && book.chapters.length > 0;
-    const hasCover = book.cover;
-    const hasAudio = book.audioUrl;
-    
-    if (hasAudio && currentAudioBookId !== book.id) {
-        initAudioPlayer(book.id);
-    }
-
-    const audioPlayerHTML = hasAudio ? `
-        <div class="pt-6 border-t border-white/5 space-y-4">
-            <div class="flex items-center justify-between mb-2">
-                <h3 class="text-sm font-medium text-slate-300 flex items-center gap-2">
-                    ${icons.volume2}
-                    音声版
-                </h3>
-            </div>
-            
-            <div class="bg-white/5 rounded-2xl p-5 space-y-4 backdrop-blur-sm border border-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="text-xs text-slate-500" id="audio-current-time">0:00</div>
-                    <input 
-                        type="range" 
-                        id="audio-progress"
-                        class="flex-1"
-                        value="0"
-                        max="100"
-                        oninput="setAudioProgress(this.value)"
-                    >
-                    <div class="text-xs text-slate-500" id="audio-duration">0:00</div>
-                </div>
-                
-                <div class="flex items-center justify-center gap-3">
-                    <button onclick="seekAudio(-10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
-                        ${icons.skipBack}
-                    </button>
-                    
-                    <button onclick="toggleAudioPlayPause()" id="audio-play-button" class="p-4 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 rounded-full transition-all shadow-lg shadow-orange-500/20">
-                        ${icons.play}
-                    </button>
-                    
-                    <button onclick="seekAudio(10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
-                        ${icons.skipForward}
-                    </button>
-                </div>
-            </div>
-        </div>
-    ` : '';
-    
-    const tableOfContents = hasChapters ? `
-        <div class="space-y-3">
-            <h3 class="text-lg font-medium text-slate-200">目次</h3>
-            <div class="space-y-2">
-                ${book.chapters.map(chapter => `
-                    <button onclick="readBookChapter(${book.id}, ${chapter.number})" 
-                        class="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all group">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <div class="text-xs text-slate-500">第${chapter.number}章</div>
-                                <div class="text-sm text-slate-300 group-hover:text-orange-300 transition-colors">${chapter.title}</div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </div>
-                    </button>
-                `).join('')}
-            </div>
-        </div>
-    ` : '';
-    
-    container.innerHTML = existingContent + `
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeBookPopup()">
-            <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
-            <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-white/5 animate-slideUp" onclick="event.stopPropagation()">
-                <button onclick="closeBookPopup()" class="sticky top-6 right-6 float-right p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm z-10">
-                    ${icons.x}
-                </button>
-                
-                <div class="p-10 space-y-6">
-                    <div class="flex items-start gap-4 sm:gap-6">
-                        ${hasCover ? `
-                            <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-24 sm:w-32 h-32 sm:h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        ` : ''}
-                        <div class="w-24 sm:w-32 h-32 sm:h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
-                            ${icons.book}
-                        </div>
-                        <div class="flex-1 space-y-3 min-w-0">
-                            <h2 class="text-xl sm:text-2xl font-light text-slate-100 leading-snug">${book.title}</h2>
-                            <p class="text-slate-400 text-xs sm:text-sm">${book.subtitle}</p>
-                            <div class="flex items-center gap-3 sm:gap-4 text-xs text-slate-500 flex-wrap">
-                                <span>${book.pages}ページ</span>
-                                <span>•</span>
-                                <span>${book.date}</span>
-                                ${hasChapters ? `<span>•</span><span>${book.chapters.length}章</span>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <p class="text-slate-300 leading-relaxed">${book.summary}</p>
-                    
-                    ${audioPlayerHTML}
-                    
-                    <div class="pt-6 border-t border-white/5 space-y-4">
-                        <div class="flex gap-3 flex-wrap">
-                            <button onclick="toggleShareMenu('book-${book.id}')" class="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-all text-sm backdrop-blur-sm">
-                                ${icons.share2}
-                                共有
-                            </button>
-                            
-                            ${state.shareMenu === `book-${book.id}` ? `
-                                <div class="flex gap-2 items-center animate-fadeIn">
-                                    <button onclick="shareBook(${book.id}, 'twitter')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                        ${icons.twitter}
-                                    </button>
-                                    <button onclick="shareBook(${book.id}, 'copy')" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all backdrop-blur-sm">
-                                        ${icons.link2}
-                                    </button>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                    
-                    ${hasChapters ? `
-                        <div class="pt-6 border-t border-white/5">
-                            ${tableOfContents}
-                        </div>
-                    ` : `
-                        <div class="pt-6 border-t border-white/5">
-                            <button onclick="alert('この本の内容は準備中です')" class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 text-white rounded-xl transition-all font-medium shadow-lg shadow-orange-500/20">
-                                ${icons.book}
-                                本を読む
-                            </button>
-                        </div>
-                    `}
-                </div>
-            </div>
-        </div>
-    `;
-    
-    setTimeout(updateAudioUI, 100);
 }
