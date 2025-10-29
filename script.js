@@ -37,8 +37,12 @@ let state = {
     currentPage: 'home',
     selectedArticle: null,
     selectedBook: null,
+    selectedVideo: null,
+    selectedPodcast: null,
     showPopup: false,
     showBookPopup: false,
+    showVideoPopup: false,
+    showPodcastPopup: false,
     shareMenu: null,
     audioPlaying: false,
     audioCurrentTime: 0,
@@ -155,6 +159,36 @@ function closeBookPopup() {
         currentAudioBookId = null;
     }
     renderBookPopup();
+}
+
+function showVideoModal(videoId) {
+    state.selectedVideo = videos.find(v => v.id === videoId);
+    state.showVideoPopup = true;
+    renderVideoPopup();
+}
+
+function closeVideoPopup() {
+    state.showVideoPopup = false;
+    const videoElement = document.querySelector('video');
+    if (videoElement) {
+        videoElement.pause();
+    }
+    renderVideoPopup();
+}
+
+function showPodcastModal(podcastId) {
+    state.selectedPodcast = podcasts.find(p => p.id === podcastId);
+    state.showPodcastPopup = true;
+    renderPodcastPopup();
+}
+
+function closePodcastPopup() {
+    state.showPodcastPopup = false;
+    if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer = null;
+    }
+    renderPodcastPopup();
 }
 
 function toggleShareMenu(id) {
@@ -832,6 +866,74 @@ function renderContent() {
             `;
             break;
 
+        case 'videos':
+            main.innerHTML = `
+                <div class="max-w-6xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <div class="text-center space-y-6">
+                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">動画一覧</h2>
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                        <p class="text-slate-400 text-sm font-light">わかりやすく解説する動画コンテンツ</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${videos.map(video => `
+                            <div onclick="showVideoModal(${video.id})" class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                                <div class="aspect-video relative overflow-hidden">
+                                    <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center">
+                                        <div class="w-16 h-16 rounded-full bg-orange-400/90 hover:bg-orange-400 flex items-center justify-center transition-all group-hover:scale-110">
+                                            ${icons.play}
+                                        </div>
+                                    </div>
+                                    <span class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-white">${video.duration}</span>
+                                </div>
+                                <div class="p-6 space-y-2">
+                                    <h4 class="text-slate-200 font-light group-hover:text-orange-300 transition-colors">${video.title}</h4>
+                                    <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">${video.description}</p>
+                                    <div class="flex items-center gap-3 text-xs text-slate-600">
+                                        <span>${video.date}</span>
+                                        <span>•</span>
+                                        <span>${video.views} 視聴</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            break;
+
+        case 'podcasts-page':
+            main.innerHTML = `
+                <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <div class="text-center space-y-6">
+                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">ポッドキャスト一覧</h2>
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                        <p class="text-slate-400 text-sm font-light">深掘りする音声コンテンツ</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        ${podcasts.map(podcast => `
+                            <div onclick="showPodcastModal(${podcast.id})" class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                                <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-24 h-24 rounded-2xl object-cover flex-shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-slate-200 font-light mb-2 group-hover:text-orange-300 transition-colors">${podcast.title}</h4>
+                                    <p class="text-slate-500 text-sm leading-relaxed mb-3 line-clamp-2">${podcast.description}</p>
+                                    <div class="flex items-center gap-3 text-xs text-slate-600">
+                                        <span>${podcast.duration}</span>
+                                        <span>•</span>
+                                        <span>${podcast.date}</span>
+                                        <span>•</span>
+                                        <span>${podcast.plays} 再生</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            break;
+
         case 'info':
             main.innerHTML = `
                 <div class="max-w-4xl mx-auto space-y-16 animate-fadeIn py-8">
@@ -1489,6 +1591,93 @@ function performSearch(query) {
     }
 
     results.innerHTML = html;
+}
+
+function renderVideoPopup() {
+    const container = document.getElementById('popup-container');
+    if (!state.showVideoPopup || !state.selectedVideo) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const video = state.selectedVideo;
+
+    container.innerHTML = `
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeVideoPopup()">
+            <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md"></div>
+            <div class="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/10 animate-slideUp" onclick="event.stopPropagation()">
+
+                <button onclick="closeVideoPopup()" class="absolute top-6 right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm">
+                    ${icons.x}
+                </button>
+
+                <div class="aspect-video bg-black">
+                    <video class="w-full h-full" controls autoplay>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        お使いのブラウザは動画タグをサポートしていません。
+                    </video>
+                </div>
+
+                <div class="p-8 space-y-4">
+                    <h2 class="text-3xl font-light text-slate-200">${video.title}</h2>
+                    <p class="text-slate-400 leading-relaxed">${video.description}</p>
+                    <div class="flex items-center gap-4 text-sm text-slate-500">
+                        <span>${video.date}</span>
+                        <span>•</span>
+                        <span>${video.duration}</span>
+                        <span>•</span>
+                        <span>${video.views} 視聴</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderPodcastPopup() {
+    const container = document.getElementById('popup-container');
+    if (!state.showPodcastPopup || !state.selectedPodcast) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const podcast = state.selectedPodcast;
+
+    container.innerHTML = `
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closePodcastPopup()">
+            <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md"></div>
+            <div class="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-white/10 animate-slideUp" onclick="event.stopPropagation()">
+
+                <button onclick="closePodcastPopup()" class="absolute top-6 right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm">
+                    ${icons.x}
+                </button>
+
+                <div class="p-8 space-y-6">
+                    <div class="flex items-start gap-6">
+                        <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-32 h-32 rounded-2xl object-cover flex-shrink-0">
+                        <div class="flex-1">
+                            <h2 class="text-3xl font-light text-slate-200 mb-3">${podcast.title}</h2>
+                            <p class="text-slate-400 leading-relaxed mb-4">${podcast.description}</p>
+                            <div class="flex items-center gap-4 text-sm text-slate-500">
+                                <span>${podcast.date}</span>
+                                <span>•</span>
+                                <span>${podcast.duration}</span>
+                                <span>•</span>
+                                <span>${podcast.plays} 再生</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/5">
+                        <audio class="w-full" controls>
+                            <source src="${podcast.audioUrl}" type="audio/mpeg">
+                            お使いのブラウザは音声タグをサポートしていません。
+                        </audio>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 renderNav();
