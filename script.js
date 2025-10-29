@@ -18,7 +18,9 @@ const icons = {
     pause: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
     skipBack: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
     skipForward: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
-    volume2: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>'
+    volume2: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
+    film: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>',
+    search: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>'
 };
 
 let newsArticles = [];
@@ -66,6 +68,7 @@ async function loadBooks() {
 const navItems = [
     { id: 'home', label: 'ホーム', icon: 'home' },
     { id: 'bookshelf', label: '本棚', icon: 'bookOpen' },
+    { id: 'media', label: 'メディア', icon: 'film' },
     { id: 'about', label: 'About', icon: 'info' },
     { id: 'contact', label: 'Contact', icon: 'mail' }
 ];
@@ -688,11 +691,10 @@ function renderContent() {
             const categories = getCategories();
             main.innerHTML = `
                 <div class="space-y-12 animate-fadeIn">
-                    <div class="text-center space-y-4 py-12">
-                        <h1 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">
+                    <div class="text-center space-y-2 py-6">
+                        <h1 class="text-2xl font-extralight text-slate-400 leading-tight">
                             Neutral Eyes
                         </h1>
-                        <p class="text-slate-500 text-sm font-light">中立的な視点で世界を見つめる</p>
                     </div>
                     
                     <div class="max-w-4xl mx-auto space-y-6">
@@ -918,7 +920,103 @@ function renderContent() {
                 </div>
             `;
             break;
-        
+
+        case 'media':
+            main.innerHTML = `
+                <div class="max-w-5xl mx-auto space-y-16 animate-fadeIn py-8">
+                    <div class="text-center space-y-3">
+                        <h2 class="text-3xl font-extralight text-slate-300">メディア</h2>
+                        <p class="text-slate-500 text-sm font-light">映像、音声、その他のコンテンツ</p>
+                    </div>
+
+                    <div class="space-y-12">
+                        <section class="space-y-4">
+                            <h3 class="text-xl font-light text-slate-400 border-l-2 border-slate-700 pl-3">動画</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="group bg-white/[0.01] hover:bg-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-white/10 transition-all cursor-pointer">
+                                    <div class="aspect-video bg-slate-800/30 flex items-center justify-center">
+                                        <div class="text-slate-600 text-sm">準備中</div>
+                                    </div>
+                                    <div class="p-5 space-y-2">
+                                        <h4 class="text-slate-300 text-sm font-light">動画コンテンツ</h4>
+                                        <p class="text-slate-500 text-xs leading-relaxed">近日公開予定</p>
+                                    </div>
+                                </div>
+                                <div class="group bg-white/[0.01] hover:bg-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-white/10 transition-all cursor-pointer">
+                                    <div class="aspect-video bg-slate-800/30 flex items-center justify-center">
+                                        <div class="text-slate-600 text-sm">準備中</div>
+                                    </div>
+                                    <div class="p-5 space-y-2">
+                                        <h4 class="text-slate-300 text-sm font-light">動画コンテンツ</h4>
+                                        <p class="text-slate-500 text-xs leading-relaxed">近日公開予定</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="space-y-4">
+                            <h3 class="text-xl font-light text-slate-400 border-l-2 border-slate-700 pl-3">ポッドキャスト</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-4 p-4 bg-white/[0.01] hover:bg-white/[0.02] rounded-xl border border-white/5 hover:border-white/10 transition-all cursor-pointer">
+                                    <div class="w-16 h-16 rounded-lg bg-slate-800/30 flex-shrink-0 flex items-center justify-center">
+                                        ${icons.volume2}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-slate-300 text-sm font-light mb-1">エピソード</h4>
+                                        <p class="text-slate-500 text-xs">近日公開予定</p>
+                                    </div>
+                                    <div class="text-slate-600 text-xs">--:--</div>
+                                </div>
+                                <div class="flex items-center gap-4 p-4 bg-white/[0.01] hover:bg-white/[0.02] rounded-xl border border-white/5 hover:border-white/10 transition-all cursor-pointer">
+                                    <div class="w-16 h-16 rounded-lg bg-slate-800/30 flex-shrink-0 flex items-center justify-center">
+                                        ${icons.volume2}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-slate-300 text-sm font-light mb-1">エピソード</h4>
+                                        <p class="text-slate-500 text-xs">近日公開予定</p>
+                                    </div>
+                                    <div class="text-slate-600 text-xs">--:--</div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="space-y-4">
+                            <h3 class="text-xl font-light text-slate-400 border-l-2 border-slate-700 pl-3">その他</h3>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="bg-white/[0.01] hover:bg-white/[0.02] rounded-xl p-5 border border-white/5 hover:border-white/10 transition-all cursor-pointer space-y-3">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-800/30 flex items-center justify-center">
+                                        ${icons.book}
+                                    </div>
+                                    <div>
+                                        <h4 class="text-slate-300 text-sm font-light mb-1">リソース</h4>
+                                        <p class="text-slate-500 text-xs leading-relaxed">近日公開予定</p>
+                                    </div>
+                                </div>
+                                <div class="bg-white/[0.01] hover:bg-white/[0.02] rounded-xl p-5 border border-white/5 hover:border-white/10 transition-all cursor-pointer space-y-3">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-800/30 flex items-center justify-center">
+                                        ${icons.book}
+                                    </div>
+                                    <div>
+                                        <h4 class="text-slate-300 text-sm font-light mb-1">リソース</h4>
+                                        <p class="text-slate-500 text-xs leading-relaxed">近日公開予定</p>
+                                    </div>
+                                </div>
+                                <div class="bg-white/[0.01] hover:bg-white/[0.02] rounded-xl p-5 border border-white/5 hover:border-white/10 transition-all cursor-pointer space-y-3">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-800/30 flex items-center justify-center">
+                                        ${icons.book}
+                                    </div>
+                                    <div>
+                                        <h4 class="text-slate-300 text-sm font-light mb-1">リソース</h4>
+                                        <p class="text-slate-500 text-xs leading-relaxed">近日公開予定</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            `;
+            break;
+
         case 'contact':
             main.innerHTML = `
                 <div class="max-w-4xl mx-auto space-y-10 animate-fadeIn">
@@ -1112,6 +1210,100 @@ function renderContent() {
             }, 0);
             break;
     }
+}
+
+function toggleSearch() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        setTimeout(() => input.focus(), 100);
+    } else {
+        modal.classList.add('hidden');
+        input.value = '';
+        results.innerHTML = '';
+    }
+}
+
+function closeSearch() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    modal.classList.add('hidden');
+    input.value = '';
+    results.innerHTML = '';
+}
+
+function performSearch(query) {
+    const results = document.getElementById('search-results');
+
+    if (!query.trim()) {
+        results.innerHTML = '<p class="text-slate-500 text-sm text-center py-8">検索ワードを入力してください</p>';
+        return;
+    }
+
+    const lowerQuery = query.toLowerCase();
+
+    const articleResults = newsArticles.filter(article =>
+        article.title.toLowerCase().includes(lowerQuery) ||
+        article.excerpt.toLowerCase().includes(lowerQuery) ||
+        article.category.toLowerCase().includes(lowerQuery)
+    );
+
+    const bookResults = researchBooks.filter(book =>
+        book.title.toLowerCase().includes(lowerQuery) ||
+        book.subtitle.toLowerCase().includes(lowerQuery) ||
+        book.summary.toLowerCase().includes(lowerQuery)
+    );
+
+    if (articleResults.length === 0 && bookResults.length === 0) {
+        results.innerHTML = '<p class="text-slate-500 text-sm text-center py-8">検索結果が見つかりませんでした</p>';
+        return;
+    }
+
+    let html = '';
+
+    if (articleResults.length > 0) {
+        html += '<div class="space-y-2"><p class="text-slate-400 text-xs font-medium px-2">記事</p>';
+        articleResults.forEach(article => {
+            html += `
+                <div onclick="viewArticleDetail(${article.id}); closeSearch();" class="p-3 bg-white/[0.02] hover:bg-white/[0.05] rounded-xl cursor-pointer transition-all border border-white/5 hover:border-white/10">
+                    <div class="flex items-start gap-3">
+                        <img src="${article.image}" alt="${article.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-slate-300 text-sm font-light mb-1 line-clamp-1">${article.title}</h4>
+                            <p class="text-slate-500 text-xs line-clamp-2">${article.excerpt}</p>
+                            <span class="inline-block mt-1 px-2 py-0.5 ${article.categoryColor} rounded text-xs ${article.categoryText}">${article.category}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+
+    if (bookResults.length > 0) {
+        html += '<div class="space-y-2 mt-4"><p class="text-slate-400 text-xs font-medium px-2">本</p>';
+        bookResults.forEach(book => {
+            html += `
+                <div onclick="showBookModal(${book.id}); closeSearch();" class="p-3 bg-white/[0.02] hover:bg-white/[0.05] rounded-xl cursor-pointer transition-all border border-white/5 hover:border-white/10">
+                    <div class="flex items-start gap-3">
+                        <div class="w-12 h-16 rounded-lg bg-gradient-to-br ${book.coverColor} flex-shrink-0"></div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-slate-300 text-sm font-light mb-1 line-clamp-1">${book.title}</h4>
+                            <p class="text-slate-500 text-xs line-clamp-2">${book.subtitle}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+
+    results.innerHTML = html;
 }
 
 renderNav();
