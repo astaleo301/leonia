@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leonia - Neutral Eyes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950/20 via-transparent to-transparent pointer-events-none"></div>
+    
+    <header class="sticky top-0 z-40 backdrop-blur-2xl bg-slate-950/80 border-b border-white/5">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="./images/logo.jpg" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20" style="display:none;">
+                        <span class="text-white font-extralight text-xl">L</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extralight bg-gradient-to-r from-slate-200 via-orange-200 to-amber-300 bg-clip-text text-transparent">
+                            Leonia
+                        </h1>
+                        <p class="text-[10px] text-slate-600 font-light">Neutral Eyes</p>
+                    </div>
+                </div>
+                
+                <nav class="flex gap-2" id="nav-buttons"></nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 relative" id="main-content">
+        <div class="text-center text-slate-400 py-20">
+            <p>記事を読み込んでいます...</p>
+        </div>
+    </main>
+
+    <footer class="relative border-t border-white/5 bg-slate-950/50 backdrop-blur-sm mt-24">
+        <div class="container mx-auto px-6 py-10">
+            <div class="text-center space-y-2">
+                <p class="text-slate-500 text-sm font-light">© 2025 Leonia. All rights reserved.</p>
+                <p class="text-slate-600 text-xs font-light">Powered by neutral AI technology</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="popup-container"></div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
