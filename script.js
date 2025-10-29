@@ -827,6 +827,12 @@ function renderContent() {
         case 'bookshelf':
             main.innerHTML = `
                 <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <button onclick="changePage('content')" class="flex items-center gap-2 text-slate-400 hover:text-orange-300 transition-colors text-sm font-light group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        コンテンツ一覧に戻る
+                    </button>
                     <div class="text-center space-y-6">
                         <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">本棚</h2>
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
@@ -869,6 +875,12 @@ function renderContent() {
         case 'videos':
             main.innerHTML = `
                 <div class="max-w-6xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <button onclick="changePage('content')" class="flex items-center gap-2 text-slate-400 hover:text-orange-300 transition-colors text-sm font-light group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        コンテンツ一覧に戻る
+                    </button>
                     <div class="text-center space-y-6">
                         <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">動画一覧</h2>
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
@@ -906,6 +918,12 @@ function renderContent() {
         case 'podcasts-page':
             main.innerHTML = `
                 <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <button onclick="changePage('content')" class="flex items-center gap-2 text-slate-400 hover:text-orange-300 transition-colors text-sm font-light group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        コンテンツ一覧に戻る
+                    </button>
                     <div class="text-center space-y-6">
                         <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">ポッドキャスト一覧</h2>
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
@@ -955,7 +973,7 @@ function renderContent() {
                                         Leoniaは、AIを活用した中立的な情報プラットフォームです。私たちは、あらゆる利権や圧力から独立した立場で、偏りのない情報をお届けすることを約束します。
                                     </p>
                                     <p class="text-slate-300 leading-relaxed font-light">
-                                        ここでの目標はシンプルです。あなたが自分自身で考え、検証し、議論するための十分な知識と手法を提供すること。それだけです。
+                                        利用者が自ら考え、検証し、議論するための十分な知識と手法を提供することを目的としています
                                     </p>
                                 </div>
                             </div>
@@ -982,7 +1000,7 @@ function renderContent() {
                                     <h3 class="text-lg font-medium text-slate-200">思考のパートナー</h3>
                                 </div>
                                 <p class="text-slate-400 leading-relaxed text-sm font-light">
-                                    私たちの役割は、あなたに代わって考えることではありません。あなた自身が思考し、検証し、議論するための土台となる情報を提供します。
+                                    私たちの役割は、利用者が思考し・検証し・議論するための土台となる、正確で十分な情報を提供することです。
                                 </p>
                             </div>
                         </div>
