@@ -67,8 +67,7 @@ async function loadBooks() {
 
 const navItems = [
     { id: 'home', label: 'ホーム', icon: 'home' },
-    { id: 'bookshelf', label: '本棚', icon: 'bookOpen' },
-    { id: 'media', label: 'メディア', icon: 'film' },
+    { id: 'content', label: 'コンテンツ', icon: 'film' },
     { id: 'info', label: 'Info', icon: 'info' }
 ];
 
@@ -133,6 +132,7 @@ function closeBookPopup() {
 
 function toggleShareMenu(id) {
     event.stopPropagation();
+    const scrollPos = window.scrollY;
     state.shareMenu = state.shareMenu === id ? null : id;
     if (state.showPopup) {
         renderPopup();
@@ -140,6 +140,7 @@ function toggleShareMenu(id) {
         renderBookPopup();
     } else {
         renderContent();
+        window.scrollTo(0, scrollPos);
     }
 }
 
@@ -764,13 +765,14 @@ function renderContent() {
         
         case 'bookshelf':
             main.innerHTML = `
-                <div class="space-y-12 animate-fadeIn">
-                    <div class="text-center space-y-3">
-                        <h2 class="text-4xl font-extralight text-slate-200">調査本棚</h2>
-                        <p class="text-slate-500 text-sm font-light">AIによる詳細な調査・分析レポート</p>
+                <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <div class="text-center space-y-6">
+                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">本棚</h2>
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                        <p class="text-slate-400 text-sm font-light">深い理解のための調査本</p>
                     </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         ${researchBooks.map(book => {
                             const hasCover = book.cover;
                             return `
@@ -1036,137 +1038,81 @@ function renderContent() {
             `;
             break;
 
+        case 'content':
         case 'media':
             main.innerHTML = `
-                <div class="max-w-6xl mx-auto space-y-16 animate-fadeIn py-8">
+                <div class="max-w-5xl mx-auto space-y-12 animate-fadeIn py-8">
                     <div class="text-center space-y-6">
-                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">メディア</h2>
+                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">コンテンツ</h2>
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
-                        <p class="text-slate-400 text-sm font-light">映像、音声、そして新たな視点</p>
+                        <p class="text-slate-400 text-sm font-light">本、動画、音声、コミュニティ</p>
                     </div>
 
-                    <div class="space-y-16">
-                        <section class="space-y-6">
-                            <div class="flex items-center gap-3 justify-center md:justify-start">
-                                <div class="w-1 h-8 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
-                                <h3 class="text-2xl font-light text-slate-300">動画コンテンツ</h3>
-                            </div>
-                            <div class="grid md:grid-cols-2 gap-8">
-                                <div class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                    <div class="aspect-video bg-gradient-to-br from-slate-800/50 to-slate-900/50 flex items-center justify-center relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-orange-950/10 to-transparent"></div>
-                                        <div class="relative z-10 text-center space-y-3">
-                                            <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-400/10 flex items-center justify-center border border-orange-400/20">
-                                                ${icons.play}
-                                            </div>
-                                            <p class="text-slate-500 text-sm">準備中</p>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 space-y-3">
-                                        <h4 class="text-slate-300 font-light group-hover:text-orange-300 transition-colors">解説動画</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed">複雑なトピックをわかりやすく解説します</p>
-                                        <div class="flex items-center gap-2 text-xs text-slate-600">
-                                            <span>近日公開</span>
-                                        </div>
-                                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div onclick="changePage('bookshelf')" class="group relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] hover:from-white/[0.06] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/10 hover:border-orange-400/40 transition-all duration-500 cursor-pointer">
+                            <div class="p-8 space-y-4">
+                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400/10 to-cyan-400/10 flex items-center justify-center border border-blue-400/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400/70"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
                                 </div>
-                                <div class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                    <div class="aspect-video bg-gradient-to-br from-slate-800/50 to-slate-900/50 flex items-center justify-center relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-orange-950/10 to-transparent"></div>
-                                        <div class="relative z-10 text-center space-y-3">
-                                            <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-400/10 flex items-center justify-center border border-orange-400/20">
-                                                ${icons.play}
-                                            </div>
-                                            <p class="text-slate-500 text-sm">準備中</p>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 space-y-3">
-                                        <h4 class="text-slate-300 font-light group-hover:text-orange-300 transition-colors">インタビュー</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed">専門家の視点を深く掘り下げます</p>
-                                        <div class="flex items-center gap-2 text-xs text-slate-600">
-                                            <span>近日公開</span>
-                                        </div>
-                                    </div>
+                                <div>
+                                    <h3 class="text-xl font-light text-slate-200 mb-2 group-hover:text-orange-300 transition-colors flex items-center gap-2">
+                                        本棚
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                    </h3>
+                                    <p class="text-slate-400 text-sm leading-relaxed">AIによる詳細な調査・分析レポート</p>
                                 </div>
                             </div>
-                        </section>
+                        </div>
 
-                        <section class="space-y-6">
-                            <div class="flex items-center gap-3 justify-center md:justify-start">
-                                <div class="w-1 h-8 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
-                                <h3 class="text-2xl font-light text-slate-300">ポッドキャスト</h3>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400/10 to-amber-400/10 flex-shrink-0 flex items-center justify-center border border-orange-400/20">
-                                        <div class="text-orange-400/60">
-                                            ${icons.volume2}
-                                        </div>
+                        <div class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                            <div class="aspect-video bg-gradient-to-br from-slate-800/50 to-slate-900/50 flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-orange-950/10 to-transparent"></div>
+                                <div class="relative z-10 text-center space-y-3">
+                                    <div class="w-14 h-14 mx-auto rounded-xl bg-orange-400/10 flex items-center justify-center border border-orange-400/20">
+                                        ${icons.play}
                                     </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">エピソード 1</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed mb-3">様々なトピックを深く掘り下げる音声コンテンツ</p>
-                                        <div class="flex items-center gap-3 text-xs text-slate-600">
-                                            <span>近日公開</span>
-                                            <span>•</span>
-                                            <span>--:--</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400/10 to-amber-400/10 flex-shrink-0 flex items-center justify-center border border-orange-400/20">
-                                        <div class="text-orange-400/60">
-                                            ${icons.volume2}
-                                        </div>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">エピソード 2</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed mb-3">専門家との対話を通じて理解を深めます</p>
-                                        <div class="flex items-center gap-3 text-xs text-slate-600">
-                                            <span>近日公開</span>
-                                            <span>•</span>
-                                            <span>--:--</span>
-                                        </div>
-                                    </div>
+                                    <p class="text-slate-500 text-xs">準備中</p>
                                 </div>
                             </div>
-                        </section>
+                            <div class="p-6 space-y-2">
+                                <h3 class="text-slate-300 font-light group-hover:text-orange-300 transition-colors">解説動画</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed">複雑なトピックをわかりやすく解説</p>
+                                <div class="text-xs text-slate-600">近日公開</div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <section class="space-y-6">
-                            <div class="flex items-center gap-3 justify-center md:justify-start">
-                                <div class="w-1 h-8 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
-                                <h3 class="text-2xl font-light text-slate-300">その他のコンテンツ</h3>
+                    <div class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400/10 to-amber-400/10 flex-shrink-0 flex items-center justify-center border border-orange-400/20">
+                            <div class="text-orange-400/60">
+                                ${icons.volume2}
                             </div>
-                            <div class="grid md:grid-cols-3 gap-6">
-                                <div class="group bg-gradient-to-br from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl p-8 border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer space-y-4">
-                                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-400/10 to-cyan-400/10 flex items-center justify-center border border-blue-400/20">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400/60"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">リサーチレポート</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed">詳細な調査結果をまとめた資料</p>
-                                    </div>
-                                </div>
-                                <div class="group bg-gradient-to-br from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl p-8 border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer space-y-4">
-                                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-400/10 to-pink-400/10 flex items-center justify-center border border-purple-400/20">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400/60"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">データ分析</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed">統計データを視覚的に理解する</p>
-                                    </div>
-                                </div>
-                                <div class="group bg-gradient-to-br from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl p-8 border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer space-y-4">
-                                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-400/10 to-emerald-400/10 flex items-center justify-center border border-green-400/20">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400/60"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">コミュニティ</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed">議論と学びの場</p>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">ポッドキャスト</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed mb-3">様々なトピックを深く掘り下げる音声コンテンツ</p>
+                            <div class="flex items-center gap-3 text-xs text-slate-600">
+                                <span>近日公開</span>
+                                <span>•</span>
+                                <span>--:--</span>
                             </div>
-                        </section>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1 h-6 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
+                            <h3 class="text-lg font-light text-slate-400">その他のコンテンツ</h3>
+                        </div>
+                        <div class="group bg-gradient-to-br from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl p-8 border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer space-y-4">
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-400/10 to-emerald-400/10 flex items-center justify-center border border-green-400/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400/60"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">コミュニティ</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">議論と学びの場</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
