@@ -18,7 +18,9 @@ const icons = {
     pause: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
     skipBack: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
     skipForward: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
-    volume2: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>'
+    volume2: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
+    film: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>',
+    search: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>'
 };
 
 let newsArticles = [];
@@ -65,9 +67,8 @@ async function loadBooks() {
 
 const navItems = [
     { id: 'home', label: 'ホーム', icon: 'home' },
-    { id: 'bookshelf', label: '本棚', icon: 'bookOpen' },
-    { id: 'about', label: 'About', icon: 'info' },
-    { id: 'contact', label: 'Contact', icon: 'mail' }
+    { id: 'content', label: 'コンテンツ', icon: 'film' },
+    { id: 'info', label: 'Info', icon: 'info' }
 ];
 
 function renderNav() {
@@ -131,6 +132,7 @@ function closeBookPopup() {
 
 function toggleShareMenu(id) {
     event.stopPropagation();
+    const scrollPos = window.scrollY;
     state.shareMenu = state.shareMenu === id ? null : id;
     if (state.showPopup) {
         renderPopup();
@@ -138,6 +140,7 @@ function toggleShareMenu(id) {
         renderBookPopup();
     } else {
         renderContent();
+        window.scrollTo(0, scrollPos);
     }
 }
 
@@ -762,13 +765,14 @@ function renderContent() {
         
         case 'bookshelf':
             main.innerHTML = `
-                <div class="space-y-12 animate-fadeIn">
-                    <div class="text-center space-y-3">
-                        <h2 class="text-4xl font-extralight text-slate-200">調査本棚</h2>
-                        <p class="text-slate-500 text-sm font-light">AIによる詳細な調査・分析レポート</p>
+                <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8">
+                    <div class="text-center space-y-6">
+                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">本棚</h2>
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                        <p class="text-slate-400 text-sm font-light">深い理解のための調査本</p>
                     </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         ${researchBooks.map(book => {
                             const hasCover = book.cover;
                             return `
@@ -800,7 +804,122 @@ function renderContent() {
                 </div>
             `;
             break;
-            case 'about':
+
+        case 'info':
+            main.innerHTML = `
+                <div class="max-w-4xl mx-auto space-y-16 animate-fadeIn py-8">
+                    <div class="text-center space-y-6">
+                        <h2 class="text-5xl font-extralight text-slate-200 tracking-wide">About Leonia</h2>
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                        <p class="text-slate-400 text-sm font-light">中立的な視点で、あなたの思考をサポートします</p>
+                    </div>
+
+                    <div class="space-y-12">
+                        <div class="bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm rounded-3xl p-10 border border-white/5 space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-400/20 to-amber-400/20 flex items-center justify-center border border-orange-400/10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400/60"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                </div>
+                                <div class="flex-1 space-y-4">
+                                    <h3 class="text-2xl font-light text-slate-200">Leoniaとは</h3>
+                                    <p class="text-slate-300 leading-relaxed font-light">
+                                        Leoniaは、AIを活用した中立的な情報プラットフォームです。私たちは、あらゆる利権や圧力から独立した立場で、偏りのない情報をお届けすることを約束します。
+                                    </p>
+                                    <p class="text-slate-300 leading-relaxed font-light">
+                                        ここでの目標はシンプルです。あなたが自分自身で考え、検証し、議論するための十分な知識と手法を提供すること。それだけです。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-400/20 transition-all duration-500 group space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400/20 to-cyan-400/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400/60"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-slate-200">独立性の保証</h3>
+                                </div>
+                                <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                    広告は一切導入しません。スポンサーの影響を受けることなく、純粋に中立的な情報提供に専念します。
+                                </p>
+                            </div>
+
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-400/20 transition-all duration-500 group space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400/20 to-amber-400/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400/60"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-slate-200">思考のパートナー</h3>
+                                </div>
+                                <p class="text-slate-400 leading-relaxed text-sm font-light">
+                                    私たちの役割は、あなたに代わって考えることではありません。あなた自身が思考し、検証し、議論するための土台となる情報を提供します。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-white/5 pt-12">
+                            <h2 class="text-3xl font-extralight text-slate-200 text-center mb-8">Contact</h2>
+
+                            <div class="bg-white/[0.02] backdrop-blur-sm rounded-3xl p-8 border border-white/5 space-y-6">
+                                <div class="text-center space-y-3">
+                                    <p class="text-slate-300 leading-relaxed font-light">
+                                        お問い合わせは以下のチャンネルからお気軽にどうぞ
+                                    </p>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="space-y-4">
+                                        <a href="https://smp15.simplex.im/a#qNivkZ9U791ACZXyEgmZ2y78iaRfPlf5ZWVr7A1BHUA" target="_blank" class="flex items-start gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
+                                            <div class="p-3 bg-gradient-to-br from-orange-400/20 to-amber-400/20 rounded-xl group-hover:from-orange-400/30 group-hover:to-amber-400/30 transition-all">
+                                                ${icons.messageCircle}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-base font-medium text-slate-200 mb-1">SimpleX Chat</h3>
+                                                <p class="text-slate-400 text-sm font-light">メッセージ</p>
+                                            </div>
+                                        </a>
+
+                                        <a href="https://x.com/leonia301" target="_blank" class="flex items-start gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
+                                            <div class="p-3 bg-gradient-to-br from-slate-400/20 to-slate-500/20 rounded-xl group-hover:from-slate-400/30 group-hover:to-slate-500/30 transition-all">
+                                                ${icons.xTwitter}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-base font-medium text-slate-200 mb-1">X (Twitter)</h3>
+                                                <p class="text-slate-400 text-sm font-light">@leonia301</p>
+                                            </div>
+                                        </a>
+
+                                        <a href="https://bsky.app/profile/leonia301.bsky.social" target="_blank" class="flex items-start gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
+                                            <div class="p-3 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-xl group-hover:from-blue-400/30 group-hover:to-cyan-400/30 transition-all">
+                                                ${icons.cloud}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-base font-medium text-slate-200 mb-1">Bluesky</h3>
+                                                <p class="text-slate-400 text-sm font-light">@leonia301.bsky.social</p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                    <div class="flex flex-col items-center justify-center space-y-4 p-6 bg-white/[0.02] rounded-2xl border border-white/5">
+                                        <div class="text-center space-y-2">
+                                            <h3 class="text-base font-medium text-slate-200">SimpleX QRコード</h3>
+                                            <p class="text-slate-400 text-xs font-light">スキャンして接続</p>
+                                        </div>
+                                        <img src="./images/simplex.jpg" alt="SimpleX QR Code" class="w-48 h-48 rounded-xl bg-white p-2" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="w-48 h-48 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center" style="display:none;">
+                                            <p class="text-slate-400 text-sm text-center px-4">QRコード画像を<br>準備中です</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+
+        case 'about':
             main.innerHTML = `
                 <div class="max-w-4xl mx-auto space-y-16 animate-fadeIn py-8">
                     <div class="text-center space-y-6">
@@ -918,7 +1037,87 @@ function renderContent() {
                 </div>
             `;
             break;
-        
+
+        case 'content':
+        case 'media':
+            main.innerHTML = `
+                <div class="max-w-5xl mx-auto space-y-12 animate-fadeIn py-8">
+                    <div class="text-center space-y-6">
+                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">コンテンツ</h2>
+                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
+                        <p class="text-slate-400 text-sm font-light">本、動画、音声、コミュニティ</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div onclick="changePage('bookshelf')" class="group relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] hover:from-white/[0.06] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/10 hover:border-orange-400/40 transition-all duration-500 cursor-pointer">
+                            <div class="p-8 space-y-4">
+                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400/10 to-cyan-400/10 flex items-center justify-center border border-blue-400/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400/70"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-light text-slate-200 mb-2 group-hover:text-orange-300 transition-colors flex items-center gap-2">
+                                        本棚
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                    </h3>
+                                    <p class="text-slate-400 text-sm leading-relaxed">AIによる詳細な調査・分析レポート</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                            <div class="aspect-video bg-gradient-to-br from-slate-800/50 to-slate-900/50 flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-orange-950/10 to-transparent"></div>
+                                <div class="relative z-10 text-center space-y-3">
+                                    <div class="w-14 h-14 mx-auto rounded-xl bg-orange-400/10 flex items-center justify-center border border-orange-400/20">
+                                        ${icons.play}
+                                    </div>
+                                    <p class="text-slate-500 text-xs">準備中</p>
+                                </div>
+                            </div>
+                            <div class="p-6 space-y-2">
+                                <h3 class="text-slate-300 font-light group-hover:text-orange-300 transition-colors">解説動画</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed">複雑なトピックをわかりやすく解説</p>
+                                <div class="text-xs text-slate-600">近日公開</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400/10 to-amber-400/10 flex-shrink-0 flex items-center justify-center border border-orange-400/20">
+                            <div class="text-orange-400/60">
+                                ${icons.volume2}
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">ポッドキャスト</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed mb-3">様々なトピックを深く掘り下げる音声コンテンツ</p>
+                            <div class="flex items-center gap-3 text-xs text-slate-600">
+                                <span>近日公開</span>
+                                <span>•</span>
+                                <span>--:--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1 h-6 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
+                            <h3 class="text-lg font-light text-slate-400">その他のコンテンツ</h3>
+                        </div>
+                        <div class="group bg-gradient-to-br from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl p-8 border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer space-y-4">
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-400/10 to-emerald-400/10 flex items-center justify-center border border-green-400/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400/60"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">コミュニティ</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">議論と学びの場</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+
         case 'contact':
             main.innerHTML = `
                 <div class="max-w-4xl mx-auto space-y-10 animate-fadeIn">
@@ -1112,6 +1311,100 @@ function renderContent() {
             }, 0);
             break;
     }
+}
+
+function toggleSearch() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        setTimeout(() => input.focus(), 100);
+    } else {
+        modal.classList.add('hidden');
+        input.value = '';
+        results.innerHTML = '';
+    }
+}
+
+function closeSearch() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    modal.classList.add('hidden');
+    input.value = '';
+    results.innerHTML = '';
+}
+
+function performSearch(query) {
+    const results = document.getElementById('search-results');
+
+    if (!query.trim()) {
+        results.innerHTML = '<p class="text-slate-500 text-sm text-center py-8">検索ワードを入力してください</p>';
+        return;
+    }
+
+    const lowerQuery = query.toLowerCase();
+
+    const articleResults = newsArticles.filter(article =>
+        article.title.toLowerCase().includes(lowerQuery) ||
+        article.excerpt.toLowerCase().includes(lowerQuery) ||
+        article.category.toLowerCase().includes(lowerQuery)
+    );
+
+    const bookResults = researchBooks.filter(book =>
+        book.title.toLowerCase().includes(lowerQuery) ||
+        book.subtitle.toLowerCase().includes(lowerQuery) ||
+        book.summary.toLowerCase().includes(lowerQuery)
+    );
+
+    if (articleResults.length === 0 && bookResults.length === 0) {
+        results.innerHTML = '<p class="text-slate-500 text-sm text-center py-8">検索結果が見つかりませんでした</p>';
+        return;
+    }
+
+    let html = '';
+
+    if (articleResults.length > 0) {
+        html += '<div class="space-y-2"><p class="text-slate-400 text-xs font-medium px-2">記事</p>';
+        articleResults.forEach(article => {
+            html += `
+                <div onclick="viewArticleDetail(${article.id}); closeSearch();" class="p-3 bg-white/[0.02] hover:bg-white/[0.05] rounded-xl cursor-pointer transition-all border border-white/5 hover:border-white/10">
+                    <div class="flex items-start gap-3">
+                        <img src="${article.image}" alt="${article.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-slate-300 text-sm font-light mb-1 line-clamp-1">${article.title}</h4>
+                            <p class="text-slate-500 text-xs line-clamp-2">${article.excerpt}</p>
+                            <span class="inline-block mt-1 px-2 py-0.5 ${article.categoryColor} rounded text-xs ${article.categoryText}">${article.category}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+
+    if (bookResults.length > 0) {
+        html += '<div class="space-y-2 mt-4"><p class="text-slate-400 text-xs font-medium px-2">本</p>';
+        bookResults.forEach(book => {
+            html += `
+                <div onclick="showBookModal(${book.id}); closeSearch();" class="p-3 bg-white/[0.02] hover:bg-white/[0.05] rounded-xl cursor-pointer transition-all border border-white/5 hover:border-white/10">
+                    <div class="flex items-start gap-3">
+                        <div class="w-12 h-16 rounded-lg bg-gradient-to-br ${book.coverColor} flex-shrink-0"></div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-slate-300 text-sm font-light mb-1 line-clamp-1">${book.title}</h4>
+                            <p class="text-slate-500 text-xs line-clamp-2">${book.subtitle}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+
+    results.innerHTML = html;
 }
 
 renderNav();
