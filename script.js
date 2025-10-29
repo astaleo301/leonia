@@ -25,6 +25,8 @@ const icons = {
 
 let newsArticles = [];
 let researchBooks = [];
+let videos = [];
+let podcasts = [];
 let audioPlayer = null;
 let currentAudioBookId = null;
 let currentAudioArticleId = null;
@@ -65,6 +67,26 @@ async function loadBooks() {
     }
 }
 
+async function loadVideos() {
+    try {
+        const response = await fetch('./videos/videos.json');
+        videos = await response.json();
+    } catch (error) {
+        console.error('動画の読み込みに失敗しました:', error);
+        videos = [];
+    }
+}
+
+async function loadPodcasts() {
+    try {
+        const response = await fetch('./podcasts/podcasts.json');
+        podcasts = await response.json();
+    } catch (error) {
+        console.error('ポッドキャストの読み込みに失敗しました:', error);
+        podcasts = [];
+    }
+}
+
 const navItems = [
     { id: 'home', label: 'ホーム', icon: 'home' },
     { id: 'content', label: 'コンテンツ', icon: 'film' },
@@ -86,6 +108,11 @@ function renderNav() {
             <span class="hidden md:inline">${item.label}</span>
         </button>
     `).join('');
+}
+
+function getRandomItems(array, count) {
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
 }
 
 function changePage(page) {
@@ -1040,66 +1067,123 @@ function renderContent() {
 
         case 'content':
         case 'media':
+            const recommendedBooks = getRandomItems(researchBooks, 4);
+            const recommendedVideos = getRandomItems(videos, 2);
+            const recommendedPodcasts = getRandomItems(podcasts, 2);
+
             main.innerHTML = `
-                <div class="max-w-5xl mx-auto space-y-12 animate-fadeIn py-8">
+                <div class="max-w-6xl mx-auto space-y-16 animate-fadeIn py-8">
                     <div class="text-center space-y-6">
                         <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">コンテンツ</h2>
                         <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
                         <p class="text-slate-400 text-sm font-light">本、動画、音声、コミュニティ</p>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div onclick="changePage('bookshelf')" class="group relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] hover:from-white/[0.06] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/10 hover:border-orange-400/40 transition-all duration-500 cursor-pointer">
-                            <div class="p-8 space-y-4">
-                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400/10 to-cyan-400/10 flex items-center justify-center border border-blue-400/20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400/70"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-light text-slate-200 mb-2 group-hover:text-orange-300 transition-colors flex items-center gap-2">
-                                        本棚
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                    </h3>
-                                    <p class="text-slate-400 text-sm leading-relaxed">AIによる詳細な調査・分析レポート</p>
-                                </div>
+                    <section class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-1 h-8 bg-gradient-to-b from-blue-400/60 to-cyan-400/60 rounded-full"></div>
+                                <h3 class="text-2xl font-light text-slate-300">おすすめの本</h3>
                             </div>
+                            <button onclick="changePage('bookshelf')" class="text-orange-400 hover:text-orange-300 text-sm font-light flex items-center gap-2 transition-colors">
+                                もっと見る
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </button>
                         </div>
-
-                        <div class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                            <div class="aspect-video bg-gradient-to-br from-slate-800/50 to-slate-900/50 flex items-center justify-center relative overflow-hidden">
-                                <div class="absolute inset-0 bg-gradient-to-br from-orange-950/10 to-transparent"></div>
-                                <div class="relative z-10 text-center space-y-3">
-                                    <div class="w-14 h-14 mx-auto rounded-xl bg-orange-400/10 flex items-center justify-center border border-orange-400/20">
-                                        ${icons.play}
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            ${recommendedBooks.map(book => `
+                                <div onclick="showBookModal(${book.id})" class="group cursor-pointer transition-all duration-500 hover:-translate-y-2">
+                                    <div class="w-full aspect-[3/4] rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
+                                        ${book.cover ? `
+                                            <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        ` : ''}
+                                        <div class="w-full h-full bg-gradient-to-br ${book.coverColor} flex flex-col items-center justify-center p-6 relative" style="${book.cover ? 'display:none;' : ''}">
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                            ${icons.book}
+                                            <div class="text-center relative z-10">
+                                                <h3 class="text-white font-medium text-sm mb-1 leading-snug">${book.title}</h3>
+                                                <p class="text-white/80 text-xs">${book.subtitle}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="text-slate-500 text-xs">準備中</p>
+                                    <div class="mt-3 space-y-1 px-1">
+                                        <p class="text-slate-300 text-sm font-light line-clamp-2">${book.title}</p>
+                                        <p class="text-slate-500 text-xs">${book.date}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="p-6 space-y-2">
-                                <h3 class="text-slate-300 font-light group-hover:text-orange-300 transition-colors">解説動画</h3>
-                                <p class="text-slate-500 text-sm leading-relaxed">複雑なトピックをわかりやすく解説</p>
-                                <div class="text-xs text-slate-600">近日公開</div>
-                            </div>
+                            `).join('')}
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400/10 to-amber-400/10 flex-shrink-0 flex items-center justify-center border border-orange-400/20">
-                            <div class="text-orange-400/60">
-                                ${icons.volume2}
+                    <section class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-1 h-8 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
+                                <h3 class="text-2xl font-light text-slate-300">おすすめの動画</h3>
                             </div>
+                            <button onclick="changePage('videos')" class="text-orange-400 hover:text-orange-300 text-sm font-light flex items-center gap-2 transition-colors">
+                                もっと見る
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </button>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">ポッドキャスト</h3>
-                            <p class="text-slate-500 text-sm leading-relaxed mb-3">様々なトピックを深く掘り下げる音声コンテンツ</p>
-                            <div class="flex items-center gap-3 text-xs text-slate-600">
-                                <span>近日公開</span>
-                                <span>•</span>
-                                <span>--:--</span>
-                            </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            ${recommendedVideos.map(video => `
+                                <div onclick="showVideoModal(${video.id})" class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                                    <div class="aspect-video relative overflow-hidden">
+                                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center">
+                                            <div class="w-16 h-16 rounded-full bg-orange-400/90 hover:bg-orange-400 flex items-center justify-center transition-all group-hover:scale-110">
+                                                ${icons.play}
+                                            </div>
+                                        </div>
+                                        <span class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-white">${video.duration}</span>
+                                    </div>
+                                    <div class="p-6 space-y-2">
+                                        <h4 class="text-slate-200 font-light group-hover:text-orange-300 transition-colors">${video.title}</h4>
+                                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">${video.description}</p>
+                                        <div class="flex items-center gap-3 text-xs text-slate-600">
+                                            <span>${video.date}</span>
+                                            <span>•</span>
+                                            <span>${video.views} 視聴</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="space-y-6">
+                    <section class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-1 h-8 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
+                                <h3 class="text-2xl font-light text-slate-300">おすすめのポッドキャスト</h3>
+                            </div>
+                            <button onclick="changePage('podcasts-page')" class="text-orange-400 hover:text-orange-300 text-sm font-light flex items-center gap-2 transition-colors">
+                                もっと見る
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                        <div class="space-y-4">
+                            ${recommendedPodcasts.map(podcast => `
+                                <div onclick="showPodcastModal(${podcast.id})" class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                                    <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-24 h-24 rounded-2xl object-cover flex-shrink-0">
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-slate-200 font-light mb-2 group-hover:text-orange-300 transition-colors">${podcast.title}</h4>
+                                        <p class="text-slate-500 text-sm leading-relaxed mb-3 line-clamp-2">${podcast.description}</p>
+                                        <div class="flex items-center gap-3 text-xs text-slate-600">
+                                            <span>${podcast.duration}</span>
+                                            <span>•</span>
+                                            <span>${podcast.date}</span>
+                                            <span>•</span>
+                                            <span>${podcast.plays} 再生</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+
+                    <section class="space-y-6">
                         <div class="flex items-center gap-3">
                             <div class="w-1 h-6 bg-gradient-to-b from-orange-400/60 to-amber-400/60 rounded-full"></div>
                             <h3 class="text-lg font-light text-slate-400">その他のコンテンツ</h3>
@@ -1110,10 +1194,10 @@ function renderContent() {
                             </div>
                             <div>
                                 <h4 class="text-slate-300 font-light mb-2 group-hover:text-orange-300 transition-colors">コミュニティ</h4>
-                                <p class="text-slate-500 text-sm leading-relaxed">議論と学びの場</p>
+                                <p class="text-slate-500 text-sm leading-relaxed">議論と学びの場（近日公開）</p>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             `;
             break;
@@ -1408,6 +1492,6 @@ function performSearch(query) {
 }
 
 renderNav();
-Promise.all([loadArticles(), loadBooks()]).then(() => {
+Promise.all([loadArticles(), loadBooks(), loadVideos(), loadPodcasts()]).then(() => {
     checkURLParams();
 });

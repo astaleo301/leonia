@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "量子コンピューティング入門",
+    "description": "量子コンピューティングの基礎から応用まで、わかりやすく解説します",
+    "thumbnail": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80",
+    "videoUrl": "./videos/quantum-computing-intro.mp4",
+    "duration": "15:30",
+    "date": "2025-10-28",
+    "category": "テクノロジー",
+    "views": 1250
+  },
+  {
+    "id": 2,
+    "title": "サイバーセキュリティの最新動向",
+    "description": "ランサムウェア攻撃の実態と対策について詳しく解説",
+    "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
+    "videoUrl": "./videos/cybersecurity-trends.mp4",
+    "duration": "22:45",
+    "date": "2025-10-25",
+    "category": "セキュリティ",
+    "views": 2100
+  },
+  {
+    "id": 3,
+    "title": "メガソーラー事業の真実",
+    "description": "再生可能エネルギー事業の裏側にある利権構造を調査",
+    "thumbnail": "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
+    "videoUrl": "./videos/megasolar-investigation.mp4",
+    "duration": "18:20",
+    "date": "2025-10-22",
+    "category": "社会",
+    "views": 1800
+  }
+]
