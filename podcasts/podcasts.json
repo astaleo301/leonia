@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "AIと社会の未来",
+    "description": "人工知能技術の発展が社会にもたらす影響について、専門家と対話します",
+    "thumbnail": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    "audioUrl": "./podcasts/ai-future.mp3",
+    "duration": "45:20",
+    "date": "2025-10-27",
+    "category": "テクノロジー",
+    "plays": 3200
+  },
+  {
+    "id": 2,
+    "title": "グローバル経済の転換点",
+    "description": "世界経済の構造変化と日本への影響を深掘り",
+    "thumbnail": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80",
+    "audioUrl": "./podcasts/global-economy.mp3",
+    "duration": "52:15",
+    "date": "2025-10-24",
+    "category": "経済",
+    "plays": 2800
+  },
+  {
+    "id": 3,
+    "title": "気候変動と持続可能性",
+    "description": "地球温暖化対策と持続可能な社会の実現に向けた議論",
+    "thumbnail": "https://images.unsplash.com/photo-1569163139394-de4798aa62b6?w=800&q=80",
+    "audioUrl": "./podcasts/climate-change.mp3",
+    "duration": "38:45",
+    "date": "2025-10-20",
+    "category": "環境",
+    "plays": 2400
+  }
+]
