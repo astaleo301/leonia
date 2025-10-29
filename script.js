@@ -819,10 +819,10 @@ function renderContent() {
                                 <div class="flex-1 space-y-4">
                                     <h3 class="text-2xl font-light text-slate-200">Leoniaとは</h3>
                                     <p class="text-slate-300 leading-relaxed font-light">
-                                        Leoniaは、AIを活用した中立的な情報プラットフォームです。私たちは、あらゆる利権や圧力から独立した立場で、偏りのない情報をお届けすることを約束します。
+                                        Leoniaは、AIを活用した中立的な情報プラットフォームです。私たちは、あらゆる利権や圧力から独立した立場で、偏りのない情報をお届けします。
                                     </p>
                                     <p class="text-slate-300 leading-relaxed font-light">
-                                        ここでの目標はシンプルです。あなたが自分自身で考え、検証し、議論するための十分な知識と手法を提供すること。それだけです。
+                                        利用者が自ら考え、検証し、議論するための十分な知識と手法を提供することを目的としています
                                     </p>
                                 </div>
                             </div>
@@ -837,7 +837,7 @@ function renderContent() {
                                     <h3 class="text-lg font-medium text-slate-200">独立性の保証</h3>
                                 </div>
                                 <p class="text-slate-400 leading-relaxed text-sm font-light">
-                                    広告は一切導入しません。スポンサーの影響を受けることなく、純粋に中立的な情報提供に専念します。あなたに届く情報は、誰の利益でもなく、ただ事実だけを基にしています。
+                                    広告は一切導入しません。スポンサーの影響を受けることなく、純粋に中立的な情報提供に専念します。お伝えする情報は、誰の利益でもなく、ただ事実だけを基にしています。
                                 </p>
                             </div>
 
@@ -849,7 +849,7 @@ function renderContent() {
                                     <h3 class="text-lg font-medium text-slate-200">広告ゼロの理由</h3>
                                 </div>
                                 <p class="text-slate-400 leading-relaxed text-sm font-light">
-                                    広告収入に頼ると、どうしてもその影響を受けてしまいます。私たちは、完全に独立した情報提供を実現するため、広告に頼らないモデルを選択しました。
+                                   私たちは、完全に独立した情報提供を実現するため、広告に頼らないモデルを選択しました。
                                 </p>
                             </div>
 
@@ -861,7 +861,7 @@ function renderContent() {
                                     <h3 class="text-lg font-medium text-slate-200">もう一つの選択肢</h3>
                                 </div>
                                 <p class="text-slate-400 leading-relaxed text-sm font-light">
-                                    感情や私見のこもった人間的なメディアを否定するわけではありません。それらにも大切な価値があります。Leoniaは、あくまで「もう一つの選択肢」として、中立的な視点を提供します。
+                                    感情や私見のこもった人間的なメディアを否定するわけではありません。Leoniaは、あくまで「もう一つの選択肢」として、中立的な視点を提供します。
                                 </p>
                             </div>
 
@@ -873,7 +873,7 @@ function renderContent() {
                                     <h3 class="text-lg font-medium text-slate-200">思考のパートナー</h3>
                                 </div>
                                 <p class="text-slate-400 leading-relaxed text-sm font-light">
-                                    私たちの役割は、あなたに代わって考えることではありません。あなた自身が思考し、検証し、議論するための土台となる、正確で十分な情報を提供することです。
+                                    私たちの役割は、利用者が思考・検証・議論するための土台となる、正確で十分な情報を提供することです。
                                 </p>
                             </div>
                         </div>
