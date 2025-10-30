@@ -22,7 +22,57 @@ const icons = {
     film: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>',
     search: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>',
     headphones: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>',
-    mic: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>'
+    mic: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>',
+    // Badge icons
+    cpu: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"></rect><rect width="6" height="6" x="9" y="9" rx="1"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>',
+    user: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+    users: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+    searchIcon: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>',
+    shieldCheck: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>'
+};
+
+// Badge definitions
+const badgeDefinitions = {
+    ai: {
+        icon: icons.cpu,
+        color: 'text-blue-400',
+        bg: 'bg-blue-500/10',
+        border: 'border-blue-500/20',
+        title: 'AI作成',
+        description: 'この記事はAIによって作成されました。複数の信頼できる情報源から収集されたデータをもとに、中立的な視点で構成されています。'
+    },
+    human: {
+        icon: icons.user,
+        color: 'text-emerald-400',
+        bg: 'bg-emerald-500/10',
+        border: 'border-emerald-500/20',
+        title: '人間作成',
+        description: 'この記事は人間のライターによって執筆されました。独自の視点と専門知識に基づいて作成されています。'
+    },
+    collaborative: {
+        icon: icons.users,
+        color: 'text-purple-400',
+        bg: 'bg-purple-500/10',
+        border: 'border-purple-500/20',
+        title: 'AI+人間 共同制作',
+        description: 'この記事はAIと人間が協力して作成しました。AIによるデータ収集と人間による編集・検証を組み合わせています。'
+    },
+    investigation: {
+        icon: icons.searchIcon,
+        color: 'text-orange-400',
+        bg: 'bg-orange-500/10',
+        border: 'border-orange-500/20',
+        title: 'Original Investigation',
+        description: 'Leoniaの独自調査に基づく記事です。現地取材、専門家へのインタビュー、独自のデータ分析などを含んでいます。'
+    },
+    verified: {
+        icon: icons.shieldCheck,
+        color: 'text-cyan-400',
+        bg: 'bg-cyan-500/10',
+        border: 'border-cyan-500/20',
+        title: 'Verified by Leonia OSINT Team',
+        description: 'Leonia OSINTチームによって事実確認と検証が行われた記事です。複数の独立した情報源で裏付けられています。'
+    }
 };
 
 let newsArticles = [];
@@ -418,15 +468,11 @@ function renderPopup() {
                     </div>
 
                     <div class="space-y-4">
-                        <div class="flex items-center gap-3 flex-wrap">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <span class="px-3 py-1.5 ${article.categoryColor} backdrop-blur-sm rounded-full text-xs ${article.categoryText} font-medium border border-white/5">
                                 ${article.category}
                             </span>
-                            ${article.authorType ? `
-                                <span class="px-2.5 py-1 bg-slate-700/30 rounded-full text-[11px] text-slate-500 font-light border border-slate-700/50">
-                                    ${article.authorType === 'ai' ? 'AI作成' : article.authorType === 'human' ? '人間作成' : 'AI+人間 共同制作'}
-                                </span>
-                            ` : ''}
+                            ${getArticleBadges(article)}
                             <span class="text-slate-500 text-xs">${article.date}</span>
                         </div>
                         
@@ -841,11 +887,7 @@ function renderContent() {
                                                     <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
                                                         ${article.category}
                                                     </span>
-                                                    ${article.authorType ? `
-                                                        <span class="px-2 py-0.5 bg-slate-700/30 rounded text-[10px] text-slate-500 font-light border border-slate-700/50">
-                                                            ${article.authorType === 'ai' ? 'AI' : article.authorType === 'human' ? '人間' : 'AI+人間'}
-                                                        </span>
-                                                    ` : ''}
+                                                    ${getArticleBadges(article)}
                                                     <span class="text-xs text-slate-600">${article.date}</span>
                                                 </div>
                                                 
@@ -1685,6 +1727,69 @@ function renderContent() {
             }, 0);
             break;
     }
+}
+
+// Badge helper functions
+function getBadgeHTML(badgeType) {
+    const badge = badgeDefinitions[badgeType];
+    if (!badge) return '';
+
+    return `
+        <button onclick="showBadgeInfo(event, '${badgeType}')" class="inline-flex items-center gap-1 px-2 py-1 ${badge.bg} ${badge.border} border rounded-lg ${badge.color} hover:opacity-80 transition-all cursor-pointer">
+            ${badge.icon}
+        </button>
+    `;
+}
+
+function getArticleBadges(article) {
+    let badges = [];
+
+    // Author type badge
+    if (article.authorType) {
+        badges.push(getBadgeHTML(article.authorType));
+    }
+
+    // Investigation badge
+    if (article.badges && article.badges.includes('investigation')) {
+        badges.push(getBadgeHTML('investigation'));
+    }
+
+    // Verified badge
+    if (article.badges && article.badges.includes('verified')) {
+        badges.push(getBadgeHTML('verified'));
+    }
+
+    return badges.join('');
+}
+
+function showBadgeInfo(event, badgeType) {
+    event.stopPropagation();
+    const badge = badgeDefinitions[badgeType];
+    if (!badge) return;
+
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn';
+    modal.onclick = () => modal.remove();
+
+    modal.innerHTML = `
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
+        <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-2xl max-w-md w-full p-8 shadow-2xl border ${badge.border} animate-slideUp" onclick="event.stopPropagation()">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 ${badge.bg} ${badge.border} border rounded-xl flex items-center justify-center flex-shrink-0">
+                    ${badge.icon.replace('width="14" height="14"', 'width="24" height="24"')}
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-light ${badge.color} mb-2">${badge.title}</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">${badge.description}</p>
+                </div>
+            </div>
+            <button onclick="this.closest('.fixed').remove()" class="mt-4 w-full px-4 py-2 bg-white/5 hover:bg-white/10 ${badge.color} rounded-xl transition-all text-sm font-light border ${badge.border}">
+                閉じる
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
 }
 
 function toggleSearch() {
