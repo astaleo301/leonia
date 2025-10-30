@@ -403,8 +403,8 @@ function renderPopup() {
                 </button>
                 
                 <div class="p-10 space-y-6">
-                    <div class="relative">
-                        <img src="${article.image}" alt="${article.title}" class="w-full h-48 sm:h-56 object-contain bg-slate-900/30 rounded-2xl shadow-xl">
+                    <div class="relative aspect-video sm:aspect-auto sm:h-56">
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover rounded-2xl shadow-xl">
                         ${article.audioUrl ? `
                             <div class="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-md rounded-full shadow-lg">
                                 <span class="relative flex h-2 w-2">
@@ -784,7 +784,7 @@ function renderContent() {
                         <h1 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">
                             Neutral Eyes
                         </h1>
-                        <p class="text-slate-500 text-sm font-light">中立的な視点で世界を見つめる</p>
+                        <p class="text-slate-500 text-sm font-light">バイアスの霧を晴らす、クリアな視座</p>
                     </div>
                     
                     <div class="max-w-4xl mx-auto space-y-6">
@@ -818,8 +818,13 @@ function renderContent() {
                             ${sortedArticles.map(article => `
                                 <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden relative">
                                     ${article.audioUrl ? `
-                                        <div class="absolute top-3 left-3 z-10 w-7 h-7 rounded-full bg-orange-400/20 backdrop-blur-sm border border-orange-400/30 flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                        <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 backdrop-blur-md rounded-full shadow-lg">
+                                            <span class="relative flex h-1.5 w-1.5">
+                                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                            </span>
+                                            ${icons.headphones}
+                                            <span class="text-white text-xs font-medium hidden sm:inline">音声</span>
                                         </div>
                                     ` : ''}
                                     <div class="p-5 flex gap-4">
@@ -902,42 +907,53 @@ function renderContent() {
 
         case 'videos':
             main.innerHTML = `
-                <div class="max-w-6xl mx-auto space-y-10 animate-fadeIn py-8">
-                    <button onclick="changePage('content')" class="flex items-center gap-2 text-slate-400 hover:text-orange-300 transition-colors text-sm font-light group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                        コンテンツ一覧に戻る
-                    </button>
-                    <div class="text-center space-y-6">
-                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">動画一覧</h2>
-                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
-                        <p class="text-slate-400 text-sm font-light">わかりやすく解説する動画コンテンツ</p>
-                    </div>
+                <div class="min-h-screen bg-gradient-to-b from-cyan-950/20 via-transparent to-blue-950/20">
+                    <div class="max-w-6xl mx-auto space-y-10 animate-fadeIn py-8 px-4">
+                        <button onclick="changePage('content')" class="flex items-center gap-2 text-cyan-400/70 hover:text-cyan-300 transition-colors text-sm font-light group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            コンテンツ一覧に戻る
+                        </button>
+                        <div class="text-center space-y-6 relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-blue-500/5 to-cyan-500/5 blur-3xl"></div>
+                            <h2 class="text-5xl sm:text-6xl font-extralight bg-gradient-to-r from-cyan-300 via-blue-200 to-cyan-300 bg-clip-text text-transparent leading-tight relative">動画ライブラリ</h2>
+                            <div class="w-24 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent mx-auto"></div>
+                            <p class="text-cyan-300/60 text-sm font-light relative">ビジュアルで学ぶ、深い洞察</p>
+                        </div>
 
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${videos.map(video => `
-                            <div onclick="showVideoModal(${video.id})" class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                <div class="aspect-video relative overflow-hidden">
-                                    <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center">
-                                        <div class="w-16 h-16 rounded-full bg-orange-400/90 hover:bg-orange-400 flex items-center justify-center transition-all group-hover:scale-110">
-                                            ${icons.play}
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${videos.map(video => `
+                                <div onclick="showVideoModal(${video.id})" class="group relative bg-gradient-to-br from-cyan-500/5 to-blue-500/5 hover:from-cyan-500/10 hover:to-blue-500/10 rounded-2xl overflow-hidden border border-cyan-400/10 hover:border-cyan-400/30 transition-all duration-500 cursor-pointer hover:-translate-y-1">
+                                    <div class="aspect-video relative overflow-hidden">
+                                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
+                                            <div class="relative">
+                                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                                                <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center transition-all group-hover:scale-110 shadow-2xl">
+                                                    ${icons.play}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="absolute bottom-3 right-3 px-3 py-1.5 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 backdrop-blur-sm rounded-lg text-xs text-white font-medium shadow-lg">${video.duration}</span>
+                                        <div class="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-md rounded-full border border-cyan-400/30">
+                                            ${icons.film}
+                                            <span class="text-cyan-100 text-xs font-medium">Video</span>
                                         </div>
                                     </div>
-                                    <span class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-white">${video.duration}</span>
-                                </div>
-                                <div class="p-6 space-y-2">
-                                    <h4 class="text-slate-200 font-light group-hover:text-orange-300 transition-colors">${video.title}</h4>
-                                    <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">${video.description}</p>
-                                    <div class="flex items-center gap-3 text-xs text-slate-600">
-                                        <span>${video.date}</span>
-                                        <span>•</span>
-                                        <span>${video.views} 視聴</span>
+                                    <div class="p-5 space-y-2 relative">
+                                        <h4 class="text-slate-200 font-medium group-hover:text-cyan-300 transition-colors line-clamp-2">${video.title}</h4>
+                                        <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">${video.description}</p>
+                                        <div class="flex items-center gap-3 text-xs text-cyan-300/70">
+                                            <span>${video.date}</span>
+                                            <span>•</span>
+                                            <span>${video.views} 視聴</span>
+                                        </div>
                                     </div>
+                                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-bl-full"></div>
                                 </div>
-                            </div>
-                        `).join('')}
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
             `;
@@ -945,22 +961,24 @@ function renderContent() {
 
         case 'podcasts-page':
             main.innerHTML = `
-                <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8">
-                    <button onclick="changePage('content')" class="flex items-center gap-2 text-slate-400 hover:text-orange-300 transition-colors text-sm font-light group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                        コンテンツ一覧に戻る
-                    </button>
-                    <div class="text-center space-y-6">
-                        <h2 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">ポッドキャスト一覧</h2>
-                        <div class="w-20 h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent mx-auto"></div>
-                        <p class="text-slate-400 text-sm font-light">深掘りする音声コンテンツ</p>
-                    </div>
+                <div class="min-h-screen bg-gradient-to-b from-purple-950/20 via-transparent to-pink-950/20">
+                    <div class="max-w-5xl mx-auto space-y-10 animate-fadeIn py-8 px-4">
+                        <button onclick="changePage('content')" class="flex items-center gap-2 text-purple-400/70 hover:text-purple-300 transition-colors text-sm font-light group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            コンテンツ一覧に戻る
+                        </button>
+                        <div class="text-center space-y-6 relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-pink-500/5 to-purple-500/5 blur-3xl"></div>
+                            <h2 class="text-5xl sm:text-6xl font-extralight bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 bg-clip-text text-transparent leading-tight relative">オーディオラウンジ</h2>
+                            <div class="w-24 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent mx-auto"></div>
+                            <p class="text-purple-300/60 text-sm font-light relative">耳で聴く、深い対話</p>
+                        </div>
 
-                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div class="grid sm:grid-cols-2 gap-6">
                         ${podcasts.map(podcast => `
-                            <div onclick="showPodcastModal(${podcast.id})" class="group relative bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500/10 hover:to-pink-500/10 rounded-2xl overflow-hidden border border-purple-400/10 hover:border-purple-400/30 transition-all duration-500 cursor-pointer">
+                            <div onclick="showPodcastModal(${podcast.id})" class="group relative bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500/10 hover:to-pink-500/10 rounded-2xl overflow-hidden border border-purple-400/10 hover:border-purple-400/30 transition-all duration-500 cursor-pointer hover:-translate-y-1">
                                 <div class="relative p-6 space-y-4">
                                     <div class="flex items-start gap-4">
                                         <div class="relative flex-shrink-0">
@@ -1322,7 +1340,7 @@ function renderContent() {
                                             </div>
                                         </div>
                                         ${book.audioUrl ? `
-                                            <div class="absolute top-2 right-2 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                                            <div class="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
                                                 <span class="relative flex h-1.5 w-1.5">
                                                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                                                     <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
@@ -1397,7 +1415,7 @@ function renderContent() {
                         </div>
                         <div class="grid sm:grid-cols-2 gap-6">
                             ${recommendedPodcasts.map(podcast => `
-                                <div onclick="showPodcastModal(${podcast.id})" class="group relative bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500/10 hover:to-pink-500/10 rounded-2xl overflow-hidden border border-purple-400/10 hover:border-purple-400/30 transition-all duration-500 cursor-pointer">
+                                <div onclick="showPodcastModal(${podcast.id})" class="group relative bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500/10 hover:to-pink-500/10 rounded-2xl overflow-hidden border border-purple-400/10 hover:border-purple-400/30 transition-all duration-500 cursor-pointer hover:-translate-y-1">
                                     <div class="relative p-6 space-y-4">
                                         <div class="flex items-start gap-4">
                                             <div class="relative flex-shrink-0">
@@ -1771,17 +1789,11 @@ function renderVideoPopup() {
                     ${icons.x}
                 </button>
 
-                <div class="relative">
-                    <div class="aspect-video bg-black rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
-                        <video class="w-full h-full" controls autoplay>
-                            <source src="${video.videoUrl}" type="video/mp4">
-                            お使いのブラウザは動画タグをサポートしていません。
-                        </video>
-                    </div>
-                    <div class="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 backdrop-blur-md rounded-full shadow-lg border border-cyan-400/30">
-                        ${icons.film}
-                        <span class="text-white text-xs font-medium hidden sm:inline">Video</span>
-                    </div>
+                <div class="aspect-video bg-black rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
+                    <video class="w-full h-full" controls autoplay>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        お使いのブラウザは動画タグをサポートしていません。
+                    </video>
                 </div>
 
                 <div class="p-4 sm:p-8 space-y-4">
