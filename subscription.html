@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leonia+ - プレミアムメンバーシップ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-sparkle {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            transition: all 0.3s ease;
+        }
+
+        .gradient-border {
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #fb923c, #fbbf24, #ec4899, #a855f7) border-box;
+            border: 2px solid transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950/20 via-transparent to-transparent pointer-events-none"></div>
+
+    <!-- Decorative elements -->
+    <div class="fixed top-20 right-10 text-pink-400/20 animate-float" style="animation-delay: 0s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+    </div>
+    <div class="fixed top-40 left-10 text-purple-400/20 animate-float" style="animation-delay: 1s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+    </div>
+    <div class="fixed bottom-20 right-20 text-amber-400/20 animate-float" style="animation-delay: 0.5s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v6m0 6v6M23 12h-6m-6 0H1"/>
+        </svg>
+    </div>
+
+    <header class="sticky top-0 z-40 backdrop-blur-2xl bg-slate-950/80 border-b border-white/5">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex items-center justify-between">
+                <a href="./index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <img src="./images/logo.jpg" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20" style="display:none;">
+                        <span class="text-white font-extralight text-xl">L</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extralight bg-gradient-to-r from-slate-200 via-orange-200 to-amber-300 bg-clip-text text-transparent">
+                            Leonia+
+                        </h1>
+                        <p class="text-[10px] text-slate-600 font-light">Premium Membership</p>
+                    </div>
+                </a>
+
+                <a href="./index.html" class="px-4 py-2 text-slate-400 hover:text-slate-300 hover:bg-white/5 rounded-xl transition-all text-sm">
+                    ホームに戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 relative">
+        <!-- Hero Section -->
+        <div class="text-center mb-20 animate-fadeIn">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-full border border-pink-500/20 mb-6">
+                <span class="text-pink-400 animate-sparkle">✨</span>
+                <span class="text-slate-300 text-sm font-light">特別な体験へようこそ</span>
+                <span class="text-pink-400 animate-sparkle" style="animation-delay: 1s;">✨</span>
+            </div>
+
+            <h2 class="text-5xl md:text-6xl font-extralight mb-6 bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
+                Leonia+
+            </h2>
+            <p class="text-xl text-slate-400 font-light mb-8 max-w-2xl mx-auto">
+                プレミアムな知的体験を、あなたのものに。<br>
+                限定コンテンツと特別な機能で、さらに深い学びを。
+            </p>
+
+            <!-- Price Card -->
+            <div class="max-w-md mx-auto mb-12 relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-500/20 rounded-3xl blur-xl"></div>
+                <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+                    <div class="flex items-baseline justify-center gap-2 mb-4">
+                        <span class="text-slate-500 text-lg line-through">¥500</span>
+                        <span class="text-6xl font-light bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">¥300</span>
+                        <span class="text-slate-400 text-xl">/月</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mb-6">🎉 特別価格でご提供中</p>
+
+                    <button onclick="subscribe()" class="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 text-white font-light py-4 px-8 rounded-2xl transition-all shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:scale-105 transform">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            今すぐ参加する
+                        </span>
+                    </button>
+
+                    <p class="text-slate-600 text-xs mt-4">いつでもキャンセル可能</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="mb-20">
+            <h3 class="text-3xl font-extralight text-center mb-12 text-slate-300">
+                Leonia+で<span class="bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">できること</span>
+            </h3>
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                <!-- Feature 1: Premium Podcasts -->
+                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-orange-500/30 transition-all">
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" x2="12" y1="19" y2="22"></line>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-light text-slate-200 mb-3">プレミアムポッドキャスト</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        有料会員限定の深掘りコンテンツ。専門家との対談や、特別企画のエピソードをお楽しみいただけます。
+                    </p>
+                    <div class="mt-4 flex items-center gap-2 text-orange-400 text-xs">
+                        <span class="px-2 py-1 bg-orange-500/10 rounded-lg">週2回更新</span>
+                        <span class="px-2 py-1 bg-orange-500/10 rounded-lg">限定</span>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Premium Books -->
+                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-pink-500/30 transition-all">
+                    <div class="w-14 h-14 bg-gradient-to-br from-pink-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-pink-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-light text-slate-200 mb-3">プレミアムブック</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        厳選された書籍コンテンツへのフルアクセス。オーディオブック機能で、通勤時間も有効活用できます。
+                    </p>
+                    <div class="mt-4 flex items-center gap-2 text-pink-400 text-xs">
+                        <span class="px-2 py-1 bg-pink-500/10 rounded-lg">音声対応</span>
+                        <span class="px-2 py-1 bg-pink-500/10 rounded-lg">読み放題</span>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Premium Articles -->
+                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-purple-500/30 transition-all">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-purple-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-light text-slate-200 mb-3">プレミアム記事</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        より深い分析や独自の視点を提供する有料記事。質の高い情報で、あなたの知見を広げます。
+                    </p>
+                    <div class="mt-4 flex items-center gap-2 text-purple-400 text-xs">
+                        <span class="px-2 py-1 bg-purple-500/10 rounded-lg">月20本以上</span>
+                        <span class="px-2 py-1 bg-purple-500/10 rounded-lg">独占</span>
+                    </div>
+                </div>
+
+                <!-- Feature 4: Early Access -->
+                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-amber-500/30 transition-all">
+                    <div class="w-14 h-14 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-amber-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-light text-slate-200 mb-3">先行アクセス</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        新機能や新コンテンツをいち早く体験。フィードバックで、Leoniaの未来を一緒に作りましょう。
+                    </p>
+                    <div class="mt-4 flex items-center gap-2 text-amber-400 text-xs">
+                        <span class="px-2 py-1 bg-amber-500/10 rounded-lg">優先アクセス</span>
+                        <span class="px-2 py-1 bg-amber-500/10 rounded-lg">β版</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Benefits -->
+        <div class="mb-20">
+            <h3 class="text-3xl font-extralight text-center mb-12 text-slate-300">
+                その他の<span class="bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">特典</span>
+            </h3>
+
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="flex items-start gap-4 bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5">
+                    <div class="text-2xl">🎯</div>
+                    <div>
+                        <h4 class="text-slate-300 font-light mb-1">広告なしの快適な体験</h4>
+                        <p class="text-slate-500 text-sm">集中できる読書環境を提供します</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5">
+                    <div class="text-2xl">💾</div>
+                    <div>
+                        <h4 class="text-slate-300 font-light mb-1">オフライン再生</h4>
+                        <p class="text-slate-500 text-sm">ダウンロードして、いつでもどこでも楽しめます</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5">
+                    <div class="text-2xl">🎁</div>
+                    <div>
+                        <h4 class="text-slate-300 font-light mb-1">会員限定イベント</h4>
+                        <p class="text-slate-500 text-sm">オンライン勉強会やQ&Aセッションにご参加いただけます</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5">
+                    <div class="text-2xl">💬</div>
+                    <div>
+                        <h4 class="text-slate-300 font-light mb-1">コミュニティアクセス</h4>
+                        <p class="text-slate-500 text-sm">メンバー専用のDiscordサーバーで交流できます</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mb-20">
+            <h3 class="text-3xl font-extralight text-center mb-12 text-slate-300">
+                よくある<span class="bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">質問</span>
+            </h3>
+
+            <div class="max-w-3xl mx-auto space-y-4">
+                <details class="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 cursor-pointer group">
+                    <summary class="text-slate-300 font-light list-none flex items-center justify-between">
+                        <span>支払い方法は何がありますか？</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-open:rotate-180 transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <p class="text-slate-500 text-sm mt-4 leading-relaxed">
+                        クレジットカード（Visa、Mastercard、JCB、American Express）とデビットカードに対応しています。
+                    </p>
+                </details>
+
+                <details class="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 cursor-pointer group">
+                    <summary class="text-slate-300 font-light list-none flex items-center justify-between">
+                        <span>いつでもキャンセルできますか？</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-open:rotate-180 transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <p class="text-slate-500 text-sm mt-4 leading-relaxed">
+                        はい、いつでもキャンセル可能です。キャンセル後も、次の更新日まではプレミアム機能をご利用いただけます。
+                    </p>
+                </details>
+
+                <details class="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 cursor-pointer group">
+                    <summary class="text-slate-300 font-light list-none flex items-center justify-between">
+                        <span>無料トライアルはありますか？</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-open:rotate-180 transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <p class="text-slate-500 text-sm mt-4 leading-relaxed">
+                        現在、7日間の無料トライアル期間を提供しています。トライアル期間中はいつでもキャンセル可能で、料金は発生しません。
+                    </p>
+                </details>
+
+                <details class="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 cursor-pointer group">
+                    <summary class="text-slate-300 font-light list-none flex items-center justify-between">
+                        <span>複数のデバイスで使えますか？</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-open:rotate-180 transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <p class="text-slate-500 text-sm mt-4 leading-relaxed">
+                        はい、1つのアカウントで最大5台のデバイスでご利用いただけます。スマートフォン、タブレット、PCなどでシームレスに同期されます。
+                    </p>
+                </details>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center">
+            <div class="max-w-2xl mx-auto bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-3xl p-12 border border-white/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-pink-500/5 to-purple-500/5"></div>
+                <div class="relative">
+                    <p class="text-2xl font-light text-slate-300 mb-6">
+                        今すぐLeonia+に参加して、<br>
+                        <span class="bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">特別な学びの旅を始めましょう</span>
+                    </p>
+                    <button onclick="subscribe()" class="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 text-white font-light py-4 px-12 rounded-2xl transition-all shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:scale-105 transform">
+                        7日間無料で試す
+                    </button>
+                    <p class="text-slate-600 text-sm mt-4">クレジットカード登録不要</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative border-t border-white/5 bg-slate-950/50 backdrop-blur-sm mt-24">
+        <div class="container mx-auto px-6 py-10">
+            <div class="text-center space-y-2">
+                <p class="text-slate-500 text-sm font-light">© 2025 Leonia. All rights reserved.</p>
+                <p class="text-slate-600 text-xs font-light">Powered by NoctAI</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4" onclick="closeModal()">
+        <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md"></div>
+        <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl rounded-3xl max-w-md w-full p-8 shadow-2xl border border-white/10 animate-slideUp text-center" onclick="event.stopPropagation()">
+            <div class="w-20 h-20 bg-gradient-to-br from-orange-500/20 to-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400">
+                    <path d="M20 6 9 17l-5-5"/>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-light text-slate-200 mb-3">ようこそ、Leonia+へ！</h3>
+            <p class="text-slate-400 mb-6">
+                ご登録ありがとうございます。<br>
+                プレミアムコンテンツをお楽しみください。
+            </p>
+            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-light py-3 px-8 rounded-xl transition-all">
+                はじめる
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function subscribe() {
+            // ここに実際のサブスクリプション処理を実装
+            // 今はモーダルを表示するだけ
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // ESCキーでモーダルを閉じる
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
