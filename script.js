@@ -404,7 +404,7 @@ function renderPopup() {
                 
                 <div class="p-10 space-y-6">
                     <div class="relative">
-                        <img src="${article.image}" alt="${article.title}" class="w-full h-48 sm:h-56 object-cover rounded-2xl shadow-xl">
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-48 sm:h-56 object-contain bg-slate-900/30 rounded-2xl shadow-xl">
                         ${article.audioUrl ? `
                             <div class="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-md rounded-full shadow-lg">
                                 <span class="relative flex h-2 w-2">
@@ -554,20 +554,23 @@ function renderBookPopup() {
                 
                 <div class="p-6 sm:p-10 space-y-6">
                     <div class="flex flex-col sm:flex-row items-start gap-6">
-                        <div class="relative mx-auto sm:mx-0">
-                            ${hasCover ? `
-                                <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            ` : ''}
-                            <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
-                                ${icons.book}
+                        <div class="flex flex-col items-center gap-3 mx-auto sm:mx-0">
+                            <div class="relative">
+                                ${hasCover ? `
+                                    <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                ` : ''}
+                                <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
+                                    ${icons.book}
+                                </div>
                             </div>
                             ${hasAudio ? `
-                                <div class="absolute -top-2 -right-2 flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg">
+                                <div class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg">
                                     <span class="relative flex h-1.5 w-1.5">
                                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                                         <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                                     </span>
                                     ${icons.headphones}
+                                    <span class="text-white text-xs font-medium">音声版あり</span>
                                 </div>
                             ` : ''}
                         </div>
@@ -1048,6 +1051,56 @@ function renderContent() {
                             </div>
                         </div>
 
+                        <div class="bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm rounded-3xl p-10 border border-white/5 space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-400/20 flex items-center justify-center border border-cyan-400/10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400/60"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                                </div>
+                                <div class="flex-1 space-y-4">
+                                    <h3 class="text-2xl font-light text-slate-200">調査手法について</h3>
+                                    <p class="text-slate-300 leading-relaxed font-light">
+                                        Leoniaの情報収集は、OSINT（オープンソース・インテリジェンス）を中心とした手法で行われています。これは、公開されている情報源のみを活用する調査手法であり、完全に合法的なアプローチです。
+                                    </p>
+                                    <p class="text-slate-300 leading-relaxed font-light">
+                                        私たちは、公開データベース、公式文書、衛星画像、ソーシャルメディアの公開投稿など、誰もがアクセス可能な情報を収集・分析し、AIと人間の協力によって信頼性の高い洞察を導き出しています。
+                                    </p>
+                                    <div class="grid md:grid-cols-2 gap-4 mt-6">
+                                        <div class="flex items-start gap-3 p-4 bg-white/[0.02] rounded-xl border border-white/5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400/60 flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <div class="space-y-1">
+                                                <h4 class="text-slate-200 font-medium text-sm">公開情報のみを使用</h4>
+                                                <p class="text-slate-400 text-xs font-light">違法な情報収集は一切行いません</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-4 bg-white/[0.02] rounded-xl border border-white/5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400/60 flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <div class="space-y-1">
+                                                <h4 class="text-slate-200 font-medium text-sm">AI × 人間の協力</h4>
+                                                <p class="text-slate-400 text-xs font-light">技術と人的判断の最適な組み合わせ</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-4 bg-white/[0.02] rounded-xl border border-white/5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400/60 flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <div class="space-y-1">
+                                                <h4 class="text-slate-200 font-medium text-sm">クロスリファレンス</h4>
+                                                <p class="text-slate-400 text-xs font-light">複数の情報源で事実を検証</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-4 bg-white/[0.02] rounded-xl border border-white/5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400/60 flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <div class="space-y-1">
+                                                <h4 class="text-slate-200 font-medium text-sm">透明性の確保</h4>
+                                                <p class="text-slate-400 text-xs font-light">情報源と調査プロセスを明示</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-slate-400 text-sm font-light italic">
+                                        この手法は、国際的な調査報道で実績のある手法であり、市民ジャーナリズムや独立系メディアで広く採用されています。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="border-t border-white/5 pt-12">
                             <h2 class="text-3xl font-extralight text-slate-200 text-center mb-8">Contact</h2>
 
@@ -1299,25 +1352,33 @@ function renderContent() {
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             ${recommendedVideos.map(video => `
-                                <div onclick="showVideoModal(${video.id})" class="group relative bg-gradient-to-br from-white/[0.02] to-white/[0.01] hover:from-white/[0.04] hover:to-white/[0.02] rounded-2xl overflow-hidden border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
+                                <div onclick="showVideoModal(${video.id})" class="group relative bg-gradient-to-br from-cyan-500/5 to-blue-500/5 hover:from-cyan-500/10 hover:to-blue-500/10 rounded-2xl overflow-hidden border border-cyan-400/10 hover:border-cyan-400/30 transition-all duration-500 cursor-pointer">
                                     <div class="aspect-video relative overflow-hidden">
-                                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center">
-                                            <div class="w-16 h-16 rounded-full bg-orange-400/90 hover:bg-orange-400 flex items-center justify-center transition-all group-hover:scale-110">
-                                                ${icons.play}
+                                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
+                                            <div class="relative">
+                                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                                                <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center transition-all group-hover:scale-110 shadow-2xl">
+                                                    ${icons.play}
+                                                </div>
                                             </div>
                                         </div>
-                                        <span class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-white">${video.duration}</span>
+                                        <span class="absolute bottom-3 right-3 px-3 py-1.5 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 backdrop-blur-sm rounded-lg text-xs text-white font-medium shadow-lg">${video.duration}</span>
+                                        <div class="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-md rounded-full border border-cyan-400/30">
+                                            ${icons.film}
+                                            <span class="text-cyan-100 text-xs font-medium">Video</span>
+                                        </div>
                                     </div>
-                                    <div class="p-6 space-y-2">
-                                        <h4 class="text-slate-200 font-light group-hover:text-orange-300 transition-colors">${video.title}</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">${video.description}</p>
-                                        <div class="flex items-center gap-3 text-xs text-slate-600">
+                                    <div class="p-5 space-y-2">
+                                        <h4 class="text-slate-200 font-medium group-hover:text-cyan-300 transition-colors line-clamp-2">${video.title}</h4>
+                                        <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">${video.description}</p>
+                                        <div class="flex items-center gap-3 text-xs text-cyan-300/70">
                                             <span>${video.date}</span>
                                             <span>•</span>
                                             <span>${video.views} 視聴</span>
                                         </div>
                                     </div>
+                                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-bl-full"></div>
                                 </div>
                             `).join('')}
                         </div>
@@ -1552,7 +1613,19 @@ function renderContent() {
                             <div class="grid md:grid-cols-3 gap-6">
                                 ${recommendedArticles.map(rec => `
                                     <div onclick="viewArticleDetail(${rec.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden">
-                                        <img src="${rec.image}" alt="${rec.title}" class="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105">
+                                        <div class="relative">
+                                            <img src="${rec.image}" alt="${rec.title}" class="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105">
+                                            ${rec.audioUrl ? `
+                                                <div class="absolute top-3 right-3 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 backdrop-blur-md rounded-full shadow-xl border border-white/20">
+                                                    <span class="relative flex h-2 w-2">
+                                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                                                    </span>
+                                                    ${icons.headphones}
+                                                    <span class="text-white text-xs font-bold">音声</span>
+                                                </div>
+                                            ` : ''}
+                                        </div>
                                         <div class="p-4 space-y-2">
                                             <span class="px-2.5 py-1 ${rec.categoryColor} backdrop-blur-sm rounded-lg text-xs ${rec.categoryText} font-medium inline-block">
                                                 ${rec.category}
@@ -1690,28 +1763,37 @@ function renderVideoPopup() {
     const video = state.selectedVideo;
 
     container.innerHTML = `
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closeVideoPopup()">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 animate-fadeIn" onclick="closeVideoPopup()">
             <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md"></div>
-            <div class="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/10 animate-slideUp" onclick="event.stopPropagation()">
+            <div class="relative bg-gradient-to-br from-cyan-900/40 via-slate-900/95 to-blue-900/40 backdrop-blur-2xl rounded-2xl sm:rounded-3xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl border border-cyan-500/20 animate-slideUp" onclick="event.stopPropagation()">
 
-                <button onclick="closeVideoPopup()" class="absolute top-6 right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm">
+                <button onclick="closeVideoPopup()" class="absolute top-3 right-3 sm:top-6 sm:right-6 z-10 p-2 sm:p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm">
                     ${icons.x}
                 </button>
 
-                <div class="aspect-video bg-black">
-                    <video class="w-full h-full" controls autoplay>
-                        <source src="${video.videoUrl}" type="video/mp4">
-                        お使いのブラウザは動画タグをサポートしていません。
-                    </video>
+                <div class="relative">
+                    <div class="aspect-video bg-black rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
+                        <video class="w-full h-full" controls autoplay>
+                            <source src="${video.videoUrl}" type="video/mp4">
+                            お使いのブラウザは動画タグをサポートしていません。
+                        </video>
+                    </div>
+                    <div class="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 backdrop-blur-md rounded-full shadow-lg border border-cyan-400/30">
+                        ${icons.film}
+                        <span class="text-white text-xs font-medium hidden sm:inline">Video</span>
+                    </div>
                 </div>
 
-                <div class="p-8 space-y-4">
-                    <h2 class="text-3xl font-light text-slate-200">${video.title}</h2>
-                    <p class="text-slate-400 leading-relaxed">${video.description}</p>
-                    <div class="flex items-center gap-4 text-sm text-slate-500">
-                        <span>${video.date}</span>
+                <div class="p-4 sm:p-8 space-y-4">
+                    <h2 class="text-xl sm:text-3xl font-light text-transparent bg-gradient-to-r from-cyan-200 via-slate-200 to-blue-200 bg-clip-text">${video.title}</h2>
+                    <p class="text-slate-300 leading-relaxed text-sm sm:text-base">${video.description}</p>
+                    <div class="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-cyan-300/70 flex-wrap">
+                        <span class="flex items-center gap-1.5">
+                            ${icons.film}
+                            ${video.duration}
+                        </span>
                         <span>•</span>
-                        <span>${video.duration}</span>
+                        <span>${video.date}</span>
                         <span>•</span>
                         <span>${video.views} 視聴</span>
                     </div>
@@ -1733,30 +1815,38 @@ function renderPodcastPopup() {
     container.innerHTML = `
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn" onclick="closePodcastPopup()">
             <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md"></div>
-            <div class="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-white/10 animate-slideUp" onclick="event.stopPropagation()">
+            <div class="relative bg-gradient-to-br from-purple-900/40 via-slate-900/95 to-pink-900/40 backdrop-blur-2xl rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-purple-500/20 animate-slideUp" onclick="event.stopPropagation()">
 
-                <button onclick="closePodcastPopup()" class="absolute top-6 right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm">
+                <button onclick="closePodcastPopup()" class="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 p-2 sm:p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm">
                     ${icons.x}
                 </button>
 
-                <div class="p-8 space-y-6">
-                    <div class="flex items-start gap-6">
-                        <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-32 h-32 rounded-2xl object-cover flex-shrink-0">
-                        <div class="flex-1">
-                            <h2 class="text-3xl font-light text-slate-200 mb-3">${podcast.title}</h2>
-                            <p class="text-slate-400 leading-relaxed mb-4">${podcast.description}</p>
-                            <div class="flex items-center gap-4 text-sm text-slate-500">
-                                <span>${podcast.date}</span>
+                <div class="p-6 sm:p-8 space-y-6">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                        <div class="relative flex-shrink-0">
+                            <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl object-cover shadow-2xl">
+                            <div class="absolute -bottom-3 -right-3 w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-xl">
+                                ${icons.mic}
+                            </div>
+                        </div>
+                        <div class="flex-1 text-center sm:text-left">
+                            <h2 class="text-2xl sm:text-3xl font-light text-transparent bg-gradient-to-r from-purple-200 via-slate-200 to-pink-200 bg-clip-text mb-3">${podcast.title}</h2>
+                            <p class="text-slate-300 leading-relaxed mb-4">${podcast.description}</p>
+                            <div class="flex items-center justify-center sm:justify-start gap-3 text-sm text-purple-300/70 flex-wrap">
+                                <span class="flex items-center gap-1.5">
+                                    ${icons.volume2}
+                                    ${podcast.duration}
+                                </span>
                                 <span>•</span>
-                                <span>${podcast.duration}</span>
+                                <span>${podcast.date}</span>
                                 <span>•</span>
                                 <span>${podcast.plays} 再生</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/5">
-                        <audio class="w-full" controls>
+                    <div class="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl p-4 sm:p-6 backdrop-blur-sm border border-purple-400/20 shadow-inner">
+                        <audio class="w-full" controls style="filter: hue-rotate(280deg) saturate(1.5);">
                             <source src="${podcast.audioUrl}" type="audio/mpeg">
                             お使いのブラウザは音声タグをサポートしていません。
                         </audio>
