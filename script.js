@@ -20,7 +20,9 @@ const icons = {
     skipForward: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
     volume2: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
     film: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>',
-    search: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>'
+    search: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>',
+    headphones: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>',
+    mic: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>'
 };
 
 let newsArticles = [];
@@ -401,10 +403,22 @@ function renderPopup() {
                 </button>
                 
                 <div class="p-10 space-y-6">
-                    <img src="${article.image}" alt="${article.title}" class="w-full h-56 object-cover rounded-2xl shadow-xl">
-                    
+                    <div class="relative">
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-48 sm:h-56 object-cover rounded-2xl shadow-xl">
+                        ${article.audioUrl ? `
+                            <div class="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-md rounded-full shadow-lg">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                                </span>
+                                ${icons.headphones}
+                                <span class="text-white text-xs font-medium">音声対応</span>
+                            </div>
+                        ` : ''}
+                    </div>
+
                     <div class="space-y-4">
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 flex-wrap">
                             <span class="px-3 py-1.5 ${article.categoryColor} backdrop-blur-sm rounded-full text-xs ${article.categoryText} font-medium border border-white/5">
                                 ${article.category}
                             </span>
@@ -540,11 +554,22 @@ function renderBookPopup() {
                 
                 <div class="p-6 sm:p-10 space-y-6">
                     <div class="flex flex-col sm:flex-row items-start gap-6">
-                        ${hasCover ? `
-                            <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover mx-auto sm:mx-0" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        ` : ''}
-                        <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0" style="${hasCover ? 'display:none;' : ''}">
-                            ${icons.book}
+                        <div class="relative mx-auto sm:mx-0">
+                            ${hasCover ? `
+                                <img src="./images/covers/${book.id}.jpg" alt="${book.title}" class="w-32 h-44 rounded-2xl shadow-2xl flex-shrink-0 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            ` : ''}
+                            <div class="w-32 h-44 rounded-2xl bg-gradient-to-br ${book.coverColor} shadow-2xl flex items-center justify-center flex-shrink-0" style="${hasCover ? 'display:none;' : ''}">
+                                ${icons.book}
+                            </div>
+                            ${hasAudio ? `
+                                <div class="absolute -top-2 -right-2 flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg">
+                                    <span class="relative flex h-1.5 w-1.5">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                    </span>
+                                    ${icons.headphones}
+                                </div>
+                            ` : ''}
                         </div>
                         <div class="flex-1 space-y-3 text-center sm:text-left w-full">
                             <h2 class="text-xl sm:text-2xl font-light text-slate-100 leading-snug">${book.title}</h2>
@@ -930,21 +955,39 @@ function renderContent() {
                         <p class="text-slate-400 text-sm font-light">深掘りする音声コンテンツ</p>
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-6">
                         ${podcasts.map(podcast => `
-                            <div onclick="showPodcastModal(${podcast.id})" class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-24 h-24 rounded-2xl object-cover flex-shrink-0">
-                                <div class="flex-1 min-w-0">
-                                    <h4 class="text-slate-200 font-light mb-2 group-hover:text-orange-300 transition-colors">${podcast.title}</h4>
-                                    <p class="text-slate-500 text-sm leading-relaxed mb-3 line-clamp-2">${podcast.description}</p>
-                                    <div class="flex items-center gap-3 text-xs text-slate-600">
-                                        <span>${podcast.duration}</span>
-                                        <span>•</span>
-                                        <span>${podcast.date}</span>
-                                        <span>•</span>
-                                        <span>${podcast.plays} 再生</span>
+                            <div onclick="showPodcastModal(${podcast.id})" class="group relative bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500/10 hover:to-pink-500/10 rounded-2xl overflow-hidden border border-purple-400/10 hover:border-purple-400/30 transition-all duration-500 cursor-pointer">
+                                <div class="relative p-6 space-y-4">
+                                    <div class="flex items-start gap-4">
+                                        <div class="relative flex-shrink-0">
+                                            <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover shadow-lg">
+                                            <div class="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                                ${icons.mic}
+                                            </div>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="text-slate-200 font-medium mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">${podcast.title}</h4>
+                                            <div class="flex items-center gap-2 text-xs text-purple-300/70">
+                                                <span class="flex items-center gap-1">
+                                                    ${icons.volume2}
+                                                    ${podcast.duration}
+                                                </span>
+                                                <span>•</span>
+                                                <span>${podcast.plays} 再生</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-slate-400 text-sm leading-relaxed line-clamp-2 pl-0 sm:pl-28">${podcast.description}</p>
+                                    <div class="flex items-center justify-between pl-0 sm:pl-28">
+                                        <span class="text-xs text-slate-500">${podcast.date}</span>
+                                        <div class="flex items-center gap-1 text-xs text-purple-400/80">
+                                            <span>再生</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/5 to-transparent rounded-bl-full"></div>
                             </div>
                         `).join('')}
                     </div>
@@ -1225,6 +1268,14 @@ function renderContent() {
                                                 <p class="text-white/80 text-xs">${book.subtitle}</p>
                                             </div>
                                         </div>
+                                        ${book.audioUrl ? `
+                                            <div class="absolute top-2 right-2 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                                                <span class="relative flex h-1.5 w-1.5">
+                                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                                </span>
+                                            </div>
+                                        ` : ''}
                                     </div>
                                     <div class="mt-3 space-y-1 px-1">
                                         <p class="text-slate-300 text-sm font-light line-clamp-2">${book.title}</p>
@@ -1283,21 +1334,39 @@ function renderContent() {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                             </button>
                         </div>
-                        <div class="space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-6">
                             ${recommendedPodcasts.map(podcast => `
-                                <div onclick="showPodcastModal(${podcast.id})" class="group flex items-center gap-5 p-6 bg-gradient-to-r from-white/[0.02] to-transparent hover:from-white/[0.04] hover:to-white/[0.01] rounded-2xl border border-white/5 hover:border-orange-400/30 transition-all duration-500 cursor-pointer">
-                                    <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-24 h-24 rounded-2xl object-cover flex-shrink-0">
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-slate-200 font-light mb-2 group-hover:text-orange-300 transition-colors">${podcast.title}</h4>
-                                        <p class="text-slate-500 text-sm leading-relaxed mb-3 line-clamp-2">${podcast.description}</p>
-                                        <div class="flex items-center gap-3 text-xs text-slate-600">
-                                            <span>${podcast.duration}</span>
-                                            <span>•</span>
-                                            <span>${podcast.date}</span>
-                                            <span>•</span>
-                                            <span>${podcast.plays} 再生</span>
+                                <div onclick="showPodcastModal(${podcast.id})" class="group relative bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500/10 hover:to-pink-500/10 rounded-2xl overflow-hidden border border-purple-400/10 hover:border-purple-400/30 transition-all duration-500 cursor-pointer">
+                                    <div class="relative p-6 space-y-4">
+                                        <div class="flex items-start gap-4">
+                                            <div class="relative flex-shrink-0">
+                                                <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover shadow-lg">
+                                                <div class="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                                    ${icons.mic}
+                                                </div>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-slate-200 font-medium mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">${podcast.title}</h4>
+                                                <div class="flex items-center gap-2 text-xs text-purple-300/70">
+                                                    <span class="flex items-center gap-1">
+                                                        ${icons.volume2}
+                                                        ${podcast.duration}
+                                                    </span>
+                                                    <span>•</span>
+                                                    <span>${podcast.plays} 再生</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-slate-400 text-sm leading-relaxed line-clamp-2 pl-0 sm:pl-28">${podcast.description}</p>
+                                        <div class="flex items-center justify-between pl-0 sm:pl-28">
+                                            <span class="text-xs text-slate-500">${podcast.date}</span>
+                                            <div class="flex items-center gap-1 text-xs text-purple-400/80">
+                                                <span>再生</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/5 to-transparent rounded-bl-full"></div>
                                 </div>
                             `).join('')}
                         </div>
