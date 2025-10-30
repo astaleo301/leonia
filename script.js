@@ -784,7 +784,7 @@ function renderContent() {
                         <h1 class="text-5xl font-extralight bg-gradient-to-r from-slate-300 via-orange-200 to-amber-300 bg-clip-text text-transparent leading-tight">
                             Neutral Eyes
                         </h1>
-                        <p class="text-slate-500 text-sm font-light">バイアスの霧を晴らす、クリアな視座</p>
+                        <p class="text-slate-500 text-sm font-light">バイアスの霧を見通す</p>
                     </div>
                     
                     <div class="max-w-4xl mx-auto space-y-6">
@@ -1216,7 +1216,7 @@ function renderContent() {
                                     <h3 class="text-lg font-medium text-slate-200">独立性の保証</h3>
                                 </div>
                                 <p class="text-slate-400 leading-relaxed text-sm font-light">
-                                    広告は一切導入しません。スポンサーの影響を受けることなく、純粋に中立的な情報提供に専念します。あなたに届く情報は、誰の利益でもなく、ただ事実だけを基にしています。
+                                    広告は一切導入しません。スポンサーの影響を受けることなく、純粋に中立的な情報提供に専念します。
                                 </p>
                             </div>
 
