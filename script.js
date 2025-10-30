@@ -422,6 +422,11 @@ function renderPopup() {
                             <span class="px-3 py-1.5 ${article.categoryColor} backdrop-blur-sm rounded-full text-xs ${article.categoryText} font-medium border border-white/5">
                                 ${article.category}
                             </span>
+                            ${article.authorType ? `
+                                <span class="px-2.5 py-1 bg-slate-700/30 rounded-full text-[11px] text-slate-500 font-light border border-slate-700/50">
+                                    ${article.authorType === 'ai' ? 'AI作成' : article.authorType === 'human' ? '人間作成' : 'AI+人間 共同制作'}
+                                </span>
+                            ` : ''}
                             <span class="text-slate-500 text-xs">${article.date}</span>
                         </div>
                         
@@ -836,6 +841,11 @@ function renderContent() {
                                                     <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
                                                         ${article.category}
                                                     </span>
+                                                    ${article.authorType ? `
+                                                        <span class="px-2 py-0.5 bg-slate-700/30 rounded text-[10px] text-slate-500 font-light border border-slate-700/50">
+                                                            ${article.authorType === 'ai' ? 'AI' : article.authorType === 'human' ? '人間' : 'AI+人間'}
+                                                        </span>
+                                                    ` : ''}
                                                     <span class="text-xs text-slate-600">${article.date}</span>
                                                 </div>
                                                 

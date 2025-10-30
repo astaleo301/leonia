@@ -3,39 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leonia+ - プレミアムメンバーシップ</title>
+    <title>Leonia - サポート</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./styles.css">
-    <style>
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .animate-sparkle {
-            animation: sparkle 2s ease-in-out infinite;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            transition: all 0.3s ease;
-        }
-
-        .gradient-border {
-            background: linear-gradient(white, white) padding-box,
-                        linear-gradient(135deg, #fb923c, #fbbf24, #ec4899, #a855f7) border-box;
-            border: 2px solid transparent;
-        }
-    </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950/20 via-transparent to-transparent pointer-events-none"></div>
@@ -50,9 +20,9 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-extralight bg-gradient-to-r from-slate-200 via-orange-200 to-amber-300 bg-clip-text text-transparent">
-                            Leonia+
+                            Leonia
                         </h1>
-                        <p class="text-[10px] text-slate-600 font-light">Premium Membership</p>
+                        <p class="text-[10px] text-slate-600 font-light">Support</p>
                     </div>
                 </a>
 
@@ -66,45 +36,47 @@
     <main class="container mx-auto px-6 py-16 relative">
         <!-- Hero Section -->
         <div class="text-center mb-20 animate-fadeIn">
-            <h2 class="text-5xl md:text-6xl font-extralight mb-6 bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
-                Leonia+
+            <h2 class="text-4xl md:text-5xl font-extralight mb-6 text-slate-300">
+                サポートのお願い
             </h2>
-            <p class="text-xl text-slate-400 font-light mb-4 max-w-2xl mx-auto">
-                もっと自由に、もっと深く。<br>
-                日常のなかの小さな発見を、一緒に。
+            <p class="text-base text-slate-400 font-light mb-3 max-w-2xl mx-auto leading-relaxed">
+                Leoniaは、中立的な情報をお届けするために、<br>
+                広告モデルを採用していません。
             </p>
-            <p class="text-sm text-slate-500 font-light mb-8 max-w-xl mx-auto">
-                Leoniaは中立的な情報をお届けするために、広告モデルを採用していません。<br>
-                Leonia+は、この活動を支えてくださる方へのささやかな感謝の形です。
+            <p class="text-sm text-slate-500 font-light mb-8 max-w-xl mx-auto leading-relaxed">
+                もしこの活動に価値を感じていただけたら、<br>
+                月々300円からのサポートをいただけると、とても助かります。
             </p>
 
             <!-- Price Card -->
-            <div class="max-w-md mx-auto mb-12 relative">
-                <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-pink-500/20 to-purple-500/20 rounded-3xl blur-xl"></div>
-                <div class="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+            <div class="max-w-md mx-auto mb-12">
+                <div class="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-8 border border-white/5">
                     <div class="flex items-baseline justify-center gap-2 mb-6">
-                        <span class="text-6xl font-light bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">¥300</span>
-                        <span class="text-slate-400 text-xl">/月</span>
+                        <span class="text-5xl font-light text-slate-300">¥300</span>
+                        <span class="text-slate-500 text-base">/月</span>
                     </div>
 
-                    <button onclick="subscribe()" class="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 text-white font-light py-4 px-8 rounded-2xl transition-all shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:scale-105 transform">
-                        参加する
+                    <button onclick="subscribe()" class="w-full bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 font-light py-3 px-8 rounded-xl transition-all border border-white/10 hover:border-white/20">
+                        サポートする
                     </button>
 
-                    <p class="text-slate-600 text-xs mt-4">いつでもキャンセルできます</p>
+                    <p class="text-slate-600 text-xs mt-4">いつでも停止できます</p>
                 </div>
             </div>
         </div>
 
         <!-- Features Grid -->
         <div class="mb-20">
-            <h3 class="text-3xl font-extralight text-center mb-12 text-slate-300">
-                Leonia+で<span class="bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">できること</span>
+            <h3 class="text-2xl font-extralight text-center mb-3 text-slate-300">
+                ささやかなお礼として
             </h3>
+            <p class="text-sm text-slate-500 text-center mb-12 max-w-xl mx-auto">
+                サポートしてくださる方には、特別なコンテンツをご用意しています。
+            </p>
 
             <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                 <!-- Feature 1: Premium Podcasts -->
-                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-orange-500/30 transition-all">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-2xl p-8 border border-white/5">
                     <div class="w-14 h-14 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
                             <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
@@ -123,7 +95,7 @@
                 </div>
 
                 <!-- Feature 2: Premium Books -->
-                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-pink-500/30 transition-all">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-2xl p-8 border border-white/5">
                     <div class="w-14 h-14 bg-gradient-to-br from-pink-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-pink-500/20">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400">
                             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
@@ -140,7 +112,7 @@
                 </div>
 
                 <!-- Feature 3: Premium Articles -->
-                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-purple-500/30 transition-all">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-2xl p-8 border border-white/5">
                     <div class="w-14 h-14 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-purple-500/20">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400">
                             <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
@@ -158,7 +130,7 @@
                 </div>
 
                 <!-- Feature 4: Early Access -->
-                <div class="feature-card bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-8 border border-white/5 hover:border-amber-500/30 transition-all">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-2xl p-8 border border-white/5">
                     <div class="w-14 h-14 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-amber-500/20">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -251,17 +223,14 @@
 
         <!-- CTA Section -->
         <div class="text-center">
-            <div class="max-w-2xl mx-auto bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-3xl p-12 border border-white/10 relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-pink-500/5 to-purple-500/5"></div>
-                <div class="relative">
-                    <p class="text-2xl font-light text-slate-300 mb-6">
-                        一緒に、もう少し深く。<br>
-                        <span class="bg-gradient-to-r from-orange-300 to-pink-300 bg-clip-text text-transparent">あなたの参加をお待ちしています。</span>
-                    </p>
-                    <button onclick="subscribe()" class="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 text-white font-light py-4 px-12 rounded-2xl transition-all shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:scale-105 transform">
-                        参加する
-                    </button>
-                </div>
+            <div class="max-w-2xl mx-auto bg-slate-800/20 backdrop-blur-xl rounded-2xl p-10 border border-white/5">
+                <p class="text-lg font-light text-slate-400 mb-6 leading-relaxed">
+                    この活動を続けていくために、<br>
+                    どうか、力を貸していただけませんか。
+                </p>
+                <button onclick="subscribe()" class="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 font-light py-3 px-10 rounded-xl transition-all border border-white/10 hover:border-white/20">
+                    サポートする
+                </button>
             </div>
         </div>
     </main>
