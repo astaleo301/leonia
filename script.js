@@ -865,9 +865,11 @@ function renderContent() {
                             }).join('')}
                         </div>
                         
-                        <div class="space-y-4">
-                            ${sortedArticles.map(article => `
-                                <div onclick="showArticlePopup(${article.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden relative">
+                        <div class="space-y-4 max-w-3xl mx-auto">
+                            ${sortedArticles.map(article => {
+                                const authorInfo = getAuthorInfo(article.authorType);
+                                return `
+                                <a href="./articles/pages/${article.id}.html" class="group block bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden relative">
                                     ${article.audioUrl ? `
                                         <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 backdrop-blur-md rounded-full shadow-lg">
                                             <span class="relative flex h-1.5 w-1.5">
@@ -879,8 +881,8 @@ function renderContent() {
                                         </div>
                                     ` : ''}
                                     <div class="p-5 flex gap-4">
-                                        <img src="${article.image}" alt="${article.title}" class="w-28 h-28 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
-                                        
+                                        <img src="${article.image}" alt="${article.title}" class="w-24 h-24 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
+
                                         <div class="flex-1 flex flex-col justify-between min-w-0">
                                             <div class="space-y-2">
                                                 <div class="flex items-center gap-2 flex-wrap">
@@ -890,19 +892,27 @@ function renderContent() {
                                                     ${getArticleBadges(article)}
                                                     <span class="text-xs text-slate-600">${article.date}</span>
                                                 </div>
-                                                
-                                                <h3 class="font-medium text-slate-200 text-base leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
+
+                                                <h3 class="font-light text-slate-200 text-lg leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
                                                     ${article.title}
                                                 </h3>
-                                                
+
                                                 <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">
                                                     ${article.excerpt}
                                                 </p>
+
+                                                <div class="flex items-center gap-2 pt-1">
+                                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br ${authorInfo.color} flex items-center justify-center text-xs">
+                                                        ${authorInfo.icon}
+                                                    </div>
+                                                    <span class="text-xs text-slate-500">${authorInfo.name}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            `).join('')}
+                                </a>
+                            `;
+                            }).join('')}
                         </div>
                     </div>
                 </div>
@@ -1744,11 +1754,6 @@ function getBadgeHTML(badgeType) {
 function getArticleBadges(article) {
     let badges = [];
 
-    // Author type badge
-    if (article.authorType) {
-        badges.push(getBadgeHTML(article.authorType));
-    }
-
     // Investigation badge
     if (article.badges && article.badges.includes('investigation')) {
         badges.push(getBadgeHTML('investigation'));
@@ -1760,6 +1765,28 @@ function getArticleBadges(article) {
     }
 
     return badges.join('');
+}
+
+function getAuthorInfo(authorType) {
+    const authorInfoMap = {
+        ai: {
+            name: 'Leonia AI',
+            icon: '🤖',
+            color: 'from-blue-500 to-cyan-500'
+        },
+        human: {
+            name: 'Leonia編集部',
+            icon: '✍️',
+            color: 'from-emerald-500 to-teal-500'
+        },
+        collaborative: {
+            name: 'Leonia 共同制作',
+            icon: '🤝',
+            color: 'from-purple-500 to-pink-500'
+        }
+    };
+
+    return authorInfoMap[authorType] || authorInfoMap.collaborative;
 }
 
 function showBadgeInfo(event, badgeType) {
