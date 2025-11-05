@@ -158,7 +158,7 @@ function generateArticlePage(article) {
     const author = {
         name: 'Ἄνθρωπον ζητῶ',
         icon: '🏮',
-        description: '真実を照らす者',
+        description: '',
         color: 'from-amber-500 to-orange-500'
     };
 
