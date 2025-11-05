@@ -154,34 +154,22 @@ function convertArticle(filename) {
 
 // 個別HTMLページ生成関数
 function generateArticlePage(article) {
-    const authorInfo = {
-        ai: {
-            name: 'Leonia AI',
-            icon: '🤖',
-            description: 'AI記者。複数の信頼できる情報源から収集されたデータをもとに、中立的な視点で記事を作成します。',
-            color: 'from-blue-500 to-cyan-500'
-        },
-        human: {
-            name: 'Leonia編集部',
-            icon: '✍️',
-            description: '人間のライターによる執筆。独自の視点と専門知識に基づいて記事を作成しています。',
-            color: 'from-emerald-500 to-teal-500'
-        },
-        collaborative: {
-            name: 'Leonia 共同制作',
-            icon: '🤝',
-            description: 'AIと人間が協力して作成。AIによるデータ収集と人間による編集・検証を組み合わせています。',
-            color: 'from-purple-500 to-pink-500'
-        }
+    // 執筆者情報（統一）
+    const author = {
+        name: 'Ἄνθρωπον ζητῶ',
+        icon: '🏮',
+        description: '真実を照らす者',
+        color: 'from-amber-500 to-orange-500'
     };
 
     const badgeInfo = {
-        investigation: { label: 'Original Investigation', icon: '🔍' },
-        verified: { label: 'Verified by Leonia OSINT Team', icon: '✓' }
+        investigation: { label: 'Original Investigation', icon: '🔍' }
     };
 
-    const author = authorInfo[article.authorType] || authorInfo.collaborative;
-    const badges = (article.badges || []).map(badgeId => badgeInfo[badgeId]).filter(Boolean);
+    const badges = (article.badges || [])
+        .filter(badgeId => badgeId === 'investigation')
+        .map(badgeId => badgeInfo[badgeId])
+        .filter(Boolean);
 
     const html = `<!DOCTYPE html>
 <html lang="ja">
@@ -209,9 +197,20 @@ function generateArticlePage(article) {
                         <p class="text-[10px] text-slate-600 font-light">Neutral Eyes</p>
                     </div>
                 </a>
-                <button onclick="shareArticle()" class="p-2.5 text-slate-400 hover:text-slate-300 hover:bg-white/5 rounded-xl transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
-                </button>
+                <nav class="flex items-center gap-2">
+                    <a href="../../index.html" class="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light text-slate-400 hover:bg-white/5 hover:text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span class="hidden md:inline">ホーム</span>
+                    </a>
+                    <a href="../../index.html#content" class="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light text-slate-400 hover:bg-white/5 hover:text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
+                        <span class="hidden md:inline">コンテンツ</span>
+                    </a>
+                    <a href="../../index.html#info" class="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl transition-all text-sm duration-300 font-light text-slate-400 hover:bg-white/5 hover:text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                        <span class="hidden md:inline">Info</span>
+                    </a>
+                </nav>
             </div>
         </div>
     </header>
@@ -236,7 +235,7 @@ function generateArticlePage(article) {
             </p>
 
             <div class="flex flex-wrap items-center gap-4 mb-10 pb-8 border-b border-white/5">
-                <a href="../../authors/${article.authorType}.html" class="flex items-center gap-3 group hover:bg-white/5 px-4 py-2 rounded-xl transition-all">
+                <a href="../../authors/diogenes.html" class="flex items-center gap-3 group hover:bg-white/5 px-4 py-2 rounded-xl transition-all">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-br ${author.color} flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         ${author.icon}
                     </div>

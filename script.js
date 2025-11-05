@@ -865,10 +865,8 @@ function renderContent() {
                             }).join('')}
                         </div>
                         
-                        <div class="space-y-4 max-w-3xl mx-auto">
-                            ${sortedArticles.map(article => {
-                                const authorInfo = getAuthorInfo(article.authorType);
-                                return `
+                        <div class="space-y-4">
+                            ${sortedArticles.map(article => `
                                 <a href="./articles/pages/${article.id}.html" class="group block bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-500 overflow-hidden relative">
                                     ${article.audioUrl ? `
                                         <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 backdrop-blur-md rounded-full shadow-lg">
@@ -881,7 +879,7 @@ function renderContent() {
                                         </div>
                                     ` : ''}
                                     <div class="p-5 flex gap-4">
-                                        <img src="${article.image}" alt="${article.title}" class="w-24 h-24 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
+                                        <img src="${article.image}" alt="${article.title}" class="w-28 h-28 object-cover rounded-xl flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
 
                                         <div class="flex-1 flex flex-col justify-between min-w-0">
                                             <div class="space-y-2">
@@ -889,30 +887,21 @@ function renderContent() {
                                                     <span class="px-2.5 py-1 ${article.categoryColor} backdrop-blur-sm rounded-lg text-xs ${article.categoryText} font-medium">
                                                         ${article.category}
                                                     </span>
-                                                    ${getArticleBadges(article)}
                                                     <span class="text-xs text-slate-600">${article.date}</span>
                                                 </div>
 
-                                                <h3 class="font-light text-slate-200 text-lg leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
+                                                <h3 class="font-medium text-slate-200 text-base leading-snug group-hover:text-orange-300 transition-colors duration-300 line-clamp-2">
                                                     ${article.title}
                                                 </h3>
 
                                                 <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">
                                                     ${article.excerpt}
                                                 </p>
-
-                                                <div class="flex items-center gap-2 pt-1">
-                                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br ${authorInfo.color} flex items-center justify-center text-xs">
-                                                        ${authorInfo.icon}
-                                                    </div>
-                                                    <span class="text-xs text-slate-500">${authorInfo.name}</span>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
-                            `;
-                            }).join('')}
+                            `).join('')}
                         </div>
                     </div>
                 </div>
