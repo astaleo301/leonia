@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>監視社会を生きる——プライバシーという名の静かな抵抗 - Leonia</title>
+    <meta name="description" content="見えないところで進む監視。カメラ、検索履歴、位置情報——すべてが記録される時代に、プライバシーを守る実践的な知識と選択肢を。">
+    <meta property="og:title" content="監視社会を生きる——プライバシーという名の静かな抵抗">
+    <meta property="og:description" content="見えないところで進む監視。カメラ、検索履歴、位置情報——すべてが記録される時代に、プライバシーを守る実践的な知識と選択肢を。">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=80">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="監視社会を生きる——プライバシーという名の静かな抵抗">
+    <meta name="twitter:description" content="見えないところで進む監視。カメラ、検索履歴、位置情報——すべてが記録される時代に、プライバシーを守る実践的な知識と選択肢を。">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=80">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950/20 via-transparent to-transparent pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 backdrop-blur-2xl bg-slate-950/80 border-b border-white/5">
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex items-center justify-between">
+                <a href="../../index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <img src="../../images/logo.jpg" alt="Leonia Logo" class="w-11 h-11 rounded-2xl shadow-lg shadow-orange-500/20" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="w-11 h-11 bg-gradient-to-br from-orange-400/70 to-amber-400/70 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20" style="display:none;">
+                        <span class="text-white font-extralight text-xl">L</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extralight bg-gradient-to-r from-slate-200 via-orange-200 to-amber-300 bg-clip-text text-transparent">
+                            Leonia
+                        </h1>
+                        <p class="text-[10px] text-slate-600 font-light">Neutral Eyes</p>
+                    </div>
+                </a>
+
+                <button onclick="shareArticle()" class="p-2.5 text-slate-400 hover:text-slate-300 hover:bg-white/5 rounded-xl transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <main class="container mx-auto px-6 py-12 relative">
+        <article class="max-w-3xl mx-auto">
+            <!-- Header Image -->
+            <div class="mb-8 rounded-2xl overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=80" alt="監視社会を生きる——プライバシーという名の静かな抵抗" class="w-full h-72 object-cover">
+            </div>
+
+            <!-- Category & Date -->
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-purple-500/10 text-purple-400 px-3 py-1 rounded-lg text-sm font-light">プライバシー</span>
+                <span class="text-slate-500 text-sm">2025-10-31</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl md:text-4xl font-light text-slate-100 mb-6 leading-relaxed">
+                監視社会を生きる——プライバシーという名の静かな抵抗
+            </h1>
+
+            <!-- Excerpt -->
+            <p class="text-lg text-slate-400 mb-8 leading-relaxed">
+                見えないところで進む監視。カメラ、検索履歴、位置情報——すべてが記録される時代に、プライバシーを守る実践的な知識と選択肢を。
+            </p>
+
+            <!-- Author & Badges -->
+            <div class="flex flex-wrap items-center gap-4 mb-10 pb-8 border-b border-white/5">
+                <a href="../../authors/collaborative.html" class="flex items-center gap-3 group hover:bg-white/5 px-4 py-2 rounded-xl transition-all">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        🤝
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-300 group-hover:text-slate-200 transition-colors">Leonia 共同制作</p>
+                        <p class="text-xs text-slate-500">執筆者を見る →</p>
+                    </div>
+                </a>
+
+                
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                    <span class="text-sm">✓</span>
+                    <span class="text-xs text-slate-400">Verified by Leonia OSINT Team</span>
+                </div>
+                
+            </div>
+
+            <!-- Article Body -->
+            <div class="prose prose-invert prose-slate max-w-none">
+                <div class='space-y-5'><p class='text-slate-400 text-sm leading-relaxed'>私たちは、見られている。</p><p class='text-slate-400 text-sm leading-relaxed'>スマートフォンのカメラ、検索エンジンの履歴、SNSの「いいね」、移動の軌跡——デジタル空間に残る足跡は、記録され、分析され、時には悪用される。この静かな監視は、気づかないうちに深く浸透している。</p><p class='text-slate-400 text-sm leading-relaxed'>だが、諦める必要はない。知識と選択によって、プライバシーは守れる。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>過剰ではない、必要な警戒</h3><p class='text-slate-400 text-sm leading-relaxed'>「神経質すぎる」——そう思われるかもしれない。</p><p class='text-slate-400 text-sm leading-relaxed'>しかし事実は冷徹だ。2013年、エドワード・スノーデンが暴露した<span class='text-slate-300'>PRISM計画</span>は、米国政府がGoogle、Apple、Microsoft、Facebookなど大手IT企業を通じて市民のオンライン活動を大規模に監視していた実態を白日の下にさらした。</p><p class='text-slate-400 text-sm leading-relaxed'>2025年、セキュリティ企業BitSightの「Exposed Cam Feeds」レポートは更なる衝撃をもたらした。<span class='text-slate-300'>ダークウェブ上で4万台以上のiPhone連動セキュリティカメラが、無断でライブ配信されていた</span>のだ。ハッキングされた映像は、誰でもアクセスできる状態で公開されていた。</p><p class='text-slate-400 text-sm leading-relaxed'>これは遠い国の物語ではない。私たちの日常に、リスクは潜んでいる。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>01 — 物理的防御：最も確実な手段</h3><p class='text-slate-400 text-sm leading-relaxed'>デジタル世界の脅威に対して、最も原始的で確実な防御法がある。物理的遮断だ。</p><p class='text-slate-400 text-sm leading-relaxed'>ノートPC、スマートフォン、タブレット——これらのフロントカメラを、物理的に塞ぐ。付箋、テープ、専用のプライバシーシール。手段は何でもいい。重要なのは、<span class='text-slate-300'>ソフトウェアが侵入されても、物理的障壁が残る</span>という事実だ。</p><p class='text-slate-400 text-sm leading-relaxed'>開閉式のプライバシーシールは、機能性と美学を両立させている。使用時のみスライドして開ける。それ以外の時間は、レンズは閉じられたままだ。</p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-500 italic'>マルウェアがカメラを起動させても、そこに映るのは暗闇だけ。</span></p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>02 — オープンソース：透明性という信頼</h3><p class='text-slate-400 text-sm leading-relaxed'>閉じられたコードは、ブラックボックスだ。何が起きているか、誰にもわからない。</p><p class='text-slate-400 text-sm leading-relaxed'>オープンソースソフトウェアは違う。<span class='text-slate-300'>ソースコードが公開され、世界中の開発者が検証できる</span>。バックドアや不正なデータ収集は、コミュニティによって発見される。透明性こそが、信頼の基盤となる。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>選択肢は、既に存在している</h3><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>メッセージ</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>SimpleX Chat</span> — メタデータすら残さない。究極のプライバシー重視設計</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Signal</span> — エンドツーエンド暗号化。世界中で信頼されるメッセンジャー</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>ブラウザ</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Brave</span> — 広告ブロック標準搭載。トラッキング拒否がデフォルト</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Firefox</span> — 高度なカスタマイズ性。プライバシー設定を細部まで制御可能</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>AI・LLM</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Ollama</span> — ローカル実行のオープンソースLLM。クラウドへデータは送信されない</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>LM Studio</span> — 自分のマシンで大規模言語モデルを動かす選択肢</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-500 italic'>企業にデータを渡さない。それだけで、大きな一歩になる。</span></p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>03 — VPN：見えないトンネルを作る</h3><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>VPN（Virtual Private Network）</span>は、通信を暗号化し、IPアドレス（インターネット上の住所）を隠す技術だ。</p><p class='text-slate-400 text-sm leading-relaxed'>仕組みはシンプルだ。</p><p class='text-slate-400 text-sm leading-relaxed'>```
+デバイス → VPNサーバー（暗号化） → ウェブサイト
+```</p><p class='text-slate-400 text-sm leading-relaxed'>カフェやホテルの公共Wi-Fiは、傍受のリスクがある。暗号化されていない通信は、盗聴される可能性がある。VPNは、その通信をトンネルに通す。外からは、何も見えない。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>無料、かつ信頼できる選択肢</h3><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Proton VPN</span>（無料プラン）
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> スイス拠点の企業が運営（この地理的位置が重要な理由は、後述する）</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 帯域制限なし、通信ログを保存しない</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 有料プランで更に多くのサーバーへアクセス可能</div></p><p class='text-slate-400 text-sm leading-relaxed'>無料VPNには、悪質なものも存在する。通信ログを記録し、第三者に販売するサービスもある。信頼できる企業を選ぶこと。それが前提条件だ。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>04 — プライバシー重視のエコシステム</h3><p class='text-slate-400 text-sm leading-relaxed'>日常的に使うサービスを、少し変えるだけでいい。プライバシーを尊重する選択肢は、既に存在している。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>検索エンジン</h3><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Startpage</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> Googleの検索結果を利用しながら、個人情報は収集しない</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> IPアドレス、検索履歴を保存しない</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>DuckDuckGo</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> トラッキング（追跡）を一切行わない</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> パーソナライズされない検索結果。フィルターバブルの外へ</div></p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>メール・クラウドストレージ</h3><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Proton（スイス）</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Proton Mail</span> — エンドツーエンド暗号化メール</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Proton Drive</span> — ゼロ知識暗号化ストレージ</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Proton Calendar</span> — 予定も、暗号化される</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Tresorit</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> スイス・ハンガリー拠点</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> ゼロ知識暗号化クラウド。企業レベルのセキュリティ</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Cryptee</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 暗号化されたドキュメント・写真保存</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> ミニマルで美しいインターフェース</div></p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>05 — 地政学とプライバシー：スイスという選択</h3><p class='text-slate-400 text-sm leading-relaxed'>国境は、データにも存在する。</p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Five Eyes</span>（ファイブアイズ）。アメリカ、イギリス、カナダ、オーストラリア、ニュージーランド——5カ国が結成する諜報同盟だ。これらの国々は、諜報情報を互いに共有し、大規模な監視活動を展開している。</p><p class='text-slate-400 text-sm leading-relaxed'>さらに<span class='text-slate-300'>Nine Eyes（9カ国）</span>、<span class='text-slate-300'>Fourteen Eyes（14カ国）</span>へと、監視ネットワークは拡大している。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>スイスという例外</h3><p class='text-slate-400 text-sm leading-relaxed'>スイスは、この同盟に属していない。</p><div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>Five Eyes同盟の外</span></div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>厳格なプライバシー保護法</span></div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> <span class='text-slate-300'>永世中立国</span>としての地位——政治的圧力を受けにくい</div><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>Proton</span>をはじめとするスイス拠点のサービスが、プライバシー保護において高い信頼を得ている理由は、ここにある。地理が、安全性を決める。</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>06 — デジタルとアナログ：二重の防壁</h3><p class='text-slate-400 text-sm leading-relaxed'>重要な情報ほど、デジタルだけに依存してはいけない。</p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>デジタル</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 日常的なメモ、タスク管理</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 共有が必要なドキュメント</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 検索性が求められる情報</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-300'>アナログ（紙・手書き）</span>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> パスワードマネージャーのマスターキー</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 銀行口座情報</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 契約書の重要箇所</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 個人的な記録</div></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-500 italic'>ハッキングされないものは、オフラインのものだけだ。</span></p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>07 — 過信しない：完璧な防御は存在しない</h3><p class='text-slate-400 text-sm leading-relaxed'>どれほど対策を施しても、<span class='text-slate-300'>絶対的な安全は、存在しない。</span></p><div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> VPNを使っていても、そのVPN会社自体が信頼できなければ無意味だ</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> 暗号化されていても、法的要請で情報開示される可能性はある</div>
+<div class='text-slate-400 text-sm'><span class='text-slate-500'>•</span> オープンソースでも、メンテナンスが停止すれば脆弱性は残り続ける</div><p class='text-slate-400 text-sm leading-relaxed'>プライバシー保護は、<span class='text-slate-300'>単一の解決策ではなく、多層的な防御</span>だ。リスクを減らす。完全には消せない。それを理解した上で、選択する。</p><p class='text-slate-400 text-sm leading-relaxed'>---</p><h3 class='text-lg font-light text-slate-300 mt-8 mb-3 border-l-2 border-slate-700 pl-3'>最初の一歩</h3><p class='text-slate-400 text-sm leading-relaxed'>カメラを塞ぐ。検索エンジンを変える。VPNを入れる。</p><p class='text-slate-400 text-sm leading-relaxed'>小さな変化が、静かな抵抗になる。</p><p class='text-slate-400 text-sm leading-relaxed'>---</p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-500 italic'>監視社会を生きるということは、神経質になることではない。</span></p><p class='text-slate-400 text-sm leading-relaxed'><span class='text-slate-500 italic'>知った上で選ぶこと。データを誰に、どこまで渡すか——その選択権は、常に自分の手の中にある。</span></p></div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="mt-12 pt-8 border-t border-white/5">
+                <div class="flex items-center justify-center gap-4">
+                    <button onclick="shareArticle('twitter')" class="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                        <span class="text-sm">シェア</span>
+                    </button>
+                    <button onclick="shareArticle('copy')" class="flex items-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 rounded-xl transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                        <span class="text-sm">URLコピー</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="mt-12 text-center">
+                <a href="../../index.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-300 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    <span>記事一覧に戻る</span>
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="relative border-t border-white/5 bg-slate-950/50 backdrop-blur-sm mt-24">
+        <div class="container mx-auto px-6 py-10">
+            <div class="text-center space-y-2">
+                <p class="text-slate-500 text-sm font-light">© 2025 Leonia. All rights reserved.</p>
+                <p class="text-slate-600 text-xs font-light">Powered by NoctAI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function shareArticle(platform) {
+            const url = window.location.href;
+            const text = "監視社会を生きる——プライバシーという名の静かな抵抗";
+
+            switch(platform) {
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('URLをコピーしました！');
+                    });
+                    break;
+                default:
+                    navigator.share({ title: text, url: url });
+            }
+        }
+    </script>
+</body>
+</html>
