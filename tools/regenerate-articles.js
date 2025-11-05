@@ -1,13 +1,41 @@
-<!DOCTYPE html>
+#!/usr/bin/env node
+
+/**
+ * 既存の全記事ページを再生成するツール
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// 記事ページ生成関数（article-converter.jsから抽出）
+function generateArticlePage(article) {
+    // 執筆者情報（統一）
+    const author = {
+        name: 'Ἄνθρωπον ζητῶ',
+        icon: '🏮',
+        description: '真実を照らす者',
+        color: 'from-amber-500 to-orange-500'
+    };
+
+    const badgeInfo = {
+        investigation: { label: 'Original Investigation', icon: '🔍' }
+    };
+
+    const badges = (article.badges || [])
+        .filter(badgeId => badgeId === 'investigation')
+        .map(badgeId => badgeInfo[badgeId])
+        .filter(Boolean);
+
+    const html = `<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>深海探査で未知の生態系を発見 - Leonia</title>
-    <meta name="description" content="マリアナ海溝の新たな調査により、これまで知られていなかった生物群集が確認された。">
-    <meta property="og:title" content="深海探査で未知の生態系を発見">
-    <meta property="og:description" content="マリアナ海溝の新たな調査により、これまで知られていなかった生物群集が確認された。">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80">
+    <title>${article.title} - Leonia</title>
+    <meta name="description" content="${article.excerpt}">
+    <meta property="og:title" content="${article.title}">
+    <meta property="og:description" content="${article.excerpt}">
+    <meta property="og:image" content="${article.image}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -45,37 +73,42 @@
     <main class="container mx-auto px-6 py-12">
         <article class="max-w-3xl mx-auto">
             <div class="mb-8 rounded-2xl overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="深海探査で未知の生態系を発見" class="w-full h-72 object-cover">
+                <img src="${article.image}" alt="${article.title}" class="w-full h-72 object-cover">
             </div>
 
             <div class="flex items-center gap-3 mb-6">
-                <span class="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-lg text-sm font-light">サイエンス</span>
-                <span class="text-slate-500 text-sm">2025-10-26</span>
+                <span class="${article.categoryColor} ${article.categoryText} px-3 py-1 rounded-lg text-sm font-light">${article.category}</span>
+                <span class="text-slate-500 text-sm">${article.date}</span>
             </div>
 
             <h1 class="text-3xl md:text-4xl font-light text-slate-100 mb-6 leading-relaxed">
-                深海探査で未知の生態系を発見
+                ${article.title}
             </h1>
 
             <p class="text-lg text-slate-400 mb-8 leading-relaxed">
-                マリアナ海溝の新たな調査により、これまで知られていなかった生物群集が確認された。
+                ${article.excerpt}
             </p>
 
             <div class="flex flex-wrap items-center gap-4 mb-10 pb-8 border-b border-white/5">
                 <a href="../../authors/diogenes.html" class="flex items-center gap-3 group hover:bg-white/5 px-4 py-2 rounded-xl transition-all">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                        🏮
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br ${author.color} flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        ${author.icon}
                     </div>
                     <div>
-                        <p class="text-sm text-slate-300 group-hover:text-slate-200 transition-colors">Ἄνθρωπον ζητῶ</p>
+                        <p class="text-sm text-slate-300 group-hover:text-slate-200 transition-colors">${author.name}</p>
                         <p class="text-xs text-slate-500">執筆者を見る →</p>
                     </div>
                 </a>
-                
+                ${badges.map(badge => `
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                    <span class="text-sm">${badge.icon}</span>
+                    <span class="text-xs text-slate-400">${badge.label}</span>
+                </div>
+                `).join('')}
             </div>
 
             <div class="prose prose-invert prose-slate max-w-none">
-                深海探査船による最新の調査で、マリアナ海溝の水深8000m地点において、これまで知られていなかった独自の生態系が発見されました。熱水噴出孔周辺には、地球上の他の場所には存在しない固有種が多数確認され、生命の起源や進化の過程を解明する新たな手がかりとなることが期待されています。
+                ${article.summary}
             </div>
 
             <div class="mt-12 pt-8 border-t border-white/5">
@@ -112,10 +145,10 @@
     <script>
         function shareArticle(platform) {
             const url = window.location.href;
-            const text = "深海探査で未知の生態系を発見";
+            const text = "${article.title.replace(/"/g, '\\"')}";
             switch(platform) {
                 case 'twitter':
-                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                    window.open(\`https://twitter.com/intent/tweet?text=\${encodeURIComponent(text)}&url=\${encodeURIComponent(url)}\`, '_blank');
                     break;
                 case 'copy':
                     navigator.clipboard.writeText(url).then(() => alert('URLをコピーしました！'));
@@ -126,4 +159,28 @@
         }
     </script>
 </body>
-</html>
+</html>`;
+
+    const outputDir = path.join(__dirname, '../articles/pages');
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    const filename = `${article.id}.html`;
+    const filepath = path.join(outputDir, filename);
+    fs.writeFileSync(filepath, html, 'utf-8');
+
+    console.log(`✓ 記事ページを再生成しました: ${filename}`);
+}
+
+// メイン処理
+const articlesPath = path.join(__dirname, '../articles/articles.json');
+const articles = JSON.parse(fs.readFileSync(articlesPath, 'utf-8'));
+
+console.log(`${articles.length}件の記事ページを再生成します...\n`);
+
+articles.forEach(article => {
+    generateArticlePage(article);
+});
+
+console.log(`\n✓ すべての記事ページを再生成しました！`);
