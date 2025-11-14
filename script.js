@@ -542,13 +542,14 @@ function renderBookPopup() {
                     ${icons.volume2}
                     音声版
                 </h3>
+                <span class="text-xs text-slate-500">AI生成</span>
             </div>
-            
+
             <div class="bg-white/5 rounded-2xl p-5 space-y-4 backdrop-blur-sm border border-white/5">
                 <div class="flex items-center gap-3">
                     <div class="text-xs text-slate-500" id="audio-current-time">0:00</div>
-                    <input 
-                        type="range" 
+                    <input
+                        type="range"
                         id="audio-progress"
                         class="flex-1"
                         value="0"
@@ -557,21 +558,22 @@ function renderBookPopup() {
                     >
                     <div class="text-xs text-slate-500" id="audio-duration">0:00</div>
                 </div>
-                
+
                 <div class="flex items-center justify-center gap-3">
                     <button onclick="seekAudio(-10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
                         ${icons.skipBack}
                     </button>
-                    
+
                     <button onclick="toggleAudioPlayPause()" id="audio-play-button" class="p-4 bg-gradient-to-r from-orange-400/80 to-amber-400/80 hover:from-orange-500/80 hover:to-amber-500/80 rounded-full transition-all shadow-lg shadow-orange-500/20">
                         ${icons.play}
                     </button>
-                    
+
                     <button onclick="seekAudio(10)" class="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
                         ${icons.skipForward}
                     </button>
                 </div>
             </div>
+            <p class="text-xs text-slate-500 italic">音声版は、AIによって生成されています。</p>
         </div>
     ` : '';
     
@@ -636,9 +638,15 @@ function renderBookPopup() {
                             </div>
                         </div>
                     </div>
-                    
+
                     <p class="text-slate-300 leading-relaxed">${book.summary}</p>
-                    
+
+                    <div class="p-4 bg-blue-950/20 border-l-4 border-blue-500/30 rounded-r-xl">
+                        <p class="text-xs text-slate-400 italic">
+                            このドキュメントは、OpenAIのモデルによって生成されました。内容の正確性については、複数の情報源で検証することをお勧めします。
+                        </p>
+                    </div>
+
                     ${audioPlayerHTML}
                     
                     <div class="pt-6 border-t border-white/5 space-y-4">
@@ -1088,8 +1096,17 @@ function renderContent() {
                                         Leoniaは、AIを活用した中立的な情報プラットフォームです。私たちは、あらゆる利権や圧力から独立した立場で、偏りのない情報をお届けすることを約束します。
                                     </p>
                                     <p class="text-slate-300 leading-relaxed font-light">
-                                        利用者が自ら考え、検証し、議論するための十分な知識と手法を提供することを目的としています
+                                        利用者が自ら考え、検証し、議論するための十分な知識と手法を提供することを目的としています。
                                     </p>
+                                    <div class="mt-6 p-4 bg-gradient-to-r from-amber-950/20 to-orange-950/10 border-l-4 border-amber-500/30 rounded-r-xl">
+                                        <h4 class="text-lg font-light text-amber-200 mb-2">名前の由来</h4>
+                                        <p class="text-slate-400 leading-relaxed font-light text-sm">
+                                            「Leonia」の名は、古代スパルタの王<span class="text-amber-300">レオニダス1世</span>に由来しています。紀元前480年、テルモピュライの戦いにおいて、レオニダスはわずか300人のスパルタ兵を率い、数十万のペルシア軍に立ち向かいました。圧倒的な権力と数の前でも、信念と正義のために戦い抜いた彼の精神——それがLeoniaの根幹にあります。
+                                        </p>
+                                        <p class="text-slate-400 leading-relaxed font-light text-sm mt-3">
+                                            少数であっても、真実と中立性を守り抜く。権力に屈せず、独立した視点を貫く。Leoniaは、その精神を現代の情報戦に持ち込みます。
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
